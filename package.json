@@ -1,0 +1,66 @@
+{
+  "name": "@onfido/react-native-sdk",
+  "title": "React Native Onfido Sdk",
+  "version": "1.0.0",
+  "description": "Onfido React Native SDK",
+  "main": "index.js",
+  "scripts": {
+    "lint": "echo \"Skipping SDK linting...\"",
+    "test": "echo \"RN SDK testing...\"; jest --coverage",
+    "updateGradleMultiDex": "node scripts/android_enable_multi_dex.js",
+    "updateGradleMavenLink": "node scripts/android_add_maven_link.js",
+    "updateBuildGradle": "npm run updateGradleMultiDex && npm run updateGradleMavenLink",
+    "updateColors": "node scripts/update_colors.js",
+    "updateOnfido": "npm run updateBuildGradle && npm run updateColors",
+    "iOSTest": "cd ios && xcodebuild test-without-building -workspace \"OnfidoSdk.xcworkspace\" -scheme \"OnfidoSdkTests\" -destination \"platform=iOS Simulator,name=iPhone 8,OS=13.3\" -only-testing:OnfidoSdkTests"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-native|Utilites)"
+    ],
+    "testPathIgnorePatterns": [
+      "/TestApp",
+      "/SampleApp"
+    ],
+    "globals": {
+      "__DEV__": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onfido/react-native-sdk.git",
+    "baseUrl": "https://github.com/onfido/react-native-sdk"
+  },
+  "keywords": [
+    "react-native",
+    "onfido",
+    "sdk",
+    "document",
+    "capture",
+    "identity",
+    "verification"
+  ],
+  "author": "SDK Customer Support <react-native-sdk@onfido.com> (https://github.com/onfido)",
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "babel-jest": "^25.1.0",
+    "babel-preset-react-native": "^5.0.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "onfidoPrimaryColor": "#FF0000",
+  "onfidoPrimaryButtonTextColor": "#FFFFFF",
+  "onfidoPrimaryButtonColorPressed": "#FFA500",
+  "onfidoAndroidStatusBarColor": "#A52A2A",
+  "onfidoAndroidToolBarColor": "#800080",
+  "onfidoIosSupportDarkMode": true
+}

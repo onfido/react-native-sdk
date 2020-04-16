@@ -1,0 +1,76 @@
+{
+  "name": "SampleApp",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "create-avd": "avdmanager create avd -n Test_App_Test -k \"system-images;android-28;google_play;x86\" --device \"Nexus 5X\"",
+    "delete-avd": "avdmanager delete avd -n Test_App_Test",
+    "list-avd": "avdmanager list avd",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "echo \"SampleApp testing...\"; jest --coverage",
+    "lint": "echo \"SampleApp linting...\"; eslint .",
+    "postinstall": "rm -rf node_modules/@onfido/react-native-sdk/node_modules && rm -rf node_modules/@onfido/react-native-sdk/SampleApp",
+    "start-e2e-ios-sampleapp": "export $(./scripts/get_env.sh e2eiOS | xargs) && npx react-native start",
+    "start-e2e-android-sampleapp": "export $(./scripts/get_env.sh e2eAndroid | xargs) && npx react-native start",
+    "test-e2e-ios-debug-sampleapp": "detox build -c ios.sim.debug.sampleapp && detox test -c ios.sim.debug.sampleapp -o e2eiOS/config.json",
+    "test-e2e-android-debug-sampleapp": "detox build -c android.emu.debug.sampleapp && detox test -c android.emu.debug.sampleapp -o e2eAndroid/config.json",
+    "test-e2e-ios-release-sampleapp": "detox build -c ios.sim.release.sampleapp && detox test -c ios.sim.release.sampleapp -o e2eiOS/config.json",
+    "test-e2e-android-release-sampleapp": "detox build -c android.emu.release.sampleapp && detox test -c android.emu.release.sampleapp -o e2eAndroid/config.json"
+  },
+  "dependencies": {
+    "@onfido/react-native-sdk": "file:../",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
+    "react-router-native": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/runtime": "^7.8.7",
+    "@react-native-community/eslint-config": "^0.0.7",
+    "babel-jest": "^25.1.0",
+    "detox": "^16.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-detox": "^1.0.0",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "preset": "react-native"
+  },
+  "detox": {
+    "test-runner": "jest",
+    "configurations": {
+      "ios.sim.debug.sampleapp": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/SampleApp.app",
+        "build": "xcodebuild -workspace ios/SampleApp.xcworkspace -scheme SampleApp -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 8"
+      },
+      "android.emu.debug.sampleapp": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Detox_Emulator"
+      },
+      "ios.sim.release.sampleapp": {
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/SampleApp.app",
+        "build": "xcodebuild -workspace ios/SampleApp.xcworkspace -scheme SampleApp -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 8"
+      },
+      "android.emu.release.sampleapp": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release-bitrise-signed.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "name": "Detox_Emulator"
+      }
+    }
+  }
+}
