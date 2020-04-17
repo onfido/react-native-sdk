@@ -12,7 +12,7 @@
     "start": "react-native start",
     "test": "echo \"SampleApp testing...\"; jest --coverage",
     "lint": "echo \"SampleApp linting...\"; eslint .",
-    "postinstall": "rm -rf node_modules/@onfido/react-native-sdk/node_modules && rm -rf node_modules/@onfido/react-native-sdk/SampleApp",
+    "postinstall": "node scripts/examples_postinstall.js && rm -rf node_modules/@onfido/react-native-sdk/node_modules",
     "start-e2e-ios-sampleapp": "export $(./scripts/get_env.sh e2eiOS | xargs) && npx react-native start",
     "start-e2e-android-sampleapp": "export $(./scripts/get_env.sh e2eAndroid | xargs) && npx react-native start",
     "test-e2e-ios-debug-sampleapp": "detox build -c ios.sim.debug.sampleapp && detox test -c ios.sim.debug.sampleapp -o e2eiOS/config.json",
