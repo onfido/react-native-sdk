@@ -71,7 +71,7 @@ The JSON response has an `id` field containing a UUID that identifies the applic
 
 ### 3. Configuring SDK with Tokens
 
-You will need to generate and include a short-lived JSON Web Token (JWT) every time you initialise the SDK. 
+You will need to generate and include a short-lived JSON Web Token (JWT) every time you initialise the SDK.
 
 To generate an SDK Token you should perform a request to the SDK Token endpoint in the Onfido API:
 
@@ -234,9 +234,9 @@ Example configuration:
 
 ```javascript
 config = {
-  sdkToken: “EXAMPLE-TOKEN-123”, 
+  sdkToken: “EXAMPLE-TOKEN-123”,
   flowSteps: {
-    welcome: true, 
+    welcome: true,
     captureDocument: {
       docType: OnfidoDocumentType.DRIVING_LICENSE,
       countryCode: OnfidoCountryCode.USA
@@ -263,6 +263,20 @@ config = {
 * **`captureFace`**: Optional.  This object object containing options for capture face screen.  If omitted, this screen does not appear in the flow.
 * **`type`**: Required if captureFace is specified.
   * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`.
+* **`localisation`**: Optional. This object contains localisation configuration. See section [Localization](#localization) for the details.
+  * Example usage:
+
+  ```javascript
+  config = {
+    sdkToken: “EXAMPLE-TOKEN-123”,
+    localisation: {
+      ios_strings_file_name: 'Localizable',
+    },
+    flowSteps: {
+      ...
+    },
+  }
+  ```
 
 ### 3. Success Response
 
@@ -274,7 +288,7 @@ Example:
 {
  document: {
    front: { id: "123-abc" },
-   back: { id: "345-def" } 
+   back: { id: "345-def" }
  },
  face: {
    id: "456-567",
@@ -286,7 +300,7 @@ Example:
 ### 4. Failure Response
 
 The SDK will reject the promise any time the Onfido SDK exits without a success.  This includes cases where:
-* the configuration was invalid, 
+* the configuration was invalid,
 * the mobile user clicked the back button to exit the Onfido SDK.
 
 Example
@@ -294,13 +308,30 @@ Example
 ```javascript
 {
   code: "config_error",
-  message: "sdkToken is missing" 
+  message: "sdkToken is missing"
 }
 ```
 
 ### 5. Localization
 
-Expect localization support in future releases.
+Onfido SDKs support a number of out-of-the-box translations. However, you can add your own translations.
+
+#### Android
+
+By default, custom localisation is enabled on Android. There is no configuration needed on React Native SDK to enable it.
+You could also provide custom translation for a locale that we don’t currently support, by having an additional XML strings file inside your resources folder for the desired locale. See [Localisation section of Android SDK repo](https://github.com/onfido/onfido-android-sdk#4-localisation) for the details.
+
+#### iOS
+
+If you want to enable custom localisation, add this statement to your configuration object.
+
+```
+localisation: {
+  ios_strings_file_name: '<Your .strings file name in iOS app bundle>',
+},
+```
+
+In this case SDK will show strings from the provided file. For more detailed explanation please check out [Localisation section of iOS SDK repo.](https://github.com/onfido/onfido-ios-sdk#language-customisation)
 
 ## Creating checks
 
@@ -383,6 +414,3 @@ Copyright 2020 Onfido, Ltd. All rights reserved.
 ## How is the Onfido React Native SDK licensed?
 
 The Onfido React Native SDK is available under the MIT license.
-
-
-

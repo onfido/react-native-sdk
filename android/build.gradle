@@ -54,7 +54,7 @@ buildscript {
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.5.1'
+            classpath 'com.android.tools.build:gradle:3.5.2'
         }
     }
 }
@@ -195,12 +195,12 @@ afterEvaluate { project ->
             html.enabled = true
             csv.enabled = true
         }
-        classDirectories = fileTree(
+        classDirectories.setFrom(fileTree(
                 dir: 'build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/onfido/reactnative/sdk',
                 excludes: androidExclusion
-        )
-        sourceDirectories = files('src/main/java/com/onfido/reactnative/sdk')
-        executionData = files('build/jacoco/testDebugUnitTest.exec')
+        ))
+        sourceDirectories.setFrom(files('src/main/java/com/onfido/reactnative/sdk'))
+        executionData.setFrom(files('build/jacoco/testDebugUnitTest.exec'))
     }
 
     task getCoverage(type: Exec, dependsOn: 'codeCoverageReport') {
@@ -208,4 +208,3 @@ afterEvaluate { project ->
         commandLine "open", "$buildDir/reports/jacoco/codeCoverageReport/html/index.html"
     }
 }
-

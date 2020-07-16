@@ -64,9 +64,9 @@ class OnfidoSdkTests : XCTestCase {
         
         let onfidoConfigBuilder = try buildOnfidoConfig(config: config, appearance: appearance)
         let builtOnfidoConfig = try onfidoConfigBuilder.build()
+        
         let configString = String(describing: builtOnfidoConfig)
         XCTAssert( configString.contains("intro"))
-        XCTAssert( configString.contains("USA") )
         XCTAssert( configString.contains("drivingLicence") )
         XCTAssert( configString.contains("photo") )
         XCTAssert( !configString.contains("video") )

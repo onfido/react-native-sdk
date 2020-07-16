@@ -127,6 +127,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // TODO: ET-385 Remove this workaround for React 0.62.2 when upgrading to a React 0.63+.
+    configurations.all {
+        resolutionStrategy {
+            force "com.facebook.soloader:soloader:0.8.2"
+        }
+    }
+
     defaultConfig {
         multiDexEnabled true
 
@@ -136,7 +143,7 @@ android {
         versionCode 1
         versionName "1.0"
         testBuildType System.getProperty('testBuildType', 'debug')
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner' 
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -186,7 +193,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    
+
     androidTestImplementation('com.wix:detox:+') { transitive = true }
     androidTestImplementation 'junit:junit:4.12'
     implementation "androidx.annotation:annotation:1.1.0"

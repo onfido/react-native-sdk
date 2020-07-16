@@ -53,7 +53,7 @@ public func loadAppearancePublicFromFile(filePath: String) throws -> AppearanceP
           let supportDarkMode: Bool = (jsonResult["onfidoIosSupportDarkMode"] == nil)
                   ? true : jsonResult["onfidoIosSupportDarkMode"] as! Bool
 
-        
+
           let appearancePublic = AppearancePublic(
                   primaryColor: primaryColor,
                   primaryTitleColor: primaryTitleColor,
@@ -96,6 +96,9 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
     .withSDKToken(sdkToken)
     .withAppearance(appearance)
 
+  if let localisationConfig = config["localisation"] as? NSDictionary, let file = localisationConfig["ios_strings_file_name"] as? String {
+    onfidoConfig = onfidoConfig.withCustomLocalization(andTableName: file)
+  }
 
   if flowSteps?["welcome"] as? Bool == true {
     onfidoConfig = onfidoConfig.withWelcomeStep()
@@ -104,19 +107,19 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
   if let docType = captureDocument?["docType"] as? String, let countryCode = captureDocument?["countryCode"] as? String {
     switch docType {
       case "PASSPORT":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .passport, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .passport(config: PassportConfiguration()))
       case "DRIVING_LICENCE":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .drivingLicence, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .drivingLicence(config: DrivingLicenceConfiguration(country: countryCode)))
       case "NATIONAL_IDENTITY_CARD":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .nationalIdentityCard, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryCode)))
       case "RESIDENCE_PERMIT":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .residencePermit, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .residencePermit(config: ResidencePermitConfiguration(country: countryCode)))
       case "VISA":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .visa, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .visa(config: VisaConfiguration(country: countryCode)))
       case "WORK_PERMIT":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .workPermit, andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .workPermit(config: WorkPermitConfiguration(country: countryCode)))
       case "GENERIC":
-        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .generic(config: nil), andCountryCode: countryCode)
+        onfidoConfig = onfidoConfig.withDocumentStep(ofType: .generic(config: GenericDocumentConfiguration(country: countryCode)))
       default:
         throw NSError(domain: "Unsupported document type", code: 0)
     }
@@ -141,7 +144,7 @@ class OnfidoSdk: NSObject {
 
   @objc static func requiresMainQueueSetup() -> Bool {
     return false
-  } 
+  }
 
   @objc func start(_ config: NSDictionary,
                       resolver resolve: @escaping RCTPromiseResolveBlock,
@@ -159,7 +162,7 @@ class OnfidoSdk: NSObject {
       let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "../../../../colors.json")
       let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
       let onfidoConfig = try buildOnfidoConfig(config: config, appearance: appearance)
-      let builtOnfidoConfig = try onfidoConfig.build() 
+      let builtOnfidoConfig = try onfidoConfig.build()
 
       //  Copy the face varient from the config since it is not contained in the response:
       let flowSteps:NSDictionary? = config["flowSteps"] as? NSDictionary
@@ -167,7 +170,7 @@ class OnfidoSdk: NSObject {
       let faceVariant = captureFace?["type"] as? String
 
       let onfidoFlow = OnfidoFlow(withConfiguration: builtOnfidoConfig)
-        .with(responseHandler: { [weak self] response in 
+        .with(responseHandler: { [weak self] response in
           guard let `self` = self else { return }
           switch response {
             case let .error(error):

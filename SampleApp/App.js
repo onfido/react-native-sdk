@@ -38,6 +38,9 @@ export default class App extends Component {
   startSDK = () => {
     Onfido.start({
       sdkToken: this.state.sdkToken,
+      localisation: {
+        ios_strings_file_name: 'Localizable',
+      },
       flowSteps: {
         welcome: true,
         captureDocument: {},

@@ -18,7 +18,7 @@ Make sure you have installed:
 Set up your device:
 - To run on a physical device, [enable debugging, and plug it in](https://facebook.github.io/react-native/docs/running-on-device.html#1-enable-debugging-over-usb)
 - To run on an emulator, [ensure you have an AVD created](https://facebook.github.io/react-native/docs/getting-started.html#using-a-virtual-device), and running (or follow instructions below on how to use custom commands for managing AVDs)
-  
+
 ### Install required iOS tools
 
 Make sure you have installed:
@@ -33,7 +33,7 @@ Set up your device:
 ## Step 1: Setup
 
 ### Set up the API Token
-Before running the sample app you will need to open SampleApp/App.js and replace 'YOUR_API_TOKEN_HERE' with your API token. You can use our [sandbox](https://documentation.onfido.com/#sandbox-testing) environment to test the integration, and you will find the API tokens inside your [Onfido Dashboard](https://onfido.com/dashboard/api/tokens). You can create API tokens inside your Onfido Dashboard as well.
+Before running the sample app you will need to open SampleApp/backend-server-example.js and replace 'YOUR_API_TOKEN_HERE' with your API token. You can use our [sandbox](https://documentation.onfido.com/#sandbox-testing) environment to test the integration, and you will find the API tokens inside your [Onfido Dashboard](https://onfido.com/dashboard/api/tokens). You can create API tokens inside your Onfido Dashboard as well.
 
 | :warning: Do not use your API token in your client code.  This server code is only included here as an example. |
 | --- |
@@ -77,23 +77,7 @@ npx react-native run-android
 
 ## End-to-end
 
-We have end-to-end tests that run through the app on simulator/emulator.
-
-### iOS
-
-Make sure you have AppleSimulatorUtils installed, if not run:
-
-    brew tap wix/brew && brew install applesimutils
-
-In one terminal window compile the code for end-to-end testing:
-
-    yarn start-e2e-ios-sampleapp
-
-In another boot the iOS simulator & automated tests:
-
-    yarn test-e2e-ios-debug-sampleapp
-
-Tests will be run in headless mode, however if you open iOS simulator you can see the progress being executed on the screen.
+We have end-to-end tests that run through the app on emulator.
 
 ### Android
 
