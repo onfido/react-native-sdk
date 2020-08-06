@@ -12,6 +12,7 @@ import com.facebook.react.bridge.UnexpectedNativeTypeException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import com.facebook.react.bridge.Arguments;
 
@@ -89,6 +90,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 final OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
                         .withSDKToken(sdkToken)
                         .withCustomFlow(flowStepsWithOptions)
+                        .withLocale(Locale.GERMAN)
                         .build();
                 client.startActivityForResult(currentActivity, 1, onfidoConfig);
             }
