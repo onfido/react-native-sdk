@@ -78,14 +78,14 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 currentPromise = null;
                 return;
             }
-    
+
             Activity currentActivity = getCurrentActivityInParentClass();
             if (currentActivity == null) {
                 currentPromise.reject("error", new Exception("Android activity does not exist"));
                 currentPromise = null;
                 return;
             }
-    
+
             try {
                 final OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
                         .withSDKToken(sdkToken)
@@ -114,7 +114,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return sdkToken;
     }
 
-    public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {    
+    public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {
         try {
 
             final ReadableMap flowSteps = config.getMap("flowSteps");
@@ -125,10 +125,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             } else {
                 welcomePageIsIncluded = false;
             }
-    
+
             ReadableMap captureDocument = null;
             Boolean captureDocumentBoolean = null;
-            
+
             // ReadableMap does not have a way to get multi-typed values without throwing exceptions.
             try {
                 captureDocumentBoolean = flowSteps.getBoolean("captureDocument");
@@ -139,7 +139,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     captureDocument = null;
                 }
             }
-    
+
 
             final List<FlowStep> flowStepList = new ArrayList<>();
 
@@ -165,7 +165,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
                     String countryCodeString = captureDocument.getString("countryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha3(countryCodeString);
-                    
+
                     if (countryCodeEnum ==null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
@@ -198,7 +198,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.PHOTO));
                 }
             }
-            flowStepList.add(FlowStep.FINAL);
+            // flowStepList.add(FlowStep.FINAL);
 
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
 
