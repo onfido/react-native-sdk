@@ -19,6 +19,7 @@
 		31F1352E93A4E729E0328344 /* libPods-SampleApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134EF430C5031CF381EA93F0 /* libPods-SampleApp-tvOSTests.a */; };
 		3A9D456A24180E9E0087A331 /* SampleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D456924180E9E0087A331 /* SampleSwift.swift */; };
 		448A4A7963B733A7A3E5F343 /* libPods-SampleAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 454127CFC1D34443F95D7C65 /* libPods-SampleAppTests.a */; };
+		A27D5C5624FFA363000BDD48 /* colors.json in Resources */ = {isa = PBXBuildFile; fileRef = A27D5C5524FFA363000BDD48 /* colors.json */; };
 		A2E232FB24AB94EB00007012 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2E232FA24AB94EB00007012 /* Localizable.strings */; };
 		C803C26CB03A58DA4EA318D5 /* libPods-SampleApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9467611D156F74B5DB4141 /* libPods-SampleApp-tvOS.a */; };
 		FAFD48624DBCDF07D2C16BD4 /* libPods-SampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8CE159E3962919607C4C98 /* libPods-SampleApp.a */; };
@@ -66,6 +67,7 @@
 		91E48BE4CC0FA5835AD04D9F /* Pods-SampleApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOSTests/Pods-SampleApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		95707FCD44C2FC4473376FF3 /* Pods-SampleApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOS/Pods-SampleApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		95D22025D78857D1C84E3211 /* Pods-SampleApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOS/Pods-SampleApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		A27D5C5524FFA363000BDD48 /* colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = colors.json; path = SampleApp/colors.json; sourceTree = "<group>"; };
 		A2E232FA24AB94EB00007012 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A68881444BA0DAB1CBFA1DAC /* Pods-SampleApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOSTests/Pods-SampleApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BD7D4F71ACBEFCDEF85ACD10 /* Pods-SampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A27D5C5524FFA363000BDD48 /* colors.json */,
 				13B07FAE1A68108700A75B9A /* SampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SampleAppTests */,
@@ -347,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2E232FB24AB94EB00007012 /* Localizable.strings in Resources */,
+				A27D5C5624FFA363000BDD48 /* colors.json in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

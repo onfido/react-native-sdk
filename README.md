@@ -385,7 +385,8 @@ Below is a description of all available keys:
 * **`onfidoAndroidToolBarColor`**: Android only.  Defines the color of the status bar above the `Toolbar`.
 * **`onfidoIosSupportDarkMode`**: iOS Only.  Defines if Dark Mode will be supported on SDK screens. The value is true by default.
 
-Once you've added the colors.json to you project, when running on an iOS device the values will be picked up dynamically at runtime. For Android devices to pick up the values you will need to run the following command at the same level of your `node_modules` directory.  This will also be run when running the `npm --prefix node_modules/@onfido/react-native-sdk/ run updateOnfido` command.
+Once you've added the colors.json to your project, you should add colors.json file to your xcode project as bundle resource. You can create symbolic link (rather than copy paste) to prevent redundancy. You can check out SampleApp project to see example usage.
+ Then when running on an iOS device the values will be picked up dynamically at runtime. For Android devices to pick up the values you will need to run the following command at the same level of your `node_modules` directory.  This will also be run when running the `npm --prefix node_modules/@onfido/react-native-sdk/ run updateOnfido` command.
 
 ```shell
 $ npm --prefix node_modules/@onfido/react-native-sdk/ run updateColors
