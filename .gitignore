@@ -46,6 +46,8 @@ android/bin/
 # node.js
 #
 node_modules/
+SampleApp/.yalc/
+TestApp/.yalc/
 
 # BUCK
 #

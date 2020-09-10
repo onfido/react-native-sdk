@@ -33,12 +33,13 @@ public class AppearancePublic: NSObject {
  * This public class is used for unit tests.  Once this data is added to the native Appearance class,
  * any changes to the data in this class will not affect the native SDK appearance.
  */
-public func loadAppearancePublicFromFile(filePath: String) throws -> AppearancePublic? {
+public func loadAppearancePublicFromFile(filePath: String?) throws -> AppearancePublic? {
 
   do {
       let jsonResult:Any
       do {
-        let data = try Data(contentsOf: URL(fileURLWithPath: filePath), options: .mappedIfSafe)
+        guard let path = filePath else { return nil }
+        let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
         jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
       } catch let e as NSError where e.code == NSFileNoSuchFileError || e.code == NSFileReadNoSuchFileError {
         jsonResult = Dictionary<String, AnyObject>()
@@ -71,7 +72,7 @@ public func loadAppearancePublicFromFile(filePath: String) throws -> AppearanceP
 /**
  * Load appearance data from the specified file.  If the file cannot be loaded, use the default colors.
  */
-public func loadAppearanceFromFile(filePath: String) throws -> Appearance {
+public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
     let appearancePublic = try loadAppearancePublicFromFile(filePath: filePath)
 
     if let appearancePublic = appearancePublic {
@@ -159,7 +160,7 @@ class OnfidoSdk: NSObject {
                   rejecter reject: @escaping RCTPromiseRejectBlock) {
 
     do {
-      let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "../../../../colors.json")
+      let appearanceFilePath = Bundle.main.path(forResource: "colors", ofType: "json")
       let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
       let onfidoConfig = try buildOnfidoConfig(config: config, appearance: appearance)
       let builtOnfidoConfig = try onfidoConfig.build()

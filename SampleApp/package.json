@@ -12,15 +12,16 @@
     "start": "react-native start",
     "test": "echo \"SampleApp testing...\"; jest --coverage",
     "lint": "echo \"SampleApp linting...\"; eslint .",
+    "preinstall": "(cd ../ && npx yalc publish) && npx yalc add @onfido/react-native-sdk",
     "postinstall": "node scripts/examples_postinstall.js && rm -rf node_modules/@onfido/react-native-sdk/node_modules",
     "start-e2e-android-sampleapp": "export $(./scripts/get_env.sh e2eAndroid | xargs) && npx react-native start",
     "test-e2e-android-debug-sampleapp": "detox build -c android.emu.debug.sampleapp && detox test -c android.emu.debug.sampleapp -o e2eAndroid/config.json",
     "test-e2e-android-release-sampleapp": "detox build -c android.emu.release.sampleapp && detox test -c android.emu.release.sampleapp -o e2eAndroid/config.json",
-    "refresh-native": "rsync -av ../ node_modules/@onfido/react-native-sdk/ --exclude=TestApp --exclude=SampleApp --exclude=node_modules --exclude=android/build --exclude=.git --exclude=android/bin  --exclude=android/.gradle --exclude=ios/Pods --exclude=ios/OnfidoSdkTests --exclude=Podfile --exclude=Podfile.lock",
+    "refresh-native": "(cd ../ && npx yalc publish --push)",
     "refresh-ios": "yarn refresh-native && yarn ios"
   },
   "dependencies": {
-    "@onfido/react-native-sdk": "file:../",
+    "@onfido/react-native-sdk": "file:.yalc/@onfido/react-native-sdk",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-router-native": "^5.1.2"
@@ -36,6 +37,9 @@
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "react-test-renderer": "16.11.0"
+  },
+  "resolutions": {
+    "**/**/lodash": "^4.17.17"
   },
   "jest": {
     "transform": {
