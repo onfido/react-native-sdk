@@ -253,7 +253,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - onfido-react-native-sdk (from `../..`)
+  - "onfido-react-native-sdk (from `../node_modules/@onfido/react-native-sdk`)"
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -295,7 +295,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   onfido-react-native-sdk:
-    :path: "../.."
+    :path: "../node_modules/@onfido/react-native-sdk"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -344,8 +344,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Onfido: f0a5c5ad9f523a9fda1e9b2f61c9ffee753f7941
-  onfido-react-native-sdk: 5beb2d1946a80065c179a1ca191c677c3f335d81
+  Onfido: 572cb9c1ab40277318528584363cac22cc1ada21
+  onfido-react-native-sdk: 578feb55a4a98ed40e12383376257df9712bda2e
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -369,4 +369,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 850b6e9cdcf8ee98f74c0ff1b3ef4155e2889814
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

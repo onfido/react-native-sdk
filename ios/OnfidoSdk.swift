@@ -130,7 +130,7 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
 
   if let faceVariant = captureFace?["type"] as? String {
     if faceVariant == "VIDEO" {
-      onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .video(withConfiguration: VideoStepConfiguration(showIntroVideo: true)))
+        onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .video(withConfiguration: VideoStepConfiguration(showIntroVideo: true, manualLivenessCapture: false)))
     } else if faceVariant == "PHOTO" {
       onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .photo(withConfiguration: nil))
     } else {
