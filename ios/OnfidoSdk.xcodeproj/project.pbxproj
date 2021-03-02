@@ -48,9 +48,7 @@
 		3A9D42D42412F0110087A331 /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		3AFE501B2408521F00E21479 /* OnfidoSdk-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OnfidoSdk-Bridging-Header.h"; sourceTree = "<group>"; };
 		3AFE501C2408521F00E21479 /* OnfidoSdk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdk.swift; sourceTree = "<group>"; };
-		3F1E01B8CD9AA768D0D45FF1 /* Pods-OnfidoSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdkTests/Pods-OnfidoSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49D38F6F9D324D1D7442717F /* Pods_OnfidoSdk_OnfidoSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OnfidoSdk_OnfidoSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D032EE3D8287942CAA34151 /* Pods-OnfidoSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdkTests.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdkTests/Pods-OnfidoSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		6DD905136FC7557A95EFF1C4 /* Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		731FAC5B375A699FA470D705 /* Pods-OnfidoSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.release.xcconfig"; sourceTree = "<group>"; };
 		8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdkTests.swift; sourceTree = "<group>"; };
@@ -105,8 +103,6 @@
 			children = (
 				8B8E5FE3BDE0C9C96B5FE8AB /* Pods-OnfidoSdk.debug.xcconfig */,
 				731FAC5B375A699FA470D705 /* Pods-OnfidoSdk.release.xcconfig */,
-				3F1E01B8CD9AA768D0D45FF1 /* Pods-OnfidoSdkTests.debug.xcconfig */,
-				5D032EE3D8287942CAA34151 /* Pods-OnfidoSdkTests.release.xcconfig */,
 				B78EF811082AE0A0FC0314D6 /* Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig */,
 				6DD905136FC7557A95EFF1C4 /* Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig */,
 			);
@@ -239,7 +235,6 @@
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
 				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${PODS_ROOT}/Onfido/Onfido.framework",
 				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
 				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
 				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
@@ -258,13 +253,13 @@
 				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
 				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Onfido/Onfido.framework/Onfido",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
@@ -283,6 +278,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import com.facebook.react.bridge.Arguments;
 
 import com.onfido.android.sdk.capture.Onfido;
+import com.onfido.android.sdk.capture.EnterpriseFeatures;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
@@ -24,6 +25,7 @@ import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
 import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
+import com.onfido.android.sdk.capture.errors.*;
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
@@ -77,23 +79,60 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 currentPromise = null;
                 return;
             }
-    
+
             Activity currentActivity = getCurrentActivityInParentClass();
             if (currentActivity == null) {
                 currentPromise.reject("error", new Exception("Android activity does not exist"));
                 currentPromise = null;
                 return;
             }
-    
+
             try {
-                final OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
+                /* Native SDK seems to have a bug that if an empty EnterpriseFeatures is passed to it,
+                 the logo will still be hidden, even if explicitly set to false */
+                EnterpriseFeatures.Builder enterpriseFeaturesBuilder = EnterpriseFeatures.builder();
+                boolean hasSetEnterpriseFeatures = false;
+
+                if (getBooleanFromConfig(config, "hideLogo")) {
+                    enterpriseFeaturesBuilder.withHideOnfidoLogo(true);
+                    hasSetEnterpriseFeatures = true;
+                } else if (getBooleanFromConfig(config, "logoCobrand")) {
+                    int cobrandLogoLight = currentActivity.getApplicationContext().getResources().getIdentifier(
+                            "cobrand_logo_light",
+                            "drawable",
+                            currentActivity.getApplicationContext().getPackageName()
+                    );
+                    int cobrandLogoDark = currentActivity.getApplicationContext().getResources().getIdentifier(
+                            "cobrand_logo_dark",
+                            "drawable",
+                            currentActivity.getApplicationContext().getPackageName()
+                    );
+                    enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
+                    hasSetEnterpriseFeatures = true;
+                }
+
+                OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
                         .withSDKToken(sdkToken)
-                        .withCustomFlow(flowStepsWithOptions)
-                        .build();
-                client.startActivityForResult(currentActivity, 1, onfidoConfig);
+                        .withCustomFlow(flowStepsWithOptions);
+
+                if (hasSetEnterpriseFeatures) {
+                    onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+                }
+
+                client.startActivityForResult(currentActivity, 1, onfidoConfigBuilder.build());
+            }
+            catch (final EnterpriseFeaturesInvalidLogoCobrandingException e) {
+                currentPromise.reject("error", new EnterpriseFeaturesInvalidLogoCobrandingException());
+                currentPromise = null;
+                return;
+            }
+            catch (final EnterpriseFeatureNotEnabledException e) {
+                currentPromise.reject("error", new EnterpriseFeatureNotEnabledException("logoCobrand"));
+                currentPromise = null;
+                return;
             }
             catch (final Exception e) {
-                currentPromise.reject("error", new Exception("Failed to show Onfido page", e));
+                currentPromise.reject("error", new Exception(e.getMessage(), e));
                 currentPromise = null;
                 return;
             }
@@ -112,7 +151,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return sdkToken;
     }
 
-    public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {    
+    public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {
         try {
 
             final ReadableMap flowSteps = config.getMap("flowSteps");
@@ -123,10 +162,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             } else {
                 welcomePageIsIncluded = false;
             }
-    
+
             ReadableMap captureDocument = null;
             Boolean captureDocumentBoolean = null;
-            
+
             // ReadableMap does not have a way to get multi-typed values without throwing exceptions.
             try {
                 captureDocumentBoolean = flowSteps.getBoolean("captureDocument");
@@ -137,7 +176,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     captureDocument = null;
                 }
             }
-    
+
 
             final List<FlowStep> flowStepList = new ArrayList<>();
 
@@ -163,7 +202,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
                     String countryCodeString = captureDocument.getString("countryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha3(countryCodeString);
-                    
+
                     if (countryCodeEnum ==null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
@@ -217,5 +256,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             }
         }
         return countryCode;
+    }
+
+    private boolean getBooleanFromConfig(ReadableMap config, String key) {
+        return config.hasKey(key) && config.getBoolean(key);
     }
 }

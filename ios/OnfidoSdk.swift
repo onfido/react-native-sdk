@@ -97,6 +97,8 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
     .withSDKToken(sdkToken)
     .withAppearance(appearance)
 
+  var enterpriseFeatures = EnterpriseFeatures.builder()
+
   if let localisationConfig = config["localisation"] as? NSDictionary, let file = localisationConfig["ios_strings_file_name"] as? String {
     onfidoConfig = onfidoConfig.withCustomLocalization(andTableName: file)
   }
@@ -137,7 +139,18 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
       throw NSError(domain: "Invalid or unsupported face variant", code: 0)
     }
   }
-     return onfidoConfig;
+
+  if let hideLogo = config["hideLogo"] as? Bool {
+    enterpriseFeatures.withHideOnfidoLogo(hideLogo)
+  }
+
+  if config["logoCobrand"] as? Bool == true {
+    enterpriseFeatures.withCobrandingLogo(UIImage(named: "cobrand-logo-light")!, cobrandingLogoDarkMode: UIImage(named: "cobrand-logo-dark")!)
+  }
+
+  onfidoConfig.withEnterpriseFeatures(enterpriseFeatures.build())
+
+  return onfidoConfig;
 }
 
 @objc(OnfidoSdk)
