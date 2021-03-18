@@ -57,7 +57,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return "OnfidoSdk";
     }
 
-    /** NOTE: This indirection is used to allow unit tests to mock this method */
+    /**
+     * NOTE: This indirection is used to allow unit tests to mock this method
+     */
     protected Activity getCurrentActivityInParentClass() {
         return super.getCurrentActivity();
     }
@@ -86,19 +88,26 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 return;
             }
 
-            try {
-                final OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
-                        .withSDKToken(sdkToken)
-                        .withCustomFlow(flowStepsWithOptions)
-                        .withLocale(Locale.GERMAN)
-                        .build();
-                client.startActivityForResult(currentActivity, 1, onfidoConfig);
+            Locale locale = Locale.ENGLISH; // default language
+            String language = config.getString("language"); // from js thread
+            if (language.equals("ger")) {
+                locale = Locale.GERMAN;
+            } else if (language.equals("ita")) {
+                locale = Locale.ITALIAN;
             }
-            catch (final Exception e) {
-                currentPromise.reject("error", new Exception("Failed to show Onfido page", e));
-                currentPromise = null;
-                return;
-            }
+
+                try {
+                    final OnfidoConfig onfidoConfig = OnfidoConfig.builder(currentActivity)
+                            .withSDKToken(sdkToken)
+                            .withCustomFlow(flowStepsWithOptions)
+                            .withLocale(locale)
+                            .build();
+                    client.startActivityForResult(currentActivity, 1, onfidoConfig);
+                } catch (final Exception e) {
+                    currentPromise.reject("error", new Exception("Failed to show Onfido page", e));
+                    currentPromise = null;
+                    return;
+                }
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -166,7 +175,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     String countryCodeString = captureDocument.getString("countryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha3(countryCodeString);
 
-                    if (countryCodeEnum ==null) {
+                    if (countryCodeEnum == null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
                     }
