@@ -1013,6 +1013,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@onfido/react-native-sdk@1.3.3":
+  version "1.3.3"
+  resolved "https://registry.npmjs.org/@onfido/react-native-sdk/-/react-native-sdk-1.3.3.tgz#a6cfd87066eca8aef68675d7aba261e741a833e6"
+  integrity sha512-V8aU5wmYjCZWyQIkBkSxDvcuMBsxLMtzDfTOtA1o0rQ0vcw9iZ564pbtkQOMv4A0RcMErK/Gm1yUMb2GRYMmLg==
+
 "@react-native-community/cli-platform-android@^2.0.1", "@react-native-community/cli-platform-android@^2.9.0":
   version "2.9.0"
   resolved "https://registry.npmjs.org/@react-native-community/cli-platform-android/-/cli-platform-android-2.9.0.tgz#28831e61ce565a2c7d1905852fce1eecfd33cb5e"
