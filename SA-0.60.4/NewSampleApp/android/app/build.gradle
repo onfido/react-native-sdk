@@ -128,6 +128,8 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
+
         applicationId "com.newsampleapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
