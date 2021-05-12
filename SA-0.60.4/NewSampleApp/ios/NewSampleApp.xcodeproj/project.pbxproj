@@ -17,6 +17,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* NewSampleAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NewSampleAppTests.m */; };
+		3ADE3343264C8276006A42A1 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADE3342264C8276006A42A1 /* Swift.swift */; };
 		92B6CF62AC306F1FBB7C12F0 /* libPods-NewSampleApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9581A5B035D2B27D73F8BC3B /* libPods-NewSampleApp-tvOS.a */; };
 		CE5ACCDC246163857188D6CD /* libPods-NewSampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 085FB8B15EF49C407E12066D /* libPods-NewSampleApp.a */; };
 		E8CBBF6BF591F82DD61ED5EE /* libPods-NewSampleAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549102ACBBEEE942C599E07D /* libPods-NewSampleAppTests.a */; };
@@ -57,6 +58,7 @@
 		2AB2087DDD9FF41D512FD06E /* Pods-NewSampleApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewSampleApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-NewSampleApp-tvOS/Pods-NewSampleApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* NewSampleApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NewSampleApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* NewSampleApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NewSampleApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ADE3342264C8276006A42A1 /* Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Swift.swift; path = ../Swift.swift; sourceTree = "<group>"; };
 		4B57AA2B6B439293F8DB39E8 /* Pods-NewSampleApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewSampleApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-NewSampleApp-tvOSTests/Pods-NewSampleApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		549102ACBBEEE942C599E07D /* libPods-NewSampleAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NewSampleAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		644FBABABC6478168A344B5C /* Pods-NewSampleApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewSampleApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-NewSampleApp-tvOSTests/Pods-NewSampleApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -161,7 +163,6 @@
 				91331A026DE9A60B65289807 /* Pods-NewSampleAppTests.debug.xcconfig */,
 				10469CD5FA884B8A5AFB928B /* Pods-NewSampleAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -175,6 +176,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				3ADE3342264C8276006A42A1 /* Swift.swift */,
 				13B07FAE1A68108700A75B9A /* NewSampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* NewSampleAppTests */,
@@ -226,10 +228,12 @@
 			buildPhases = (
 				F1CCE93D4A776600DD85B853 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
+				8862EBA7C3E0FD24A28E8F4D /* [CP] Prepare Artifacts */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				54571EF299E1532196DA649F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -292,6 +296,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1230;
+					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -308,6 +315,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -431,6 +439,41 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+		54571EF299E1532196DA649F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NewSampleApp/Pods-NewSampleApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewSampleApp/Pods-NewSampleApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8862EBA7C3E0FD24A28E8F4D /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NewSampleApp/Pods-NewSampleApp-artifacts.sh",
+				"${PODS_ROOT}/Onfido/Onfido.xcframework",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewSampleApp/Pods-NewSampleApp-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F1CCE93D4A776600DD85B853 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -529,6 +572,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				3ADE3343264C8276006A42A1 /* Swift.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +626,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 91331A026DE9A60B65289807 /* Pods-NewSampleAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -605,6 +650,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 10469CD5FA884B8A5AFB928B /* Pods-NewSampleAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = NewSampleAppTests/Info.plist;
@@ -626,6 +672,7 @@
 			baseConfigurationReference = 72523A88BD237EDFD1A4B99B /* Pods-NewSampleApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = NewSampleApp/Info.plist;
@@ -637,6 +684,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NewSampleApp;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -646,6 +695,7 @@
 			baseConfigurationReference = 73E732B4A3BFE75BCD3300B8 /* Pods-NewSampleApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = NewSampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -656,6 +706,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = NewSampleApp;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
