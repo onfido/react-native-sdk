@@ -107,6 +107,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                             "drawable",
                             currentActivity.getApplicationContext().getPackageName()
                     );
+                    if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
+                        currentPromise.reject("error", new Exception("Cobrand logos were not found"));
+                        currentPromise = null;
+                        return;
+                    }
                     enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
                     hasSetEnterpriseFeatures = true;
                 }

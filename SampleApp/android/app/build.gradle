@@ -127,9 +127,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // TODO: ET-385 Remove this workaround for React 0.62.2 when upgrading to a React 0.63+.
     configurations.all {
         resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (!details.requested.name.contains('onfido')) {
+                    if (details.requested.group == 'com.squareup.okhttp3') {
+                        details.useVersion '4.9.0'
+                    }
+                }
+            }
+            // TODO: ET-385 Remove this workaround for React 0.62.2 when upgrading to a React 0.63+.
             force "com.facebook.soloader:soloader:0.8.2"
         }
     }

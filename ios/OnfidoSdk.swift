@@ -145,7 +145,11 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
   }
 
   if config["logoCobrand"] as? Bool == true {
-    enterpriseFeatures.withCobrandingLogo(UIImage(named: "cobrand-logo-light")!, cobrandingLogoDarkMode: UIImage(named: "cobrand-logo-dark")!)
+    if (UIImage(named: "cobrand-logo-light") != nil && UIImage(named: "cobrand-logo-dark") != nil) {
+      enterpriseFeatures.withCobrandingLogo(UIImage(named: "cobrand-logo-light")!, cobrandingLogoDarkMode: UIImage(named: "cobrand-logo-dark")!)
+    } else {
+        throw NSError(domain: "Cobrand logos were not found", code: 0)
+    }
   }
 
   onfidoConfig.withEnterpriseFeatures(enterpriseFeatures.build())
@@ -202,17 +206,17 @@ class OnfidoSdk: NSObject {
           }
         })
 
-      let onfidoRun = try onfidoFlow.run()
-      onfidoRun.modalPresentationStyle = .fullScreen
-      UIApplication.shared.windows.first?.rootViewController?.present(onfidoRun, animated: true)
-    } catch let error as NSError {
-      reject("error", error.domain, error)
-      return;
-    } catch let error {
-      reject("error", "Error running Onfido SDK", error)
-      return;
+            let onfidoRun = try onfidoFlow.run()
+            onfidoRun.modalPresentationStyle = .fullScreen
+            UIApplication.shared.windows.first?.rootViewController?.findTopMostController().present(onfidoRun, animated: true)
+        } catch let error as NSError {
+            reject("error", error.domain, error)
+            return;
+        } catch let error {
+            reject("error", "Error running Onfido SDK", error)
+            return;
+        }
     }
-  }
 }
 
 extension UIColor {
@@ -269,4 +273,14 @@ extension Appearance {
             primaryColor: UIColor.primaryColor,
             primaryTitleColor: UIColor.white,
             primaryBackgroundPressedColor: UIColor.primaryButtonColorPressed)
+}
+
+extension UIViewController {
+    public func findTopMostController() -> UIViewController {
+        var topController: UIViewController? = self
+        while topController!.presentedViewController != nil {
+            topController = topController!.presentedViewController!
+        }
+        return topController!
+    }
 }

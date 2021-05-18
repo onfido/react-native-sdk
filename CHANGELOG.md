@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.4]
+
+### Added:
+- Public: Updated README with troubleshooting information and okhttp3 resolution guide.
+- Public: Updated error responses to be more descriptive.
+
+### Fixed:
+- Public: Apply okhttp3 fix to SampleApp.
+- Public: Add fix for XCode 12.5 to SampleApp Podfile.
+- Public: Fix an iOS bug where the Onfido flow isn't presented to user if the rootViewController is not at the top of the view hierarchy.
+- Public: Fix for bug with Android proguard rules
+
 ## [1.3.3] - 2021-02-26
 
 ### Added:

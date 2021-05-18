@@ -28,6 +28,7 @@
 - [Going live](#going-live)
 - [More Information](#more-information)
   - [Support](#support)
+  - [Troubleshooting](#troubleshooting)
 - [How is the Onfido React Native SDK licensed?](#how-is-the-onfido-react-native-sdk-licensed)
 
 
@@ -181,6 +182,28 @@ cd ios
 pod install
 cd ..
 ```
+
+#### 4.4 Fix dependency conflict between React Native and Onfido Android SDK
+
+When using React Native version <= 0.64.0 there is a dependency conflict with okhttp3 on Android that can cause requests from outside of the Onfido SDK to fail. To fix this you can add the following code to `android/app/build.gradle`:
+
+```
+android {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (!details.requested.name.contains('onfido')) {
+                    if (details.requested.group == 'com.squareup.okhttp3') {
+                        details.useVersion '4.9.0'
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+This will allow the Onfido SDK to use okhttp3 v4.9.0 while still using the React Native version defined elsewhere in your app.
 
 ## Usage
 
@@ -402,6 +425,23 @@ A few things to check before you go live:
 
 ## More Information
 
+### Troubleshooting
+
+**Resolving dependency conflicts**
+
+Here are some helpful resources if you are experiencing dependency conflicts between this React Native SDK and other packages your app uses:
+* [Gradle: Dependency Resolution](https://docs.gradle.org/current/userguide/dependency_resolution.html#header)
+* [Gradle: Dependency Constraints](https://docs.gradle.org/current/userguide/dependency_constraints.html#dependency-constraints)
+
+**General advice**
+
+If you see issues, you can try removing `node_modules`, build directories, and cache files. A good tool to help with this is [react-native-clean-project](https://github.com/pmadruga/react-native-clean-project)
+### Discrepancies between underlying Onfido native SDKs
+
+Below is a list of known differences in expected behavior between the Onfido Android and iOS SDKs this React Native SDK wraps:
+
+* Documents with the type `passport` uploaded through the iOS SDK will have the `side` attribute set to `null`, while those uploaded via Android will have `side` as `front`.
+
 ### Support
 
 Please open an issue through [GitHub](https://github.com/onfido/onfido-react-native-sdk/issues). Please be as detailed as you can. Remember **not** to submit your token in the issue. Also check the closed issues to check whether it has been previously raised and answered.
@@ -410,7 +450,7 @@ If you have any issues that contain sensitive information please send us an emai
 
 Previous version of the SDK will be supported for a month after a new major version release. Note that when the support period has expired for an SDK version, no bug fixes will be provided, but the SDK will keep functioning (until further notice).
 
-Copyright 2020 Onfido, Ltd. All rights reserved.
+Copyright 2021 Onfido, Ltd. All rights reserved.
 
 ## How is the Onfido React Native SDK licensed?
 
