@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.3.4]
+## [2.0.0] - 2021-06-11
+
+### Added:
+- Public: Added support for enabling the user consent screen for iOS and Android.
+
+### Changed:
+- Public: Updated underlying Onfido iOS SDK to version 21.4.0 (up from 20.1.0). For more information visit the [Onfido iOS SDK releases on Github](https://github.com/onfido/onfido-ios-sdk/releases)
+- Public: Updated underlying Onfido Android SDK to version 9.3.1 (up from 9.0.0). For more information visit the [Onfido Android SDK releases on Github](https://github.com/onfido/onfido-android-sdk/releases)
+
+## [1.3.4] - 2021-05-18
 
 ### Added:
 - Public: Updated README with troubleshooting information and okhttp3 resolution guide.

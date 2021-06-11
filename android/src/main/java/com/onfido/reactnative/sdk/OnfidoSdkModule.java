@@ -168,6 +168,13 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 welcomePageIsIncluded = false;
             }
 
+            final Boolean userConsentIsIncluded;
+            if (flowSteps.hasKey("userConsent")) {
+                userConsentIsIncluded = flowSteps.getBoolean("userConsent");
+            } else {
+                userConsentIsIncluded = false;
+            }
+
             ReadableMap captureDocument = null;
             Boolean captureDocumentBoolean = null;
 
@@ -189,11 +196,15 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 flowStepList.add(FlowStep.WELCOME);
             }
 
+            if (userConsentIsIncluded) {
+                flowStepList.add(FlowStep.USER_CONSENT);
+            }
+
             if (captureDocumentBoolean != null && captureDocumentBoolean) {
                 flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
             } else if (captureDocument != null) {
                 final boolean docTypeExists = captureDocument.hasKey("docType");
-                final boolean countryCodeExists = captureDocument.hasKey("countryCode");
+                final boolean countryCodeExists = captureDocument.hasKey("alpha2CountryCode");
                 if (docTypeExists && countryCodeExists) {
                     String docTypeString = captureDocument.getString("docType");
 
@@ -205,8 +216,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                         throw new Exception("Unexpected docType value.");
                     }
 
-                    String countryCodeString = captureDocument.getString("countryCode");
-                    CountryCode countryCodeEnum = findCountryCodeByAlpha3(countryCodeString);
+                    String countryCodeString = captureDocument.getString("alpha2CountryCode");
+                    CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
                     if (countryCodeEnum ==null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
@@ -252,11 +263,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         }
     }
 
-    public static CountryCode findCountryCodeByAlpha3(String countryCodeString) {
+    public static CountryCode findCountryCodeByAlpha2(String countryCodeString) {
         CountryCode countryCode = null;
         // We'll use a loop to find the value, because streams are not supported in Java 7.
         for (CountryCode cc : CountryCode.values()) {
-            if (cc.getAlpha3().equals(countryCodeString)) {
+            if (cc.name().equals(countryCodeString)) {
                 countryCode = cc;
             }
         }

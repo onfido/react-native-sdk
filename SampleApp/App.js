@@ -43,6 +43,7 @@ export default class App extends Component {
       },
       flowSteps: {
         welcome: true,
+        userConsent: true,
         captureDocument: {},
         captureFace: {
           type: OnfidoCaptureType.VIDEO,

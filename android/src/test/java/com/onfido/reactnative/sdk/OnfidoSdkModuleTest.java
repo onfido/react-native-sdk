@@ -53,13 +53,13 @@ public class OnfidoSdkModuleTest {
 
     @Test
     public void shouldFindCountryCode() throws Exception {
-        CountryCode cc = OnfidoSdkModule.findCountryCodeByAlpha3("GBR");
+        CountryCode cc = OnfidoSdkModule.findCountryCodeByAlpha2("GB");
         assertEquals(CountryCode.GB, cc);
     }
 
     @Test
     public void shouldNotFindInvalidCountryCode() throws Exception {
-        CountryCode cc = OnfidoSdkModule.findCountryCodeByAlpha3("123");
+        CountryCode cc = OnfidoSdkModule.findCountryCodeByAlpha2("12");
         assertNull(cc);
     }
 

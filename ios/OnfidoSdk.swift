@@ -87,7 +87,7 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
     }
 }
 
-public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throws -> Onfido.OnfidoConfig.Builder {
+public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throws -> Onfido.OnfidoConfigBuilder {
   let sdkToken:String = config["sdkToken"] as! String
   let flowSteps:NSDictionary? = config["flowSteps"] as? NSDictionary
   let captureDocument:NSDictionary? = flowSteps?["captureDocument"] as? NSDictionary
@@ -105,6 +105,10 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
 
   if flowSteps?["welcome"] as? Bool == true {
     onfidoConfig = onfidoConfig.withWelcomeStep()
+  }
+
+  if flowSteps?["userConsent"] as? Bool == true {
+    onfidoConfig = onfidoConfig.withUserConsentStep()
   }
 
   if let docType = captureDocument?["docType"] as? String, let countryCode = captureDocument?["countryCode"] as? String {

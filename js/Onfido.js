@@ -1,5 +1,5 @@
-import { NativeModules } from 'react-native';
-import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode } from "./config_constants";
+import { NativeModules, Platform } from 'react-native';
+import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode, OnfidoAlpha2CountryCode } from "./config_constants";
 
 const { OnfidoSdk } = NativeModules;
 
@@ -35,8 +35,15 @@ const Onfido = {
         return configError("docType is invalid");
       }
 
-      if (config.flowSteps.captureDocument.countryCode && !(config.flowSteps.captureDocument.countryCode in OnfidoCountryCode)) {
-        return configError("countryCode is not a ISO 3166-1 3 letter code");
+
+      if (config.flowSteps.captureDocument.countryCode) {
+        if (!config.flowSteps.captureDocument.countryCode in OnfidoCountryCode) {
+          return configError("countryCode is not a ISO 3166-1 3 letter code");
+        }
+
+        if (Platform.OS === "android") {
+          config.flowSteps.captureDocument.alpha2CountryCode = OnfidoAlpha2CountryCode[config.flowSteps.captureDocument.countryCode];
+        }
       }
     }
 
