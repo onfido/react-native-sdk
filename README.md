@@ -174,7 +174,7 @@ Open Xcode and create an empty swift file in your project root.  For example, if
 open ios/YourProjectName.xcodeproj
 ```
 
-Once Xcode is open, add an empty Swift file:  File > New File > Swift > Next > "SwiftVersion" > Create > Don't create Header.  This will update your iOS configuration with a Swift version.  All chaganges are automatically saved, so you can close Xcode.
+Once Xcode is open, add an empty Swift file:  File > New File > Swift > Next > "SwiftVersion" > Create > Don't create Header.  This will update your iOS configuration with a Swift version.  All changes are automatically saved, so you can close Xcode.
 
 Install the pods:
 ```bash
