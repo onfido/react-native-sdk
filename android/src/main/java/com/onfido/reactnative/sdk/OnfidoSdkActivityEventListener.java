@@ -70,7 +70,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
             @Override
             public void userExited(final ExitCode exitCode) {
                 if (currentPromise != null) {
-                    currentPromise.reject("cancel", new Exception("User exited by clicking the back button."));
+                    currentPromise.reject(exitCode.toString(), new Exception("User exited by manual action."));
                     currentPromise = null;
                 }
             }

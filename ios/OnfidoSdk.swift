@@ -196,13 +196,20 @@ class OnfidoSdk: NSObject {
           guard let `self` = self else { return }
           switch response {
             case let .error(error):
-              reject("error", "Encountered an error: \(error)", error)
+              reject("\(error)", "Encountered an error running the flow", error)
               return;
             case let .success(results):
               resolve(createResponse(results, faceVariant: faceVariant))
               return;
-            case .cancel:
-              reject("cancel", "User canceled flow", nil)
+            case let .cancel(reason):
+              switch (reason) {
+                case .deniedConsent:
+                  reject("deniedConsent", "User denied consent.", nil)
+                case .userExit:
+                  reject("userExit", "User canceled flow.", nil)
+                default:
+                  reject("userExit", "User canceled flow via unknown method.", nil)
+              }
               return;
             default:
               reject("error", "Unknown error has occured", nil)
@@ -214,10 +221,10 @@ class OnfidoSdk: NSObject {
             onfidoRun.modalPresentationStyle = .fullScreen
             UIApplication.shared.windows.first?.rootViewController?.findTopMostController().present(onfidoRun, animated: true)
         } catch let error as NSError {
-            reject("error", error.domain, error)
+            reject("\(error)", error.domain, error)
             return;
         } catch let error {
-            reject("error", "Error running Onfido SDK", error)
+            reject("\(error)", "Error running Onfido SDK", error)
             return;
         }
     }
