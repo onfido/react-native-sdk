@@ -1,7 +1,7 @@
 {
   "name": "@onfido/react-native-sdk",
   "title": "React Native Onfido Sdk",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Onfido React Native SDK",
   "main": "index.js",
   "scripts": {
@@ -58,7 +58,7 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^16.8.1",
+    "react": ">=16.8.1 <17.0.x",
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
