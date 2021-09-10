@@ -168,6 +168,14 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 welcomePageIsIncluded = false;
             }
 
+            final Boolean finalPageIsIncluded;
+            if (flowSteps.hasKey("final")) {
+                finalPageIsIncluded = flowSteps.getBoolean("final");
+            } else {
+                finalPageIsIncluded = false;
+            }
+
+
             final Boolean userConsentIsIncluded;
             if (flowSteps.hasKey("userConsent")) {
                 userConsentIsIncluded = flowSteps.getBoolean("userConsent");
@@ -251,7 +259,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.PHOTO));
                 }
             }
-            flowStepList.add(FlowStep.FINAL);
+
+            if (finalPageIsIncluded) {
+                flowStepList.add(FlowStep.FINAL);
+            }
 
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
 

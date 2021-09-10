@@ -104,6 +104,8 @@ public class OnfidoSdkModuleTest {
         when(flowStepsMock.hasKey("welcome")).thenReturn(false);
         when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
         when(flowStepsMock.hasKey("captureFace")).thenReturn(false);
+        when(flowStepsMock.hasKey("final")).thenReturn(true);
+        when(flowStepsMock.getBoolean("final")).thenReturn(true);
 
         ReadableMap configMock = mock(ReadableMap.class);
         String sdkToken = "mockSdkToken123";

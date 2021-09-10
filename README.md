@@ -232,6 +232,7 @@ export default class App extends Component {
           docType: OnfidoDocumentType.DRIVING_LICENCE,
           countryCode: OnfidoCountryCode.GBR,
         },
+        final: true
       },
     })
       .then(res => console.warn('OnfidoSDK: Success:', JSON.stringify(res)))
@@ -267,6 +268,7 @@ config = {
     captureFace: {
       type: OnfidoCaptureType.VIDEO
     },
+    final: true
   },
 }
 ```
@@ -276,6 +278,8 @@ config = {
 * **`sdkToken`**: Required.  This is the JWT sdk token obtained by making a call to the SDK token API.  See section [Configuring SDK with Tokens](#3-configuring-sdk-with-tokens).
 * **`flowSteps`**: Required.  This object is used to toggle individual screens on and off and set configurations inside the screens.
 * **`welcome`**: Optional.  This toggles the welcome screen on or off.  If omitted, this screen does not appear in the flow.
+  * Valid values: `true`, `false`
+* **`final`**: Android only, on iOS this screen is not present: Optional.  This toggles the final screen on or off.  If omitted, this screen does not appear in the flow.
   * Valid values: `true`, `false`
 * **`captureDocument`**: Optional. This object contains configuration for the capture document screen. If docType and countryCode are not specified, a screen will appear allowing the user to choose these values.  If omitted, this screen does not appear in the flow.
 * **`docType`**: Required if countryCode is specified.  
