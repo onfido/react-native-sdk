@@ -81,6 +81,7 @@ android {
 repositories {
     // ref: https://www.baeldung.com/maven-local-repository
     mavenLocal()
+    mavenCentral()
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$rootDir/../node_modules/react-native/android"
@@ -91,20 +92,17 @@ repositories {
     }
     google()
     jcenter()
-
-    maven {
-        url "https://dl.bintray.com/onfido/maven"
-        // credential_place_holder
-    }
 }
 
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:9.3.1"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:10.1.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.squareup.okhttp3:okhttp:3.8.0"
     implementation "com.android.support:multidex:1.0.3"
+    // Fix for crash due to 'java.lang.NoClassDefFoundError: Failed resolution of: Landroidx/swiperefreshlayout/widget/SwipeRefreshLayout;''
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'

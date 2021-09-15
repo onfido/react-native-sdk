@@ -142,6 +142,7 @@
 			buildConfigurationList = 3A9D42D32412EEF50087A331 /* Build configuration list for PBXNativeTarget "OnfidoSdkTests" */;
 			buildPhases = (
 				F9960F94F39C64AC672A96D8 /* [CP] Check Pods Manifest.lock */,
+				928DC589C379F55C63F7E70C /* [CP] Prepare Artifacts */,
 				3A9D42C52412EEF50087A331 /* Sources */,
 				3A9D42C62412EEF50087A331 /* Frameworks */,
 				3A9D42C72412EEF50087A331 /* Resources */,
@@ -232,6 +233,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
 				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
@@ -253,7 +255,6 @@
 				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
 				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Onfido/Onfido.framework/Onfido",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -278,7 +279,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -305,6 +305,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		928DC589C379F55C63F7E70C /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-artifacts.sh",
+				"${PODS_ROOT}/Onfido/Onfido.xcframework",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F9960F94F39C64AC672A96D8 /* [CP] Check Pods Manifest.lock */ = {

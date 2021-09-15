@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2021-09-15
+
+### Changed:
+- Public: Updated underlying Onfido iOS SDK to version 22.3.0 (up from 21.4.0). For more information visit the [Onfido iOS SDK releases on Github](https://github.com/onfido/onfido-ios-sdk/releases)
+- Public: Updated underlying Onfido Android SDK to version 10.1.0 (up from 9.3.1). For more information visit the [Onfido Android SDK releases on Github](https://github.com/onfido/onfido-android-sdk/releases)
+
+### Fixed:
+- Public: Fixed script that added Onfido bintray link to users' `android/app/build.gradle` to now add `mavenCentral()` instead, if not already present.
+- Public: Fixed sample Localizable file to match newest iOS string keys.
+
 ##  [2.1.1] - 2021-07-27
 
 ### Changed:

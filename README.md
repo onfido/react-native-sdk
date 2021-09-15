@@ -133,7 +133,7 @@ Add the maven link `android/build.gradle`:
 ```gradle
 allprojects {
   repositories {
-    maven { url "https://dl.bintray.com/onfido/maven" }
+    mavenCentral()
   }
 }
 ```

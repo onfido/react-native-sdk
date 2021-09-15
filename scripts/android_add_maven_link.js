@@ -12,7 +12,7 @@
 
 var fs = require('fs');
 
-var mavenUrl = 'https://dl.bintray.com/onfido/maven';
+var mavenUrl = 'mavenCentral()';
 var targetCurrentPath = '../../../';
 var targetFile = 'android/build.gradle';
 var targetFileWithFullPath = targetCurrentPath + targetFile;
@@ -34,7 +34,7 @@ if (!isLinked) {
     var repositoriesIndex = indexOfOrExit(contents, "repositories", allprojectsIndex);
     var repositoriesBraceIndex = indexOfOrExit(contents, "{", repositoriesIndex) + 1;
     var contentsStart = contents.substring(0,repositoriesBraceIndex);
-    var contentsToInsert = '\n        maven { url "' + mavenUrl + '" } \n';
+    var contentsToInsert = '\n        ' + mavenUrl + '\n';
     var contentsEnd = contents.substring(repositoriesBraceIndex);
     var contentsUpdated = contentsStart + contentsToInsert + contentsEnd;
     fs.writeFileSync(targetFileWithFullPath, contentsUpdated);

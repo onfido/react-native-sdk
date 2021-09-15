@@ -17,10 +17,10 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* SampleAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SampleAppTests.m */; };
 		31F1352E93A4E729E0328344 /* libPods-SampleApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134EF430C5031CF381EA93F0 /* libPods-SampleApp-tvOSTests.a */; };
+		3A207E9426EABFB400EEDE01 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A207E9326EABFB400EEDE01 /* Localizable.strings */; };
 		3A9D456A24180E9E0087A331 /* SampleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D456924180E9E0087A331 /* SampleSwift.swift */; };
 		448A4A7963B733A7A3E5F343 /* libPods-SampleAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 454127CFC1D34443F95D7C65 /* libPods-SampleAppTests.a */; };
 		A27D5C5624FFA363000BDD48 /* colors.json in Resources */ = {isa = PBXBuildFile; fileRef = A27D5C5524FFA363000BDD48 /* colors.json */; };
-		A2E232FB24AB94EB00007012 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2E232FA24AB94EB00007012 /* Localizable.strings */; };
 		C803C26CB03A58DA4EA318D5 /* libPods-SampleApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9467611D156F74B5DB4141 /* libPods-SampleApp-tvOS.a */; };
 		FAFD48624DBCDF07D2C16BD4 /* libPods-SampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8CE159E3962919607C4C98 /* libPods-SampleApp.a */; };
 /* End PBXBuildFile section */
@@ -59,6 +59,7 @@
 		2D02E47B1E0B4A5D006451C7 /* SampleApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SampleApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* SampleApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SampleApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		354E053B8237E8BC941E5FC4 /* Pods-SampleAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleAppTests.debug.xcconfig"; path = "Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3A207E9326EABFB400EEDE01 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = SampleApp/Localizable.strings; sourceTree = "<group>"; };
 		3A9D456924180E9E0087A331 /* SampleSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleSwift.swift; sourceTree = "<group>"; };
 		454127CFC1D34443F95D7C65 /* libPods-SampleAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SampleAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AF1FE68B222396981831AEA /* Pods-SampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp.release.xcconfig"; path = "Target Support Files/Pods-SampleApp/Pods-SampleApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		95707FCD44C2FC4473376FF3 /* Pods-SampleApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOS/Pods-SampleApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		95D22025D78857D1C84E3211 /* Pods-SampleApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOS/Pods-SampleApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		A27D5C5524FFA363000BDD48 /* colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = colors.json; path = SampleApp/colors.json; sourceTree = "<group>"; };
-		A2E232FA24AB94EB00007012 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A68881444BA0DAB1CBFA1DAC /* Pods-SampleApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp-tvOSTests/Pods-SampleApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BD7D4F71ACBEFCDEF85ACD10 /* Pods-SampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -131,7 +131,6 @@
 		13B07FAE1A68108700A75B9A /* SampleApp */ = {
 			isa = PBXGroup;
 			children = (
-				A2E232FA24AB94EB00007012 /* Localizable.strings */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -167,6 +166,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				3A207E9326EABFB400EEDE01 /* Localizable.strings */,
 				A27D5C5524FFA363000BDD48 /* colors.json */,
 				13B07FAE1A68108700A75B9A /* SampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -350,7 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2E232FB24AB94EB00007012 /* Localizable.strings in Resources */,
+				3A207E9426EABFB400EEDE01 /* Localizable.strings in Resources */,
 				A27D5C5624FFA363000BDD48 /* colors.json in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
