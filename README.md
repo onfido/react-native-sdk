@@ -344,7 +344,16 @@ Example
 
 ### 5. Localization
 
-Onfido SDKs support a number of out-of-the-box translations. However, you can add your own translations.
+The SDK supports and maintains the following 6 languages:
+
+ - English (en) 🇬🇧
+ - Spanish (es) 🇪🇸
+ - French (fr) 🇫🇷
+ - German (de) 🇩🇪
+ - Italian (it) 🇮🇹
+ - Portuguese (pt) 🇵🇹
+ 
+However, you can add your own translations.
 
 #### Android
 
@@ -352,16 +361,18 @@ By default, custom localisation is enabled on Android. There is no configuration
 You could also provide custom translation for a locale that we don’t currently support, by having an additional XML strings file inside your resources folder for the desired locale. See [Localisation section of Android SDK repo](https://github.com/onfido/onfido-android-sdk#4-localisation) for the details.
 
 #### iOS
+There is simple configuration needed on React Native SDK to enable custom localisation.
+You could also provide custom translation for a locale that we don’t currently support
 
-If you want to enable custom localisation, add this statement to your configuration object.
-
+1. Add this statement to your configuration object.
 ```
 localisation: {
   ios_strings_file_name: '<Your .strings file name in iOS app bundle>',
 },
 ```
-
-In this case SDK will show strings from the provided file. For more detailed explanation please check out [Localisation section of iOS SDK repo.](https://github.com/onfido/onfido-ios-sdk#language-customisation)
+2. ```cd ios``` folder, and open your XCode workspace.
+3. Follow the instruction here to add a new custom language or override existing translations [Localisation section of iOS SDK repo](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881).
+4. [Here is the keys need to be translated](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
 
 ## Creating checks
 
