@@ -361,7 +361,7 @@ By default, custom localisation is enabled on Android. There is no configuration
 You could also provide custom translation for a locale that we don’t currently support, by having an additional XML strings file inside your resources folder for the desired locale. See [Localisation section of Android SDK repo](https://github.com/onfido/onfido-android-sdk#4-localisation) for the details.
 
 #### iOS
-There is simple configuration needed on React Native SDK to enable custom localisation.
+There is a simple configuration needed on the React Native SDK to enable custom localisation.
 You can also provide a custom translation for a locale that Onfido doesn't currently support.
 
 1. Add this statement to your configuration object.
