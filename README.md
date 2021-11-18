@@ -372,7 +372,7 @@ localisation: {
 ```
 2. Navigate to the iOS folder ```cd ios```, and open your XCode workspace.
 3. Follow the instructions in the [iOS Localisation](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881) to add a new custom language or override existing translations.
-4. [Here are the keys that need to be translated in iOS SDK repo](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
+4. You can find the keys that need to be translated in the [iOS SDK repo](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
 
 ## Creating checks
 
