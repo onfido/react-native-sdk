@@ -362,7 +362,7 @@ You could also provide custom translation for a locale that we don’t currently
 
 #### iOS
 There is simple configuration needed on React Native SDK to enable custom localisation.
-You could also provide custom translation for a locale that we don’t currently support
+You can also provide a custom translation for a locale that Onfido doesn't currently support.
 
 1. Add this statement to your configuration object.
 ```
