@@ -370,7 +370,7 @@ localisation: {
   ios_strings_file_name: '<Your .strings file name in iOS app bundle>',
 },
 ```
-2. ```cd ios``` folder, and open your XCode workspace.
+2. Navigate to the iOS folder ```cd ios```, and open your XCode workspace.
 3. Follow the instruction here to add a new custom language or override existing translations [Localisation section of iOS SDK repo](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881).
 4. [Here are the keys that need to be translated](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
 
