@@ -18,7 +18,8 @@
     "test-e2e-android-debug-sampleapp": "detox build -c android.emu.debug.sampleapp && detox test -c android.emu.debug.sampleapp -o e2eAndroid/config.json",
     "test-e2e-android-release-sampleapp": "detox build -c android.emu.release.sampleapp && detox test -c android.emu.release.sampleapp -o e2eAndroid/config.json",
     "refresh-native": "(cd ../ && npx yalc publish --push)",
-    "refresh-ios": "yarn refresh-native && yarn ios"
+    "refresh-ios": "yarn refresh-native && yarn ios",
+    "clean-project": "./node_modules/.bin/react-native-clean-project"
   },
   "dependencies": {
     "@onfido/react-native-sdk": "file:.yalc/@onfido/react-native-sdk",
@@ -36,7 +37,7 @@
     "eslint-plugin-detox": "^1.0.0",
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.58.0",
-    "react-native-clean-project": "^3.6.4",
+    "react-native-clean-project": "^3.6.7",
     "react-test-renderer": "16.11.0"
   },
   "resolutions": {

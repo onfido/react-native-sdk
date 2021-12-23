@@ -44,6 +44,7 @@ This SDK provides a drop-in set of screens and tools for react native applicatio
 \* **Note**: the SDK is only responsible for capturing and uploading photos/videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to create and manage checks.
 
 * Supports iOS 10+
+* Supports Xcode 13+
 * Supports Android API level 21+
 * Supports iPads and tablets
 

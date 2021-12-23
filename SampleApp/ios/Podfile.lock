@@ -19,9 +19,9 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Onfido (22.3.0)
-  - "onfido-react-native-sdk (2.1.1+22e39454)":
-    - Onfido (= 22.3.0)
+  - Onfido (23.1.0)
+  - onfido-react-native-sdk (2.2.0):
+    - Onfido (= 23.1.0)
     - React
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
@@ -344,8 +344,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Onfido: e4a69434fc8ea8369d01ce77e5c2bdfa675dc40e
-  onfido-react-native-sdk: 7de1ba335297fdfbd5aa43331360a446e9576669
+  Onfido: c0c71c1443858d805a39d20ab72f4c681759bd60
+  onfido-react-native-sdk: 0067cab8375ea83d7989fb956614b082e55c2635
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3

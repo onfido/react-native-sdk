@@ -97,7 +97,7 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:10.1.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:10.3.2"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.squareup.okhttp3:okhttp:3.8.0"
     implementation "com.android.support:multidex:1.0.3"
