@@ -1,0 +1,44 @@
+afterEvaluate {
+    task sourceJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        archiveClassifier = "sources"
+    }
+
+    publishing {
+        def packageJson = new groovy.json.JsonSlurper().parseText(file('../package.json').text)
+
+        publications {
+            mavenJava(MavenPublication) {
+                // The new gradle publish plugin doesn't allow the @onfido/ prefix
+                artifactId = packageJson.name.replace("@onfido/", "onfido-")
+                groupId = 'com.onfido.reactnative.sdk'
+                version = packageJson.version
+
+                from components.release
+
+                artifact sourceJar
+
+                pom {
+                    name = packageJson.title
+                    description = packageJson.description
+                    url = packageJson.repository.baseUrl
+
+                    licenses {
+                        license {
+                            name = packageJson.license
+                            url = packageJson.repository.baseUrl + '/blob/master/' + packageJson.licenseFilename
+                            distribution = 'repo'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = packageJson.author
+                            name = packageJson.author
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

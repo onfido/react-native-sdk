@@ -9,9 +9,8 @@ If you want to publish the lib as a maven dependency, follow these steps before 
 ndk.dir=/Users/{username}/Library/Android/sdk/ndk-bundle
 sdk.dir=/Users/{username}/Library/Android/sdk
 ```
-3. Delete the `maven` folder
-4. Run `./gradlew installArchives`
-5. Verify that latest set of generated files is in the maven folder with the correct version number
+3. Run `./gradlew publishToMavenLocal`
+4. Go to the `~/.m2` directory. Verify that the pom file was generated successfully with the correct version.
 
 
 How to quickly develop the Android Java code using the TestApp:

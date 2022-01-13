@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.onfido.android.sdk.capture.DocumentType;
+import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
@@ -91,9 +92,9 @@ public class OnfidoSdkActivityEventListenerTest {
 
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
         Onfido.OnfidoResultListener resultListener = resultListenerCaptor.getValue();
-        resultListener.userExited(null);
+        resultListener.userExited(ExitCode.USER_LEFT_ACTIVITY);
 
-        verify(promiseMock).reject(eq("cancel"), any(Exception.class));
+        verify(promiseMock).reject(eq("USER_LEFT_ACTIVITY"), any(Exception.class));
     }
 
     @Test

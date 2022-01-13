@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.0] - 2022-01-13
+
+### Changed:
+- Public: Upgraded the Gradle version of the Onfido's React Native SDK to v7.0.2
+- Public: Upgraded the Android Gradle Plugin to v7.0.4
+
+
 ## [3.0.0] - 2021-12-22
 
 ### Changed:
