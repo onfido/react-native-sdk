@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2022-01-28
+
+### Changed:
+
+- Public: Fixed compile time issue that happened on Android due to wrong parsing of the author payload from `package.json` file
+- Public: Removed the final screen from being always shown at the end of the flow steps on Android
 
 ## [4.0.0] - 2022-01-13
 
@@ -17,6 +23,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed:
 - Public: Updated underlying Onfido iOS SDK to version 23.1.0 (up from 22.3.0). For more information visit the [Onfido iOS SDK releases on Github](https://github.com/onfido/onfido-ios-sdk/releases) NOTE: This version of SDK will only support building your app with Xcode 13 due to lack of backward compatibility introduced by Apple with Xcode 13.
 - Public: Updated underlying Onfido Android SDK to version 10.3.2 (up from 10.1.0). For more information visit the [Onfido Android SDK releases on Github](https://github.com/onfido/onfido-android-sdk/releases)
+
+
+## [2.2.1] - 2022-01-25
+
+### Changed:
+
+- Public: Removed the final screen from being always shown at the end of the flow steps on Android
+
 
 ## [2.2.0] - 2021-09-15
 

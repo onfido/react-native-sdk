@@ -126,15 +126,6 @@ public class OnfidoSdkModuleTest {
 
         onfidoSdkModuleSpy.start(configMock, promiseMock);
         verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(1), any(OnfidoConfig.class));
-
-
-        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(1), argThat(new ArgumentMatcher<OnfidoConfig>() {
-            @Override
-            public boolean matches(OnfidoConfig config) {
-
-                return config.getFlowSteps().size() == 1 && config.getFlowSteps().get(0).equals(FlowStep.FINAL);
-            }
-        }));
     }
 
 }

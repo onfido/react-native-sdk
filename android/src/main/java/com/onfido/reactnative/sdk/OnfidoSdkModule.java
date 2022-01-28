@@ -251,7 +251,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.PHOTO));
                 }
             }
-            flowStepList.add(FlowStep.FINAL);
 
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
 
