@@ -280,7 +280,7 @@ config = {
   * Valid values: `true`, `false`
 * **`captureDocument`**: Optional. This object contains configuration for the capture document screen. If docType and countryCode are not specified, a screen will appear allowing the user to choose these values.  If omitted, this screen does not appear in the flow.
 * **`docType`**: Required if countryCode is specified.  
-  * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`.
+  * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`.
     **Note**: `GENERIC` document type doesn't offer an optimised capture experience for a desired document type.
 * **`countryCode`**: Required if docType is specified.
   * Valid values in `OnfidoCountryCode`: Any ISO 3166-1 alpha-3 code. For example: `OnfidoCountryCode.USA`.
