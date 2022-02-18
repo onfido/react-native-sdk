@@ -76,12 +76,12 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
     let appearancePublic = try loadAppearancePublicFromFile(filePath: filePath)
 
     if let appearancePublic = appearancePublic {
-        return Appearance(
-            primaryColor: appearancePublic.primaryColor,
-            primaryTitleColor: appearancePublic.primaryTitleColor,
-            primaryBackgroundPressedColor: appearancePublic.primaryBackgroundPressedColor,
-            supportDarkMode: appearancePublic.supportDarkMode
-        )
+        let appearance = Appearance()
+        appearance.primaryColor = appearancePublic.primaryColor
+        appearance.primaryTitleColor = appearancePublic.primaryTitleColor
+        appearance.primaryBackgroundPressedColor = appearancePublic.primaryBackgroundPressedColor
+        appearance.supportDarkMode =  appearancePublic.supportDarkMode
+        return appearance
     } else {
         return Appearance.default;
     }
@@ -280,10 +280,13 @@ extension UIColor {
 
 extension Appearance {
 
-    static let `default` = Appearance(
-            primaryColor: UIColor.primaryColor,
-            primaryTitleColor: UIColor.white,
-            primaryBackgroundPressedColor: UIColor.primaryButtonColorPressed)
+    static let `default`: Appearance = {
+        let appearance = Appearance()
+        appearance.primaryColor = .primaryColor
+        appearance.primaryTitleColor = .white
+        appearance.primaryBackgroundPressedColor = .primaryButtonColorPressed
+        return appearance
+    }()
 }
 
 extension UIViewController {

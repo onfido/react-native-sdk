@@ -43,7 +43,7 @@ This SDK provides a drop-in set of screens and tools for react native applicatio
 
 \* **Note**: the SDK is only responsible for capturing and uploading photos/videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to create and manage checks.
 
-* Supports iOS 10+
+* Supports iOS 11+
 * Supports Xcode 13+
 * Supports Android API level 21+
 * Supports iPads and tablets
@@ -94,7 +94,7 @@ The `application_id` is the "Application ID" or "Bundle ID" that was already set
   * To get this value programmatically in native iOS code, see [Stack Overflow Page](https://stackoverflow.com/questions/8873203/how-to-get-bundle-id).
 * For Android this is usually in the form of com.example.yourapp.
   * To get this file manually, you can find it in your app's `build.config`.  For example, in `android/app/build.gradle`, it is the value of `applicationId`.
-  * To get this value programmatically in native Java code, see [Stack Overflow Page](https://stackoverflow.com/questions/14705874/bundle-id-in-android).  
+  * To get this value programmatically in native Java code, see [Stack Overflow Page](https://stackoverflow.com/questions/14705874/bundle-id-in-android).
 
 ### 4. Adding the Onfido React Native SDK to your project
 
@@ -279,7 +279,7 @@ config = {
 * **`welcome`**: Optional.  This toggles the welcome screen on or off.  If omitted, this screen does not appear in the flow.
   * Valid values: `true`, `false`
 * **`captureDocument`**: Optional. This object contains configuration for the capture document screen. If docType and countryCode are not specified, a screen will appear allowing the user to choose these values.  If omitted, this screen does not appear in the flow.
-* **`docType`**: Required if countryCode is specified.  
+* **`docType`**: Required if countryCode is specified.
   * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`.
     **Note**: `GENERIC` document type doesn't offer an optimised capture experience for a desired document type.
 * **`countryCode`**: Required if docType is specified.
@@ -353,7 +353,7 @@ The SDK supports and maintains the following 6 languages:
  - German (de) 🇩🇪
  - Italian (it) 🇮🇹
  - Portuguese (pt) 🇵🇹
- 
+
 However, you can add your own translations.
 
 #### Android
