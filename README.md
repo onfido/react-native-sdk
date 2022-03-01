@@ -119,7 +119,7 @@ $ npm install @onfido/react-native-sdk --save
 
 #### 4.2 Update your Android build.gradle files
 
-Update your build.grade files to reference the Android SDK, and enable multi-dex.  If you build your project using the `react-native init`, with a `build.gradle` in the `android/` and `android/app/` directories, you can run this script to do it:
+Update your build.gradle files to reference the Android SDK, and enable multi-dex.  If you build your project using the `react-native init`, with a `build.gradle` in the `android/` and `android/app/` directories, you can run this script to do it:
 
 ```shell
 $ npm --prefix node_modules/@onfido/react-native-sdk/ run updateBuildGradle
