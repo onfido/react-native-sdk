@@ -19,9 +19,9 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Onfido (23.1.0)
-  - onfido-react-native-sdk (2.2.0):
-    - Onfido (= 23.1.0)
+  - Onfido (24.3.0)
+  - onfido-react-native-sdk (5.0.0):
+    - Onfido (= 24.3.0)
     - React
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
@@ -344,8 +344,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Onfido: c0c71c1443858d805a39d20ab72f4c681759bd60
-  onfido-react-native-sdk: 0067cab8375ea83d7989fb956614b082e55c2635
+  Onfido: 860db9959cbdc236107a89ed495c1faea9560072
+  onfido-react-native-sdk: 80cf1e413f3e6d23a898ed1803741f2beeb042a1
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -367,6 +367,6 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
 
-PODFILE CHECKSUM: e7a3b3d5c25f7a00d7cec7a77518042a1c6f842e
+PODFILE CHECKSUM: 08e18f1fd7b940e3fe607105a09cb0719d6939a4
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.2
