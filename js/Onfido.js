@@ -37,7 +37,7 @@ const Onfido = {
 
 
       if (config.flowSteps.captureDocument.countryCode) {
-        if (!config.flowSteps.captureDocument.countryCode in OnfidoCountryCode) {
+        if (!(config.flowSteps.captureDocument.countryCode in OnfidoCountryCode)) {
           return configError("countryCode is not a ISO 3166-1 3 letter code");
         }
 
