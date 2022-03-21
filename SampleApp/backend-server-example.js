@@ -39,8 +39,8 @@ const createSdkToken = async (applicant, applicationId) => {
 
   await applicantResponse
     .json()
-    .then(responseJson => (sdkRequestBody.applicant_id = responseJson.id))
-    .catch(err => {
+    .then((responseJson) => (sdkRequestBody.applicant_id = responseJson.id))
+    .catch((err) => {
       console.log(err, 'error');
       return {
         status: 'Unable to start the SDK',
@@ -72,8 +72,8 @@ const createSdkToken = async (applicant, applicationId) => {
   let sdkToken;
   await sdkTokenResponse
     .json()
-    .then(responseJson => (sdkToken = responseJson.token))
-    .catch(err => {
+    .then((responseJson) => (sdkToken = responseJson.token))
+    .catch((err) => {
       console.log(err, 'error');
       return {
         status: 'Unable to start the SDK',

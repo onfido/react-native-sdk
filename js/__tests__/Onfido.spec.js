@@ -102,7 +102,7 @@ testCases.forEach((platform) => {
     });
 
     test('reject with an invalid countryCode', () => {
-      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.DRIVING_LICENCE } } }).then(result => expect(result).toBe(REJECTED))
+      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.DRIVING_LICENCE, countryCode: OnfidoDocumentType.DRIVING_LICENCE } } }).then(result => expect(result).toBe(REJECTED))
     });
 
     test('reject with an invalid capture type', () => {
