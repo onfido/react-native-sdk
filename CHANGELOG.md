@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## next-version
+## [5.1.0] - 2022-03-18
+
+### Changed:
+- Public: Upgraded to React v17.0.1 and React Native v0.64.3
+- Public: Updating Country Code list to match iOS SDK
+
+## [5.0.0] - 2022-02-18
 
 ### Changed:
 - Public: Updated underlying Onfido iOS SDK to version 24.3.0 (up from 23.1.0).

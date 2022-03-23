@@ -5,7 +5,7 @@ import {waitForElementByType} from '../TestUtils/waitForElement';
 import {textProps} from '../TestUtils/testProperties';
 
 describe('Android Sample App flow', () => {
-  beforeEach(async function() {
+  beforeEach(async function () {
     await device.reloadReactNative();
   });
 
