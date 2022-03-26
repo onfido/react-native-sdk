@@ -413,8 +413,13 @@ You can customize the SDK by adding a `colors.json` file to your project at the 
   "onfidoPrimaryColor": "#FF0000",
   "onfidoPrimaryButtonTextColor": "#008000",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
+  "onfidoAndroidColorAccent":"#4BC0B1",
   "onfidoAndroidStatusBarColor": "#A52A2A",
   "onfidoAndroidToolBarColor": "#800080",
+  "onfidoAndroidToolBarTitleColor": "#3E3B32",
+  "onfidoAndroidToolBarSubtitleColor": "#F5D033",
+  "onfidoAndroidButtonCornerRadius": 32,
+  "onfidoIosButtonCornerRadius": 26,
   "onfidoIosSupportDarkMode": true
 }
 ```
@@ -423,8 +428,13 @@ Below is a description of all available keys:
 * **`onfidoPrimaryColor`**: Defines the background color of views such as the document type icon, capture confirmation buttons, and back navigation button.
 * **`onfidoPrimaryButtonTextColor`**: Defines the text color of labels included in views such as capture confirmation buttons.
 * **`onfidoPrimaryButtonColorPressed`**: Defines the background color of capture confirmation buttons when pressed.
+* **`onfidoAndroidColorAccent`**: Android only.  Defines the color of the `FloatingActionButton` which allows the user to move between steps, as well as some details on the alert dialogs shown during the flow.
 * **`onfidoAndroidStatusBarColor`**: Android only.  Defines the background color of the `Toolbar` that guides the user through the flow.
 * **`onfidoAndroidToolBarColor`**: Android only.  Defines the color of the status bar above the `Toolbar`.
+* **`onfidoAndroidToolBarTitleColor`**: Android only.  Defines the color of the title on the `Toolbar`.
+* **`onfidoAndroidToolBarSubtitleColor`**: Android only.  Defines the color of the subtitle on the `Toolbar`.
+* **`onfidoAndroidButtonCornerRadius`**: Android only.  Defines the radius dimensions of all the corners of primary and secondary buttons
+* **`onfidoIosButtonCornerRadius`**: iOS Only.  Defines the radius dimensions of all the corners of primary and secondary buttons
 * **`onfidoIosSupportDarkMode`**: iOS Only.  Defines if Dark Mode will be supported on SDK screens. The value is true by default.
 
 Once you've added the colors.json to your project, you should add colors.json file to your xcode project as bundle resource. You can create symbolic link (rather than copy paste) to prevent redundancy. You can check out SampleApp project to see example usage.
