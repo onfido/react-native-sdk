@@ -1,10 +1,12 @@
 import { NativeModules, Platform } from 'react-native';
-import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode, OnfidoAlpha2CountryCode } from "./config_constants";
+import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode, OnfidoAlpha2CountryCode } from "./types";
 
 const { OnfidoSdk } = NativeModules;
 
+import type { OnfidoConfig } from './types';
+
 const Onfido = {
-  start(config) {
+  start(config: OnfidoConfig) {
 
     if (!config) {
       return configError("config is missing");
@@ -55,15 +57,19 @@ const Onfido = {
       return configError("Capture Face type is invalid");
     }
 
-    return OnfidoSdk.start(config).catch(error => {
+    return OnfidoSdk.start(config).catch((error: any) => {
       console.log(error);
       throw error;
     });
   }
 };
 
-const configError = message => {
-  const error = new Error(message);
+interface ConfigError extends Error {
+  code?: string;
+}
+
+const configError = (message: string) => {
+  const error: ConfigError = new Error(message);
   error.code = "config_error";
   console.log(error);
   return Promise.reject(error);
