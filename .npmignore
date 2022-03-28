@@ -10,7 +10,7 @@ bitrise.yml
 
 # Tests
 #
-js/__tests__
+src/__tests__
 android/src/test
 ios/OnfidoSdkTests
 
