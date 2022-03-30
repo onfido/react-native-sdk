@@ -535,7 +535,26 @@ export type OnfidoFlowSteps = {
   };
 };
 
+export type OnfidoResult = {
+  document?: {
+    front: {
+      id: string;
+    };
+    back?: {
+      id: string;
+    };
+  };
+  face?: {
+    id: string;
+    variant: OnfidoCaptureType;
+  };
+};
+
 export type OnfidoConfig = {
   sdkToken: string;
   flowSteps: OnfidoFlowSteps;
 };
+
+export interface ConfigError extends Error {
+  code?: string;
+}

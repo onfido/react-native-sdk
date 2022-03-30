@@ -8,10 +8,10 @@ import {
 
 const { OnfidoSdk } = NativeModules;
 
-import type { OnfidoConfig } from './types';
+import type { OnfidoConfig, OnfidoResult, ConfigError } from './types';
 
 const Onfido = {
-  start(config: OnfidoConfig) {
+  start(config: OnfidoConfig): OnfidoResult | Promise<ConfigError> {
     if (!config) {
       return configError('config is missing');
     }
@@ -80,10 +80,6 @@ const Onfido = {
     });
   },
 };
-
-interface ConfigError extends Error {
-  code?: string;
-}
 
 const configError = (message: string) => {
   const error: ConfigError = new Error(message);
