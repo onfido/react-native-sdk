@@ -555,6 +555,6 @@ export type OnfidoConfig = {
   flowSteps: OnfidoFlowSteps;
 };
 
-export interface ConfigError extends Error {
+export interface OnfidoError extends Error {
   code?: string;
 }
