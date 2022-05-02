@@ -14,16 +14,19 @@ public class AppearancePublic: NSObject {
     public let primaryColor: UIColor
     public let primaryTitleColor: UIColor
     public let primaryBackgroundPressedColor: UIColor
+    public let buttonCornerRadius: CGFloat
     public let supportDarkMode: Bool
 
     public init(
         primaryColor: UIColor,
         primaryTitleColor: UIColor,
         primaryBackgroundPressedColor: UIColor,
+        buttonCornerRadius: CGFloat,
         supportDarkMode: Bool = true) {
         self.primaryColor = primaryColor
         self.primaryTitleColor = primaryTitleColor
         self.primaryBackgroundPressedColor = primaryBackgroundPressedColor
+        self.buttonCornerRadius = buttonCornerRadius
         self.supportDarkMode = supportDarkMode
     }
 }
@@ -51,6 +54,8 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                   ? UIColor.white : UIColor.from(hex: jsonResult["onfidoPrimaryButtonTextColor"] as! String)
           let primaryBackgroundPressedColor: UIColor = (jsonResult["onfidoPrimaryButtonColorPressed"] == nil)
                   ? UIColor.primaryButtonColorPressed : UIColor.from(hex: jsonResult["onfidoPrimaryButtonColorPressed"] as! String)
+          let buttonCornerRadius: CGFloat = (jsonResult["onfidoIosButtonCornerRadius"] == nil)
+                  ? 5 : jsonResult["onfidoIosButtonCornerRadius"] as! CGFloat
           let supportDarkMode: Bool = (jsonResult["onfidoIosSupportDarkMode"] == nil)
                   ? true : jsonResult["onfidoIosSupportDarkMode"] as! Bool
 
@@ -59,6 +64,7 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                   primaryColor: primaryColor,
                   primaryTitleColor: primaryTitleColor,
                   primaryBackgroundPressedColor: primaryBackgroundPressedColor,
+                  buttonCornerRadius: buttonCornerRadius,
                   supportDarkMode: supportDarkMode
           )
           return appearancePublic
@@ -80,6 +86,7 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
         appearance.primaryColor = appearancePublic.primaryColor
         appearance.primaryTitleColor = appearancePublic.primaryTitleColor
         appearance.primaryBackgroundPressedColor = appearancePublic.primaryBackgroundPressedColor
+        appearance.buttonCornerRadius = appearancePublic.buttonCornerRadius
         appearance.supportDarkMode =  appearancePublic.supportDarkMode
         return appearance
     } else {

@@ -26,13 +26,23 @@ try {
         fs.mkdirSync('android/src/main/res/values')
       }
 
-      fs.writeFile('android/src/main/res/values/colors.xml', generateFileContent(colors), function (e) {
+      fs.writeFile('android/src/main/res/values/colors.xml', generateColorsFileContent(colors), function (e) {
         if (e != null) {
           console.log('\nAn error occured while trying to update colors:\n' + e + '\n')
         } else {
           console.log("\nColors were successfully updated\n")
         }
       })
+
+      if (colors.onfidoAndroidButtonCornerRadius) {
+        fs.writeFile('android/src/main/res/values/dimens.xml', generateDimensFileContent(colors.onfidoAndroidButtonCornerRadius), function (e) {
+          if (e != null) {
+            console.log('\nAn error occured while trying to update border radius:\n' + e + '\n')
+          } else {
+            console.log("\Border radius was successfully updated\n")
+          }
+        })
+      }
     });
   } else {
     console.log('\nNo colors.json was found. Ensure it is at the same level as your node-modules directory\n')
@@ -41,14 +51,23 @@ try {
   console.log(e)
 }
 
-function generateFileContent(colors) {
+function generateColorsFileContent(colors) {
   let fileContent = '<?xml version="1.0" encoding="utf-8"?>\n'
   fileContent += '<resources>\n'
   Object.keys(colors).forEach((color) => {
     let keyName = color;
     switch (keyName) {
+      case 'onfidoAndroidColorAccent':
+        keyName = 'onfidoColorAccent'
+        break
       case 'onfidoPrimaryColor':
         keyName = 'onfidoPrimaryButtonColor'
+        break
+      case 'onfidoPrimaryButtonColorPressed':
+        keyName = 'onfidoPrimaryButtonColorPressed'
+        break
+      case 'onfidoPrimaryButtonTextColor':
+        keyName = 'onfidoPrimaryButtonTextColor'
         break
       case 'onfidoAndroidStatusBarColor':
         keyName = 'onfidoColorPrimary'
@@ -56,16 +75,34 @@ function generateFileContent(colors) {
       case 'onfidoAndroidToolBarColor':
         keyName = 'onfidoColorPrimaryDark'
         break
+      case 'onfidoAndroidToolBarTitleColor':
+        keyName = 'onfidoTextColorPrimary'
+        break
+      case 'onfidoAndroidToolBarSubtitleColor':
+        keyName = 'onfidoTextColorSecondary'
+        break
+      default:
+        return
     }
 
-    if (color !== 'onfidoIosSupportDarkMode') {
-      fileContent += '\t<color name=\"'
-      fileContent += keyName
-      fileContent += "\">"
-      fileContent += colors[color]
-      fileContent += "</color>\n"
-    }
+    fileContent += '\t<color name=\"'
+    fileContent += keyName
+    fileContent += "\">"
+    fileContent += colors[color]
+    fileContent += "</color>\n"
   })
+  fileContent += "</resources>"
+  return fileContent
+}
+
+function generateDimensFileContent(borderRadius) {
+  let fileContent = '<resources>\n'
+  fileContent += '\t<dimen name=\"'
+  fileContent += 'onfidoButtonCornerRadius'
+  fileContent += "\">"
+  fileContent += borderRadius
+  fileContent += "dp"
+  fileContent += "</dimen>\n"
   fileContent += "</resources>"
   return fileContent
 }
