@@ -162,10 +162,24 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
 }
 
 @objc(OnfidoSdk)
-class OnfidoSdk: NSObject {
+class OnfidoSdk: RCTEventEmitter {
 
-  @objc static func requiresMainQueueSetup() -> Bool {
+  var hasListeners = false
+
+  @objc override static func requiresMainQueueSetup() -> Bool {
     return false
+  }
+
+  @objc override func supportedEvents() -> [String] {
+    return ["Onfido"]
+  }
+
+  @objc override func startObserving() -> Void {
+    self.hasListeners = true
+  }
+
+  @objc override func stopObserving() -> Void {
+    self.hasListeners = false
   }
 
   @objc func start(_ config: NSDictionary,
@@ -192,6 +206,25 @@ class OnfidoSdk: NSObject {
       let faceVariant = captureFace?["type"] as? String
 
       let onfidoFlow = OnfidoFlow(withConfiguration: builtOnfidoConfig)
+        .with(eventHandler: {
+          (event: Event) -> () in
+            if (self.hasListeners) {
+              var mode = ""
+              do {
+                let data = try JSONSerialization.data(withJSONObject: event.properties["mode"] ?? [], options: [])
+                mode = String(data: data, encoding: String.Encoding.utf8) ?? ""
+              } catch {
+                mode = ""
+              }
+              let body = [
+                "event_name": event.properties["name"],
+                "doc_type": event.properties["doc_type"],
+                "country": event.properties["country"],
+                "mode": mode,
+              ]
+              self.sendEvent(withName: "Onfido", body: body)
+            }
+        })
         .with(responseHandler: { [weak self] response in
           guard let `self` = self else { return }
           switch response {
