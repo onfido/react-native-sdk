@@ -1,7 +1,8 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(OnfidoSdk, NSObject)
+@interface RCT_EXTERN_MODULE(OnfidoSdk, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(
     start:(NSDictionary *)config

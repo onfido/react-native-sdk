@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode, OnfidoAlpha2CountryCode } from "./config_constants";
 
 const { OnfidoSdk } = NativeModules;
@@ -59,6 +59,10 @@ const Onfido = {
       console.log(error);
       throw error;
     });
+  },
+  addEventListener(callback) {
+    const eventEmitter = new NativeEventEmitter(OnfidoSdk);
+    return eventEmitter.addListener("Onfido", callback)
   }
 };
 

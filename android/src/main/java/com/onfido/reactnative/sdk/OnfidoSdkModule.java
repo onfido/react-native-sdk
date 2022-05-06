@@ -2,6 +2,8 @@ package com.onfido.reactnative.sdk;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -13,10 +15,14 @@ import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableMap;
+
 import com.facebook.react.bridge.Arguments;
 
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.EnterpriseFeatures;
+import com.onfido.android.sdk.capture.UserEventHandler;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
@@ -26,6 +32,7 @@ import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.errors.*;
+import com.onfido.segment.analytics.Properties;
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
@@ -38,6 +45,23 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         super(reactContext);
         this.reactContext = reactContext;
         this.client = OnfidoFactory.create(reactContext).getClient();
+        Onfido.Companion.setUserEventHandler(new UserEventHandler() {
+            @Override
+            public void handleEvent(@NonNull String s, @NonNull Properties properties) {
+                WritableMap params = Arguments.createMap();
+                params.putString("event_name", properties.get("name").toString());
+                if (properties.get("doc_type") != null) {
+                    params.putString("doc_type", properties.get("doc_type").toString());
+                }
+                if (properties.get("country") != null) {
+                    params.putString("country", properties.get("country").toString());
+                }
+                if (properties.get("mode") != null) {
+                    params.putString("mode", properties.get("mode").toString());
+                }
+                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("Onfido", params);
+            }
+        });
         this.activityEventListener = new OnfidoSdkActivityEventListener(client);
         reactContext.addActivityEventListener(activityEventListener);
     }
