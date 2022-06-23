@@ -9,23 +9,23 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UnexpectedNativeTypeException;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import com.facebook.react.bridge.Arguments;
-
-import com.onfido.android.sdk.capture.Onfido;
+import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.EnterpriseFeatures;
-import com.onfido.android.sdk.capture.ui.options.FlowStep;
+import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
+import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
-import com.onfido.android.sdk.capture.DocumentType;
-import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
-import com.onfido.android.sdk.capture.errors.*;
+import com.onfido.android.sdk.capture.ui.options.FlowStep;
+import com.onfido.android.sdk.capture.utils.CountryCode;
+import com.onfido.android.sdk.workflow.OnfidoWorkflow;
+import com.onfido.android.sdk.workflow.WorkflowConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
@@ -38,7 +38,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         super(reactContext);
         this.reactContext = reactContext;
         this.client = OnfidoFactory.create(reactContext).getClient();
-        this.activityEventListener = new OnfidoSdkActivityEventListener(client);
+        activityEventListener = new OnfidoSdkActivityEventListener(client);
         reactContext.addActivityEventListener(activityEventListener);
     }
 
@@ -58,7 +58,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return "OnfidoSdk";
     }
 
-    /** NOTE: This indirection is used to allow unit tests to mock this method */
+    /**
+     * NOTE: This indirection is used to allow unit tests to mock this method
+     */
     protected Activity getCurrentActivityInParentClass() {
         return super.getCurrentActivity();
     }
@@ -70,10 +72,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
         try {
             final String sdkToken;
-            final FlowStep[] flowStepsWithOptions;
             try {
                 sdkToken = getSdkTokenFromConfig(config);
-                flowStepsWithOptions = getFlowStepsFromConfig(config);
             } catch (Exception e) {
                 currentPromise.reject("config_error", e);
                 currentPromise = null;
@@ -88,58 +88,22 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             }
 
             try {
-                /* Native SDK seems to have a bug that if an empty EnterpriseFeatures is passed to it,
-                 the logo will still be hidden, even if explicitly set to false */
-                EnterpriseFeatures.Builder enterpriseFeaturesBuilder = EnterpriseFeatures.builder();
-                boolean hasSetEnterpriseFeatures = false;
+                final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
-                if (getBooleanFromConfig(config, "hideLogo")) {
-                    enterpriseFeaturesBuilder.withHideOnfidoLogo(true);
-                    hasSetEnterpriseFeatures = true;
-                } else if (getBooleanFromConfig(config, "logoCobrand")) {
-                    int cobrandLogoLight = currentActivity.getApplicationContext().getResources().getIdentifier(
-                            "cobrand_logo_light",
-                            "drawable",
-                            currentActivity.getApplicationContext().getPackageName()
-                    );
-                    int cobrandLogoDark = currentActivity.getApplicationContext().getResources().getIdentifier(
-                            "cobrand_logo_dark",
-                            "drawable",
-                            currentActivity.getApplicationContext().getPackageName()
-                    );
-                    if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
-                        currentPromise.reject("error", new Exception("Cobrand logos were not found"));
-                        currentPromise = null;
-                        return;
-                    }
-                    enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
-                    hasSetEnterpriseFeatures = true;
+                if (!workflowRunId.isEmpty()) {
+                    workflowSDKConfiguration(currentActivity, workflowRunId, sdkToken);
+                } else {
+                    defaultSDKConfiguration(config, currentActivity, sdkToken);
                 }
-
-                OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
-                        .withSDKToken(sdkToken)
-                        .withCustomFlow(flowStepsWithOptions);
-
-                if (hasSetEnterpriseFeatures) {
-                    onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
-                }
-
-                client.startActivityForResult(currentActivity, 1, onfidoConfigBuilder.build());
-            }
-            catch (final EnterpriseFeaturesInvalidLogoCobrandingException e) {
+            } catch (final EnterpriseFeaturesInvalidLogoCobrandingException e) {
                 currentPromise.reject("error", new EnterpriseFeaturesInvalidLogoCobrandingException());
                 currentPromise = null;
-                return;
-            }
-            catch (final EnterpriseFeatureNotEnabledException e) {
+            } catch (final EnterpriseFeatureNotEnabledException e) {
                 currentPromise.reject("error", new EnterpriseFeatureNotEnabledException("logoCobrand"));
                 currentPromise = null;
-                return;
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 currentPromise.reject("error", new Exception(e.getMessage(), e));
                 currentPromise = null;
-                return;
             }
 
         } catch (final Exception e) {
@@ -147,13 +111,64 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             // Wrap all unexpected exceptions.
             currentPromise.reject("error", new Exception("Unexpected error starting Onfido page", e));
             currentPromise = null;
-            return;
         }
     }
 
+    private void workflowSDKConfiguration(Activity currentActivity, String workflowRunId, String sdkToken) {
+        OnfidoWorkflow.create(currentActivity)
+                .startActivityForResult(currentActivity,
+                1,
+                new WorkflowConfig.Builder(sdkToken, workflowRunId).build());
+    }
+
+    private void defaultSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
+        final FlowStep[] flowStepsWithOptions = getFlowStepsFromConfig(config);
+                /* Native SDK seems to have a bug that if an empty EnterpriseFeatures is passed to it,
+                 the logo will still be hidden, even if explicitly set to false */
+        EnterpriseFeatures.Builder enterpriseFeaturesBuilder = EnterpriseFeatures.builder();
+        boolean hasSetEnterpriseFeatures = false;
+
+        if (getBooleanFromConfig(config, "hideLogo")) {
+            enterpriseFeaturesBuilder.withHideOnfidoLogo(true);
+            hasSetEnterpriseFeatures = true;
+        } else if (getBooleanFromConfig(config, "logoCobrand")) {
+            int cobrandLogoLight = currentActivity.getApplicationContext().getResources().getIdentifier(
+                    "cobrand_logo_light",
+                    "drawable",
+                    currentActivity.getApplicationContext().getPackageName()
+            );
+            int cobrandLogoDark = currentActivity.getApplicationContext().getResources().getIdentifier(
+                    "cobrand_logo_dark",
+                    "drawable",
+                    currentActivity.getApplicationContext().getPackageName()
+            );
+            if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
+                currentPromise.reject("error", new Exception("Cobrand logos were not found"));
+                currentPromise = null;
+                return;
+            }
+            enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
+            hasSetEnterpriseFeatures = true;
+        }
+
+        OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(flowStepsWithOptions);
+
+        if (hasSetEnterpriseFeatures) {
+            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        }
+
+        client.startActivityForResult(currentActivity, 1, onfidoConfigBuilder.build());
+    }
+
     public static String getSdkTokenFromConfig(final ReadableMap config) {
-        final String sdkToken = config.getString("sdkToken");
-        return sdkToken;
+        return config.getString("sdkToken");
+    }
+
+    public static String getWorkflowRunIdFromConfig(final ReadableMap config) {
+        final String key = "workflowRunId";
+        return config.hasKey(key) ? config.getString(key) : "";
     }
 
     public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {
@@ -196,10 +211,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 flowStepList.add(FlowStep.WELCOME);
             }
 
-            if (userConsentIsIncluded) {
-                flowStepList.add(FlowStep.USER_CONSENT);
-            }
-
             if (captureDocumentBoolean != null && captureDocumentBoolean) {
                 flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
             } else if (captureDocument != null) {
@@ -219,7 +230,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     String countryCodeString = captureDocument.getString("alpha2CountryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
-                    if (countryCodeEnum ==null) {
+                    if (countryCodeEnum == null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
                     }

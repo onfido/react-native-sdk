@@ -47,6 +47,8 @@ const baseConfig = {
   flowSteps
 };
 
+const workflowRunId = 'cf1b3300-71fa-494b-8a87-059463bf0c31';
+
 const testCases = ['android', 'ios'];
 
 testCases.forEach((platform) => {
@@ -74,6 +76,14 @@ testCases.forEach((platform) => {
 
     test('resolve a capture document object with explicitly null attributes', () => {
       return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: null, countryCode: null } } }).then(result => expect(result).toBe(RESOLVED))
+    });
+    
+    test('resolve with a valid workflow runId', () => {
+      return start({ ...baseConfig, workflowRunId: workflowRunId }).then(result => expect(result).toBe(RESOLVED))
+    });
+
+    test('resolve with a valid workflow runId without flow steps', () => {
+      return start({ ...baseConfig, flowSteps: null, workflowRunId: workflowRunId }).then(result => expect(result).toBe(RESOLVED))
     });
 
     // Invalid Configuration Tests

@@ -4,7 +4,7 @@ platform :ios, '10.0'
 target 'OnfidoSdk' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-  pod 'Onfido', '24.6.0'
+  pod 'Onfido', '25.1.0'
 
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"

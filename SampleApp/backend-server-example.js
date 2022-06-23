@@ -3,12 +3,14 @@
  *
  * The applicant must be created in your backend server.  The apiToken must never be in code or in
  * memory of the client code, or nefarious actors will be able to mis-use it.
+ * If the workflowId is provided, the standard steps will be ovewritten.
  *
  * The code below is meant to demo a working integration of the Onfido React Native SDK.
  */
 
 const createSdkToken = async (applicant, applicationId) => {
   const apiToken = 'YOUR_API_TOKEN_HERE'; // DO NOT expose your api token in client code: keep it on the backend server.
+  const workflowId = null; // This is not mandatory for the standard integration, and make sure to keep it on the backend server.
 
   const applicantResponse = await fetch(
     'https://api.onfido.com/v3/applicants',
@@ -82,8 +84,53 @@ const createSdkToken = async (applicant, applicationId) => {
         sdkToken: null,
       };
     });
+
+  let workflowRunId;
+  if (workflowId) {
+    const workflowRunIdBody = {
+      workflow_id: workflowId,
+      applicant_id: sdkRequestBody.applicant_id,
+    };
+    const workflowRunIdResponse = await fetch(
+      'https://api.onfido.com/v4/workflow_runs',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'Token token=' + apiToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(workflowRunIdBody),
+      },
+    );
+
+    if (!workflowRunIdResponse.ok) {
+      console.log(workflowRunIdResponse, 'error');
+      return {
+        status: 'Unable to start the SDK',
+        message: 'Error retrieving workflow run id from server',
+        sdkToken: sdkToken,
+        workflowRunId: null,
+      };
+    }
+
+    await workflowRunIdResponse
+      .json()
+      .then((responseJson) => (workflowRunId = responseJson.id))
+      .catch((err) => {
+        console.log(err, 'error');
+        return {
+          status: 'Unable to start the SDK',
+          message:
+            'Unexpected error occurred while trying to get the workflow run id from the response.',
+          sdkToken: sdkToken,
+          workflowRunId: null,
+        };
+      });
+  }
+
   return {
     sdkToken,
+    workflowRunId,
   };
 };
 

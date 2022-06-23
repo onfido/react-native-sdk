@@ -12,6 +12,7 @@ export default class App extends Component {
     message: '--',
     sdkToken: null,
     sdkFlowComplete: false,
+    workflowRunId: null,
   };
 
   componentDidMount() {
@@ -38,6 +39,7 @@ export default class App extends Component {
   startSDK = () => {
     Onfido.start({
       sdkToken: this.state.sdkToken,
+      workflowRunId: this.state.workflowRunId,
       localisation: {
         ios_strings_file_name: 'Localizable',
       },

@@ -14,7 +14,7 @@ class Response {
         public Identifiable front; 
         public Identifiable back; 
     }
-    public class Face extends Identifiable {
+    public class Face extends Response.Identifiable {
         public Face(String id, String variant) {
             super(id);
             this.variant = variant;

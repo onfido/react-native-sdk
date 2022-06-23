@@ -137,7 +137,7 @@ android {
                 }
             }
             // TODO: ET-385 Remove this workaround for React 0.62.2 when upgrading to a React 0.63+.
-            force "com.facebook.soloader:soloader:0.8.2"
+            force "com.facebook.soloader:soloader:0.9.0+"
         }
     }
 
