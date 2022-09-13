@@ -20,13 +20,13 @@ export default class Start extends Component {
         <Text style={styles.label}>First Name</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(text) => this.onChangeText('firstName', text)}
+          onChangeText={text => this.onChangeText('firstName', text)}
           value={this.state.firstName}
         />
         <Text style={styles.label}>Last Name</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(text) => this.onChangeText('lastName', text)}
+          onChangeText={text => this.onChangeText('lastName', text)}
           value={this.state.lastName}
         />
         <Link

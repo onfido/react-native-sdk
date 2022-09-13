@@ -52,14 +52,14 @@ export default class App extends Component {
         },
       },
     })
-      .then((response) => {
+      .then(response => {
         this.setState({
           status: 'resolved',
           message: JSON.stringify(response),
           sdkFlowComplete: true,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           status: 'rejected',
           message: error.code + ': ' + error.message,

@@ -16,6 +16,8 @@ import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
+import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
+import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
@@ -29,14 +31,12 @@ import java.util.List;
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
-    private final ReactApplicationContext reactContext;
     /* package */ final Onfido client;
     private Promise currentPromise = null;
     private final OnfidoSdkActivityEventListener activityEventListener;
 
     public OnfidoSdkModule(final ReactApplicationContext reactContext) {
         super(reactContext);
-        this.reactContext = reactContext;
         this.client = OnfidoFactory.create(reactContext).getClient();
         activityEventListener = new OnfidoSdkActivityEventListener(client);
         reactContext.addActivityEventListener(activityEventListener);
@@ -59,7 +59,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     *
      * NOTE: This indirection is used to allow unit tests to mock this method
+    
      */
     protected Activity getCurrentActivityInParentClass() {
         return super.getCurrentActivity();
@@ -115,9 +117,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     private void workflowSDKConfiguration(Activity currentActivity, String workflowRunId, String sdkToken) {
-        OnfidoWorkflow.create(currentActivity)
-                .startActivityForResult(currentActivity,
-                1,
+        final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
+        this.activityEventListener.setWorkflow(flow);
+
+        flow.startActivityForResult(currentActivity,
+                OnfidoSdkActivityEventListener.workflowActivityCode,
                 new WorkflowConfig.Builder(sdkToken, workflowRunId).build());
     }
 
@@ -159,7 +163,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
         }
 
-        client.startActivityForResult(currentActivity, 1, onfidoConfigBuilder.build());
+        client.startActivityForResult(currentActivity,
+                OnfidoSdkActivityEventListener.checksActivityCode,
+                onfidoConfigBuilder.build());
     }
 
     public static String getSdkTokenFromConfig(final ReadableMap config) {
@@ -183,13 +189,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 welcomePageIsIncluded = false;
             }
 
-            final Boolean userConsentIsIncluded;
-            if (flowSteps.hasKey("userConsent")) {
-                userConsentIsIncluded = flowSteps.getBoolean("userConsent");
-            } else {
-                userConsentIsIncluded = false;
-            }
-
             ReadableMap captureDocument = null;
             Boolean captureDocumentBoolean = null;
 
@@ -203,7 +202,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     captureDocument = null;
                 }
             }
-
 
             final List<FlowStep> flowStepList = new ArrayList<>();
 
@@ -230,7 +228,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     String countryCodeString = captureDocument.getString("alpha2CountryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
-                    if (countryCodeEnum == null) {
+                    if (countryCodeEnum ==  null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
                     }

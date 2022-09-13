@@ -20,6 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -60,6 +61,7 @@ buck-out/
 # CocoaPods
 #
 /ios/Pods/
+/vendor/bundle/
 
 # Jest
 #

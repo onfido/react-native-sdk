@@ -16,13 +16,13 @@ export default class Router extends Component {
           <Route
             exact
             path="/sdk/:firstName/:lastName"
-            render={(props) => <App {...props} />}
+            render={props => <App {...props} />}
           />
 
           <Route
             exact
             path="/finish/:status/:message"
-            render={(props) => <Finish {...props} />}
+            render={props => <Finish {...props} />}
           />
         </View>
       </NativeRouter>

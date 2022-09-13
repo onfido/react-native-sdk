@@ -1,6 +1,7 @@
 package com.onfido.reactnative.sdk;
 
 import android.app.Activity;
+
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
@@ -12,6 +13,7 @@ import com.facebook.react.bridge.ReadableMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.mockito.ArgumentMatcher;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -27,6 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.mockito.stubbing.Answer;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -88,16 +92,16 @@ public class OnfidoSdkModuleTest {
 
         ReadableMap configMock = mock(ReadableMap.class);
         when(configMock.getString("sdkToken")).thenReturn("mockSdkToken123");
-        when(configMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap> () {
+        when(configMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap>() {
             public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
-              return flowStepsMock;
+                return flowStepsMock;
             }
-          });
+        });
 
         onfidoSdkModule.start(configMock, promiseMock);
         verify(promiseMock).reject(eq("error"), any(Exception.class));
     }
-    
+
     @Test
     public void shouldCallTheMockClientWithTheExpectedParameters() throws Exception {
         final ReadableMap flowStepsMock = mock(ReadableMap.class);
@@ -108,11 +112,11 @@ public class OnfidoSdkModuleTest {
         ReadableMap configMock = mock(ReadableMap.class);
         String sdkToken = "mockSdkToken123";
         when(configMock.getString("sdkToken")).thenReturn(sdkToken);
-        when(configMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap> () {
+        when(configMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap>() {
             public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
-              return flowStepsMock;
+                return flowStepsMock;
             }
-          });
+        });
 
         // Use a spy to mock the internal call to getCurrentActivity
         Activity currentActivityMock = mock(Activity.class);
@@ -120,12 +124,12 @@ public class OnfidoSdkModuleTest {
         when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
 
         final OnfidoConfig onfidoConfigExpected = OnfidoConfig.builder(currentActivityMock)
-            .withSDKToken(sdkToken)
-            .withCustomFlow(new FlowStep[0])
-            .build();
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
 
         onfidoSdkModuleSpy.start(configMock, promiseMock);
-        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(1), any(OnfidoConfig.class));
+        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), any(OnfidoConfig.class));
     }
 
 }

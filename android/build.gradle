@@ -78,6 +78,11 @@ android {
     buildFeatures {
         buildConfig = false
     }
+  
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
@@ -99,7 +104,7 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:12.2.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:13.0.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.squareup.okhttp3:okhttp:3.8.0"
     // Fix for crash due to 'java.lang.NoClassDefFoundError: Failed resolution of: Landroidx/swiperefreshlayout/widget/SwipeRefreshLayout;''

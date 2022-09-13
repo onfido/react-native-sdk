@@ -2,6 +2,9 @@ package com.onfido.reactnative.sdk;
 
 import android.app.Activity;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
@@ -10,31 +13,79 @@ import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.upload.Captures;
 import com.onfido.android.sdk.capture.errors.OnfidoException;
+import com.onfido.android.sdk.workflow.OnfidoWorkflow;
 
 class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
+    private OnfidoWorkflow workflow = null;
 
-    public OnfidoSdkActivityEventListener(final Onfido client){
+    static final int workflowActivityCode = 102030;
+    static final int checksActivityCode = 102040;
+
+
+    public OnfidoSdkActivityEventListener(final Onfido client) {
         this.client = client;
     }
 
     /**
      * Sets the current promise to be resolved.
-     * 
+     *
      * @param currentPromise the promise to set
      */
     public void setCurrentPromise(Promise currentPromise) {
         this.currentPromise = currentPromise;
     }
 
+    public void setWorkflow(OnfidoWorkflow workflow) {
+        this.workflow = workflow;
+    }
+
     @Override
     public void onActivityResult(final Activity activity, final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(activity, requestCode, resultCode, data);
+
+        if (requestCode == workflowActivityCode) {
+            handleOnfidoWorkflow(resultCode, data);
+        }
+
+        if (requestCode == checksActivityCode) {
+            handleOnfidoChecks(resultCode, data);
+        }
+    }
+
+    private void handleOnfidoWorkflow(int resultCode, Intent data) {
+        workflow.handleActivityResult(resultCode, data, new OnfidoWorkflow.ResultListener() {
+            @Override
+            public void onUserCompleted() {
+                if (currentPromise != null) {
+                    currentPromise.resolve("");
+                }
+            }
+
+            @Override
+            public void onUserExited(@NonNull ExitCode exitCode) {
+                if (currentPromise != null) {
+                    currentPromise.reject(exitCode.toString(), new Exception("User exited by manual action."));
+                    currentPromise = null;
+                }
+            }
+
+            @Override
+            public void onException(@NonNull OnfidoWorkflow.WorkflowException e) {
+                if (currentPromise != null) {
+                    currentPromise.reject("error", e);
+                    currentPromise = null;
+                }
+            }
+        });
+    }
+
+    private void handleOnfidoChecks(int resultCode, Intent data) {
         client.handleActivityResult(resultCode, data, new Onfido.OnfidoResultListener() {
             @Override
-            public void userCompleted(Captures captures) {
+            public void userCompleted(@NonNull Captures captures) {
                 if (currentPromise != null) {
                     String docFrontId = null;
                     String docBackId = null;
@@ -50,15 +101,14 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                     }
                     if (captures.getFace() != null) {
                         faceId = captures.getFace().getId();
-                        if (captures.getFace().getVariant() != null) {
-                            faceVarient = captures.getFace().getVariant().toString();
-                        }
+                        captures.getFace().getVariant();
+                        faceVarient = captures.getFace().getVariant().toString();
                     }
 
                     final Response response = new Response(docFrontId, docBackId, faceId, faceVarient);
                     try {
-                       final WritableMap responseMap = ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(response);
-                       currentPromise.resolve(responseMap);
+                        final WritableMap responseMap = ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(response);
+                        currentPromise.resolve(responseMap);
                         currentPromise = null;
                     } catch (Exception e) {
                         currentPromise.reject("error", "Error serializing response", e);
@@ -68,7 +118,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
             }
 
             @Override
-            public void userExited(final ExitCode exitCode) {
+            public void userExited(@NonNull final ExitCode exitCode) {
                 if (currentPromise != null) {
                     currentPromise.reject(exitCode.toString(), new Exception("User exited by manual action."));
                     currentPromise = null;
@@ -76,7 +126,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
             }
 
             @Override
-            public void onError(final OnfidoException e) {
+            public void onError(@NonNull final OnfidoException e) {
                 if (currentPromise != null) {
                     currentPromise.reject("error", e);
                     currentPromise = null;

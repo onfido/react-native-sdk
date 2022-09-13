@@ -1,5 +1,7 @@
 package com.onfido.reactnative.sdk;
 
+import static com.onfido.reactnative.sdk.OnfidoSdkActivityEventListener.checksActivityCode;
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -80,14 +82,14 @@ public class OnfidoSdkActivityEventListenerTest {
     @Test
     public void shouldRegisterActivityListener() throws Exception {
         int resultCode = 123;
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,intentMock);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, intentMock);
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq(intentMock), any(Onfido.OnfidoResultListener.class));
     }
 
     @Test
     public void shouldRejectWithCancel() throws Exception {
         int resultCode = 123;
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,null);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
         ArgumentCaptor<Onfido.OnfidoResultListener> resultListenerCaptor = ArgumentCaptor.forClass(Onfido.OnfidoResultListener.class);
 
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
@@ -100,12 +102,12 @@ public class OnfidoSdkActivityEventListenerTest {
     @Test
     public void shouldRejectWithError() throws Exception {
         int resultCode = 123;
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,null);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
         ArgumentCaptor<Onfido.OnfidoResultListener> resultListenerCaptor = ArgumentCaptor.forClass(Onfido.OnfidoResultListener.class);
 
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
         Onfido.OnfidoResultListener resultListener = resultListenerCaptor.getValue();
-        resultListener.onError( new OnfidoException("example message"));
+        resultListener.onError(new OnfidoException("example message"));
 
         verify(promiseMock).reject(eq("error"), any(Exception.class));
     }
@@ -113,11 +115,11 @@ public class OnfidoSdkActivityEventListenerTest {
     @Test
     public void shouldResolveSuccessfully() throws Exception {
         int resultCode = 123;
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,null);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
         ArgumentCaptor<Response> responseCaptor = ArgumentCaptor.forClass(Response.class);
         ArgumentCaptor<Onfido.OnfidoResultListener> resultListenerCaptor = ArgumentCaptor.forClass(Onfido.OnfidoResultListener.class);
         PowerMockito.mockStatic(ReactNativeBridgeUtiles.class);
-        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap( any(Response.class))).thenReturn(mock(WritableMap.class));
+        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(any(Response.class))).thenReturn(mock(WritableMap.class));
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
         Onfido.OnfidoResultListener resultListener = resultListenerCaptor.getValue();
 
@@ -138,11 +140,11 @@ public class OnfidoSdkActivityEventListenerTest {
         FaceCaptureVariant faceVariant = FaceCaptureVariant.PHOTO;
         when(capturesMock.getFace()).thenReturn(new Face(faceId, faceVariant));
 
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,null);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
         ArgumentCaptor<Response> responseCaptor = ArgumentCaptor.forClass(Response.class);
         ArgumentCaptor<Onfido.OnfidoResultListener> resultListenerCaptor = ArgumentCaptor.forClass(Onfido.OnfidoResultListener.class);
         PowerMockito.mockStatic(ReactNativeBridgeUtiles.class);
-        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap( any(Response.class))).thenReturn(mock(WritableMap.class));
+        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(any(Response.class))).thenReturn(mock(WritableMap.class));
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
         Onfido.OnfidoResultListener resultListener = resultListenerCaptor.getValue();
 
@@ -168,11 +170,11 @@ public class OnfidoSdkActivityEventListenerTest {
         when(documentMock.getBack()).thenReturn(new DocumentSide(docBackId, DocSide.BACK, DocumentType.DRIVING_LICENCE));
         when(capturesMock.getDocument()).thenReturn(documentMock);
 
-        onfidoSdkActivityEventListener.onActivityResult(null, 0,resultCode,null);
+        onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
         ArgumentCaptor<Response> responseCaptor = ArgumentCaptor.forClass(Response.class);
         ArgumentCaptor<Onfido.OnfidoResultListener> resultListenerCaptor = ArgumentCaptor.forClass(Onfido.OnfidoResultListener.class);
         PowerMockito.mockStatic(ReactNativeBridgeUtiles.class);
-        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap( any(Response.class))).thenReturn(mock(WritableMap.class));
+        when(ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(any(Response.class))).thenReturn(mock(WritableMap.class));
         verify(onfidoClientMock).handleActivityResult(eq(resultCode), eq((Intent) null), resultListenerCaptor.capture());
         Onfido.OnfidoResultListener resultListener = resultListenerCaptor.getValue();
 

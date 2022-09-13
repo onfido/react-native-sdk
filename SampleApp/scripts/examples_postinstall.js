@@ -30,7 +30,7 @@ const fs = require('fs');
 const path = require('path');
 
 /// Delete all files and directories for the given path
-const removeFileDirectoryRecursively = (fileDirPath) => {
+const removeFileDirectoryRecursively = fileDirPath => {
   // Remove file
   if (!fs.lstatSync(fileDirPath).isDirectory()) {
     fs.unlinkSync(fileDirPath);
@@ -38,7 +38,7 @@ const removeFileDirectoryRecursively = (fileDirPath) => {
   }
 
   // Go down the directory an remove each file / directory recursively
-  fs.readdirSync(fileDirPath).forEach((entry) => {
+  fs.readdirSync(fileDirPath).forEach(entry => {
     const entryPath = path.join(fileDirPath, entry);
     removeFileDirectoryRecursively(entryPath);
   });
@@ -46,7 +46,7 @@ const removeFileDirectoryRecursively = (fileDirPath) => {
 };
 
 /// Remove TestApp/node_modules/react-native-library-name/node_modules directory
-const removeLibraryNodeModulesPath = (libraryNodeModulesPath) => {
+const removeLibraryNodeModulesPath = libraryNodeModulesPath => {
   const nodeModulesPath = path.resolve(libraryNodeModulesPath, 'node_modules');
 
   if (!fs.existsSync(nodeModulesPath)) {
@@ -76,7 +76,7 @@ const removeLibraryNpmIgnorePaths = (npmIgnorePath, libraryNodeModulesPath) => {
 
   fs.readFileSync(npmIgnorePath, 'utf8')
     .split(/\r?\n/)
-    .forEach((entry) => {
+    .forEach(entry => {
       if (entry.length === 0) {
         return;
       }
