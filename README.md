@@ -10,11 +10,12 @@
   - [1. Obtaining an API token](#1-obtaining-an-api-token)
   - [2. Creating an Applicant](#2-creating-an-applicant)
   - [3. Configuring SDK with Tokens](#3-configuring-sdk-with-tokens)
-  - [4. Adding the Onfido React Native SDK to your project](#4-adding-the-onfido-react-native-sdk-to-your-project)
+  - [4. Adding the Onfido React Native SDK to your project](#4-adding-the-onfido-react-native-sdk-to-a-non-expo-project)
     - [This SDK supports React Native versions 0.60.0 and later](#this-sdk-supports-react-native-versions-0600-and-later)
     - [4.1 Adding SDK dependency through npm](#41-adding-sdk-dependency-through-npm)
     - [4.2 Update your Android build.gradle files](#42-update-your-android-buildgradle-files)
     - [4.3 Update your iOS configuration files](#43-update-your-ios-configuration-files)
+  - [5. Adding the Onfido React Native SDK to an Expo project](#5-adding-the-onfido-react-native-sdk-to-an-expo-project)
 - [Usage](#usage)
   - [1. Creating the SDK configuration](#1-creating-the-sdk-configuration)
   - [2. Parameter details](#2-parameter-details)
@@ -96,7 +97,7 @@ The `application_id` is the "Application ID" or "Bundle ID" that was already set
   * To get this file manually, you can find it in your app's `build.config`.  For example, in `android/app/build.gradle`, it is the value of `applicationId`.
   * To get this value programmatically in native Java code, see [Stack Overflow Page](https://stackoverflow.com/questions/14705874/bundle-id-in-android).
 
-### 4. Adding the Onfido React Native SDK to your project
+### 4. Adding the Onfido React Native SDK to a non-Expo project
 
 #### This SDK supports React Native versions 0.60.0 and later
 
@@ -205,6 +206,20 @@ android {
 ```
 
 This will allow the Onfido SDK to use okhttp3 v4.9.0 while still using the React Native version defined elsewhere in your app.
+
+### 5. Adding the Onfido React Native SDK to an Expo project
+
+This SDK supports Expo SDK 44 and higher.
+
+To configure the SDK to work in an Expo managed project, add `@onfido/react-native-sdk` to your `app.json` plugins. The SDK will not work in Expo Go. Instead, use an Expo Dev Client or the `expo run:ios` and `expo run:android` commands.
+
+```json
+{
+	"expo": {
+		"plugins": ["@onfido/react-native-sdk"],
+	}
+}
+```
 
 ## Usage
 
