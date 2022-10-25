@@ -11,6 +11,7 @@ export enum OnfidoDocumentType {
 export enum OnfidoCaptureType {
   PHOTO = 'PHOTO',
   VIDEO = 'VIDEO',
+  MOTION = 'MOTION',
 }
 
 export enum OnfidoCountryCode {
@@ -529,7 +530,6 @@ export type OnfidoFlowSteps = {
   captureFace?: {
     type: OnfidoCaptureType;
   };
-  userConsent?: boolean;
   localisation?: {
     ios_strings_file_name?: string;
   };
@@ -553,6 +553,7 @@ export type OnfidoResult = {
 export type OnfidoConfig = {
   sdkToken: string;
   flowSteps: OnfidoFlowSteps;
+  workflowRunId?: string | null | undefined;
 };
 
 export interface OnfidoError extends Error {

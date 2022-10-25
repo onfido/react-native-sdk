@@ -37,7 +37,6 @@ const start = (config: any) => {
 
 const flowSteps: OnfidoFlowSteps = {
   welcome: true,
-  userConsent: true,
   captureDocument: {
     docType: OnfidoDocumentType.DRIVING_LICENCE,
     countryCode: OnfidoCountryCode.GBR,
@@ -64,12 +63,6 @@ testCases.forEach((platform) => {
     // Valid Configuration Tests
     test('resolve with a detailed valid configuration', () => {
       return start({ ...baseConfig }).then((result: string) => expect(result).toBe(RESOLVED));
-    });
-
-    test('resolve with userConsent false', () => {
-      return start({ ...baseConfig, userConsent: false }).then((result: string) =>
-        expect(result).toBe(RESOLVED),
-      );
     });
 
     test('resolve an empty captureDocument object', () => {
