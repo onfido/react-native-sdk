@@ -1,10 +1,18 @@
 import { NativeModules, Platform } from 'react-native';
-import { OnfidoDocumentType, OnfidoCaptureType, OnfidoCountryCode, OnfidoAlpha2CountryCode } from "./config_constants";
+import { 
+  OnfidoDocumentType, 
+  OnfidoCaptureType, 
+  OnfidoCountryCode,
+  OnfidoAlpha2CountryCode, 
+  OnfidoConfig,
+  OnfidoError,
+  OnfidoResult
+} from "./config_constants";
 
 const { OnfidoSdk } = NativeModules;
 
 const Onfido = {
-  start(config) {
+  start(config: OnfidoConfig): Promise<OnfidoResult | OnfidoError> {
 
     if (!config) {
       return configError("config is missing");
@@ -57,15 +65,15 @@ const Onfido = {
       }
     }
 
-    return OnfidoSdk.start(config).catch(error => {
+    return OnfidoSdk.start(config).catch((error: any) => {
       console.log(error);
       throw error;
     });
   }
 };
 
-const configError = message => {
-  const error = new Error(message);
+const configError = (message: string): Promise<OnfidoError> => {
+  const error: OnfidoError = new Error(message);
   error.code = "config_error";
   console.log(error);
   return Promise.reject(error);

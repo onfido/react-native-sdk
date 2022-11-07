@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34BABF197D944467478602E3 /* libPods-OnfidoSdk-OnfidoSdkTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */; };
 		3A9D42CC2412EEF50087A331 /* ResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42CB2412EEF50087A331 /* ResponseTests.swift */; };
 		3A9D42CE2412EEF50087A331 /* libOnfidoSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libOnfidoSdk.a */; };
 		3A9D42D52412F0110087A331 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* Response.swift */; };
 		3A9D42D62412F0110087A331 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* Response.swift */; };
 		3AFE501D2408522000E21479 /* OnfidoSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFE501C2408521F00E21479 /* OnfidoSdk.swift */; };
+		5D2F5DC95516209E65E56280 /* libPods-OnfidoSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BAC76485E97F0FD9C7A9FB /* libPods-OnfidoSdk.a */; };
 		8517ACCE244290D10077E909 /* OnfidoSdkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */; };
-		A940742A56BB293584EBCE4F /* Pods_OnfidoSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB36956AD3BFBB13AF3F684F /* Pods_OnfidoSdk.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* OnfidoSdk.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */; };
-		D5372EB21CA14C5483972435 /* Pods_OnfidoSdk_OnfidoSdkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D38F6F9D324D1D7442717F /* Pods_OnfidoSdk_OnfidoSdkTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11BAC76485E97F0FD9C7A9FB /* libPods-OnfidoSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OnfidoSdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		134814201AA4EA6300B7C361 /* libOnfidoSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOnfidoSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A9D42C92412EEF50087A331 /* OnfidoSdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnfidoSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A9D42CB2412EEF50087A331 /* ResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseTests.swift; sourceTree = "<group>"; };
@@ -48,15 +49,14 @@
 		3A9D42D42412F0110087A331 /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		3AFE501B2408521F00E21479 /* OnfidoSdk-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OnfidoSdk-Bridging-Header.h"; sourceTree = "<group>"; };
 		3AFE501C2408521F00E21479 /* OnfidoSdk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdk.swift; sourceTree = "<group>"; };
-		49D38F6F9D324D1D7442717F /* Pods_OnfidoSdk_OnfidoSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OnfidoSdk_OnfidoSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DD905136FC7557A95EFF1C4 /* Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		731FAC5B375A699FA470D705 /* Pods-OnfidoSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.release.xcconfig"; sourceTree = "<group>"; };
 		8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdkTests.swift; sourceTree = "<group>"; };
+		899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OnfidoSdk-OnfidoSdkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8E5FE3BDE0C9C96B5FE8AB /* Pods-OnfidoSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.debug.xcconfig"; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* OnfidoSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnfidoSdk.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnfidoSdk.m; sourceTree = "<group>"; };
 		B78EF811082AE0A0FC0314D6 /* Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CB36956AD3BFBB13AF3F684F /* Pods_OnfidoSdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OnfidoSdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A9D42CE2412EEF50087A331 /* libOnfidoSdk.a in Frameworks */,
-				D5372EB21CA14C5483972435 /* Pods_OnfidoSdk_OnfidoSdkTests.framework in Frameworks */,
+				34BABF197D944467478602E3 /* libPods-OnfidoSdk-OnfidoSdkTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A940742A56BB293584EBCE4F /* Pods_OnfidoSdk.framework in Frameworks */,
+				5D2F5DC95516209E65E56280 /* libPods-OnfidoSdk.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,8 +128,8 @@
 		59AF9C2A9480A3EDE2338EF9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CB36956AD3BFBB13AF3F684F /* Pods_OnfidoSdk.framework */,
-				49D38F6F9D324D1D7442717F /* Pods_OnfidoSdk_OnfidoSdkTests.framework */,
+				11BAC76485E97F0FD9C7A9FB /* libPods-OnfidoSdk.a */,
+				899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -142,11 +142,11 @@
 			buildConfigurationList = 3A9D42D32412EEF50087A331 /* Build configuration list for PBXNativeTarget "OnfidoSdkTests" */;
 			buildPhases = (
 				F9960F94F39C64AC672A96D8 /* [CP] Check Pods Manifest.lock */,
-				928DC589C379F55C63F7E70C /* [CP] Prepare Artifacts */,
 				3A9D42C52412EEF50087A331 /* Sources */,
 				3A9D42C62412EEF50087A331 /* Frameworks */,
 				3A9D42C72412EEF50087A331 /* Resources */,
 				32EACCEA3FD7725E23E8C33A /* [CP] Embed Pods Frameworks */,
+				1B04FE2BC5941AF8684272D0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -226,6 +226,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1B04FE2BC5941AF8684272D0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		32EACCEA3FD7725E23E8C33A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,52 +251,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
-				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
-				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
-				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTAnimation/RCTAnimation.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTBlob/RCTBlob.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTImage/RCTImage.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTLinking/RCTLinking.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTNetwork/RCTNetwork.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTSettings/RCTSettings.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTText/RCTText.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTVibration/RCTVibration.framework",
-				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
-				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Onfido/Onfido.framework/Onfido",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTAnimation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTBlob.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTLinking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTNetwork.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTSettings.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTText.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTVibration.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -305,24 +282,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		928DC589C379F55C63F7E70C /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-artifacts.sh",
-				"${PODS_ROOT}/Onfido/Onfido.xcframework",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputPaths = (
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F9960F94F39C64AC672A96D8 /* [CP] Check Pods Manifest.lock */ = {

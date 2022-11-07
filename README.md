@@ -151,9 +151,9 @@ android {
 
 #### 4.3 Update your iOS configuration files
 
-Change `ios/Podfile` to use version 10:
+Change `ios/Podfile` to use version 11:
 ```
-platform :ios, '10.0'
+platform :ios, '11.0'
 ```
 
 Add descriptions for camera and microphone permissions to `ios/YourProjectName/Info.plist`:

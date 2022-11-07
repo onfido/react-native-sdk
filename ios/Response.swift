@@ -9,35 +9,65 @@
 import Foundation
 import Onfido
 
+// 📝 Protocols are for testing purposes since SDK types are final
+protocol ReactDocumentSideResult {
+    var id: String { get }
+}
+
+protocol ReactDocumentResult {
+    var reactFront: ReactDocumentSideResult { get }
+    var reactBack: ReactDocumentSideResult? { get }
+}
+
+protocol ReactFaceResult {
+    var id: String { get }
+}
+
+extension DocumentSideResult: ReactDocumentSideResult {}
+extension DocumentResult: ReactDocumentResult {
+    var reactFront: ReactDocumentSideResult { front }
+    var reactBack: ReactDocumentSideResult? { back }
+}
+
+extension FaceResult: ReactFaceResult {}
+
 func createResponse(_ results: [OnfidoResult], faceVariant: String?) -> [String: [String: Any]] {
-    var RNResponse = [String: [String: Any]]()
-    
-    let document: OnfidoResult? = results.filter({ result in
-        if case OnfidoResult.document = result { return true }
-        return false
-    }).first
-    
-    let face: OnfidoResult? = results.filter({ result in
-        if case OnfidoResult.face = result { return true }
-        return false
-    }).first
-    
-    if let documentUnwrapped = document, case OnfidoResult.document(let documentResponse) = documentUnwrapped {
-        RNResponse["document"] = ["front": ["id": documentResponse.front.id]]
-        if (documentResponse.back?.id != documentResponse.front.id) {
-            RNResponse["document"]?["back"] = ["id": documentResponse.back?.id]
+    let document: DocumentResult? = results.compactMap { result in
+        guard case let .document(documentResult) = result else { return nil }
+        return documentResult
+    }.first
+    let face: FaceResult? = results.compactMap { result in
+        guard case let .face(faceResult) = result else { return nil }
+        return faceResult
+    }.first
+    return createResponse(document: document, face: face, faceVariant: faceVariant)
+}
+
+func createResponse(
+    document: ReactDocumentResult? = nil,
+    face: ReactFaceResult? = nil,
+    faceVariant: String? = nil
+) -> [String: [String: Any]] {
+    var response = [String: [String: Any]]()
+
+    if let documentResponse = document {
+        response["document"] = ["front": ["id": documentResponse.reactFront.id]]
+        if let backId = documentResponse.reactBack?.id,
+           backId != documentResponse.reactFront.id
+        {
+            response["document"]?["back"] = ["id": documentResponse.reactBack?.id]
         }
     }
-    
-    if let faceUnwrapped = face, case OnfidoResult.face(let faceResponse) = faceUnwrapped {
+
+    if let faceResponse = face {
         var faceResponse = ["id": faceResponse.id]
-        
+
         if let faceVariant = faceVariant {
             faceResponse["variant"] = faceVariant
         }
-        
-        RNResponse["face"] = faceResponse
+
+        response["face"] = faceResponse
     }
-    
-    return RNResponse
+
+    return response
 }

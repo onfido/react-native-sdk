@@ -32,7 +32,7 @@ class OnfidoSdkTests : XCTestCase {
     func testBuildOnfidoConfigMinimal() throws {
         let appearance = try loadAppearanceFromFile(filePath: "colorsFileDoesNotExist.json")
         let config: NSDictionary = [
-            "sdkToken" : "abc123",
+            "sdkToken" : "demo",
             "flowSteps" : [
                 "captureDocument": [:]
             ]
@@ -49,7 +49,7 @@ class OnfidoSdkTests : XCTestCase {
         let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
         let appearanceRefString = String(describing: appearance)
         let config: NSDictionary = [
-            "sdkToken" : "abc123",
+            "sdkToken" : "demo",
             "flowSteps" : [
                 "welcome": NSNumber(value:true),
                 "captureDocument": [

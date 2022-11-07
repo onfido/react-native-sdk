@@ -11,9 +11,8 @@ Pod::Spec.new do |s|
                    DESC
   s.homepage     = "https://github.com/onfido/onfido-react-native-sdk"
   s.license      = "MIT"
-  # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.authors      = { "Your Name" => "yourname@email.com" }
-  s.platforms    = { :ios => "10.0" }
+  s.authors      = { "Onfido" => "engineering@onfido.com" }
+  s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/onfido/onfido-react-native-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
@@ -21,7 +20,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
-  s.dependency "Onfido", "26.0.1"
-  # ...
-  # s.dependency "..."
+  s.dependency "Onfido", "26.1.1"
 end

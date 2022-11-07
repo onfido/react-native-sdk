@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## next-version
 
+## [6.1.0] - 2022-11-07
+
+### Changed:
+- Public: Update underlying Onfido native SDK versions:
+  - iOS 26.1.1 (up from 26.0.1)
+- Public: Start supporting Typescript
+- Public: Fix iOS build on older Xcode versions
+
 ## [6.0.0] - 2022-09-13
 
 ### Changed:
