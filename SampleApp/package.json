@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@onfido/react-native-sdk": "file:.yalc/@onfido/react-native-sdk",
+    "lottie-react-native": "^5.1.4",
     "react": "18.0.0",
     "react-native": "0.69.5",
     "react-router-native": "^5.1.2"

@@ -11,9 +11,13 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.69.5)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Onfido (26.1.1)
-  - onfido-react-native-sdk (6.0.0):
-    - Onfido (= 26.1.1)
+  - lottie-ios (3.4.4)
+  - lottie-react-native (5.1.4):
+    - lottie-ios (~> 3.4.0)
+    - React-Core
+  - Onfido (27.0.0)
+  - onfido-react-native-sdk (7.0.0):
+    - Onfido (= 27.0.0)
     - React
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -298,6 +302,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - "onfido-react-native-sdk (from `../node_modules/@onfido/react-native-sdk`)"
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -331,6 +336,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - fmt
+    - lottie-ios
     - Onfido
 
 EXTERNAL SOURCES:
@@ -344,6 +350,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   onfido-react-native-sdk:
     :path: "../node_modules/@onfido/react-native-sdk"
   RCT-Folly:
@@ -408,8 +416,10 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 82e74141263f8c962e288f5cd6b5d149cdc8afe1
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
-  Onfido: 3e2de53ad6245d3a76cf8c6bffbb633fd27eec05
-  onfido-react-native-sdk: 1e47a23a31cea7e91f280447b87dbf8fff6412b1
+  lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
+  lottie-react-native: b702fab740cdb952a8e2354713d3beda63ff97b0
+  Onfido: bdbc3ed45598aa106ab2ea021d94e2e28c6b5be3
+  onfido-react-native-sdk: 8cfbd3cad7f9c7e64e1d0414512890625c95ee5e
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: 85c60c4bde8241278be2c93420de4c65475a2151
   RCTTypeSafety: 15990f289215eb0fc65c5eb6e2610faeeda8d5e1
@@ -440,4 +450,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 041ef7eb6e691346c602d1383d084716ac8986da
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.2
