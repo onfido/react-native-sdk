@@ -20,6 +20,8 @@ import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledExceptio
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
+import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
+import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantVideo;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
@@ -228,7 +230,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     String countryCodeString = captureDocument.getString("alpha2CountryCode");
                     CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
-                    if (countryCodeEnum ==  null) {
+                    if (countryCodeEnum == null) {
                         System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
                         throw new Exception("Unexpected countryCode value.");
                     }
@@ -249,15 +251,15 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 if (captureFaceTypeExists) {
                     final String captureFaceType = captureFace.getString("type");
                     if (captureFaceType.equals("PHOTO")) {
-                        flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.PHOTO));
+                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
                     } else if (captureFaceType.equals("VIDEO")) {
-                        flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.VIDEO));
+                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantVideo()));
                     } else {
                         throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
                     }
                 } else {
                     // Default face capture type is photo.
-                    flowStepList.add(new FaceCaptureStep(FaceCaptureVariant.PHOTO));
+                    flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
                 }
             }
 
