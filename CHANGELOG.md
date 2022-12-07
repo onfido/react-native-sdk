@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## next-version
 
+### Added:
+
+- Public: Added NFC support
+- Public: Added support for new OnfidoCaptureType - MOTION
+
 ## [7.0.1] - 2022-11-28
 
 ### Changed:
@@ -35,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [5.4.0] - 2022-06-22
 
 ### Changed:
-- Public: 
+- Public:
 - Public: Update underlying Onfido native SDK versions:
   - Android 12.2.0 (up from 11.5.0)
   - iOS 25.1.0 (up from 24.6.0)

@@ -22,6 +22,7 @@ import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantVideo;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
@@ -61,9 +62,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     *
      * NOTE: This indirection is used to allow unit tests to mock this method
-    
      */
     protected Activity getCurrentActivityInParentClass() {
         return super.getCurrentActivity();
@@ -165,6 +164,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
         }
 
+        if(getBooleanFromConfig(config, "enableNFC")) {
+            onfidoConfigBuilder.withNFCReadFeature();
+        }
+
         client.startActivityForResult(currentActivity,
                 OnfidoSdkActivityEventListener.checksActivityCode,
                 onfidoConfigBuilder.build());
@@ -254,6 +257,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                         flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
                     } else if (captureFaceType.equals("VIDEO")) {
                         flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantVideo()));
+                    } else if (captureFaceType.equals("MOTION")) {
+                        flowStepList.add(FaceCaptureStepBuilder.forMotion().build());
                     } else {
                         throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
                     }

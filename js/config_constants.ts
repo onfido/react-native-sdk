@@ -30,7 +30,8 @@ export type OnfidoConfig = {
   workflowRunId?: string;
   flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
-  logoCoBrand?: boolean
+  logoCoBrand?: boolean;
+  enableNFC?: boolean;
   localisation?: {
     ios_strings_file_name?: string;
   };
@@ -53,7 +54,8 @@ export enum OnfidoDocumentType {
 
 export enum OnfidoCaptureType {
   PHOTO = "PHOTO",
-  VIDEO = "VIDEO"
+  VIDEO = "VIDEO",
+  MOTION = "MOTION"
 }
 
 export enum OnfidoCountryCode {

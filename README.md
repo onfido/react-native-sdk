@@ -41,6 +41,10 @@ This SDK provides a drop-in set of screens and tools for react native applicatio
 * Advanced image quality detection technology to ensure the quality of the captured images meets the requirement of the Onfido identity verification process, guaranteeing the best success rate
 * Direct image upload to the Onfido service, to simplify integration\*
 
+> ℹ️ 
+> 
+> If you are integrating using Onfido Studio please see our [Studio integration guide](ONFIDO_STUDIO.md)
+
 \* **Note**: the SDK is only responsible for capturing and uploading photos/videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to create and manage checks.
 
 * Supports iOS 11+
@@ -247,6 +251,7 @@ config = {
       type: OnfidoCaptureType.VIDEO
     },
   },
+  enableNFC: true
 }
 ```
 
@@ -262,9 +267,11 @@ config = {
     **Note**: `GENERIC` document type doesn't offer an optimised capture experience for a desired document type.
 * **`countryCode`**: Required if docType is specified.
   * Valid values in `OnfidoCountryCode`: Any ISO 3166-1 alpha-3 code. For example: `OnfidoCountryCode.USA`.
+* **`enableNFC`**: Optional. This toggles the ePassport NFC extraction feature. If omitted, this feature is not enabled in the flow. There is also application configuration changes needed to use this feature. To do that please follow [Onfido Developer Hub](#https://developers.onfido.com/guide/document-report-nfc#enable-nfc-in-the-onfido-sdks)
+  * Valid values: `true`, `false`.
 * **`captureFace`**: Optional.  This object object containing options for capture face screen.  If omitted, this screen does not appear in the flow.
 * **`type`**: Required if captureFace is specified.
-  * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`.
+  * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`, `MOTION`.
 * **`localisation`**: Optional. This object contains localisation configuration. See section [Localization](#localization) for the details.
   * Example usage:
 
