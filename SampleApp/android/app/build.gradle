@@ -200,10 +200,11 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "androidx.annotation:annotation:1.5.0"
 
-    androidTestImplementation('com.wix:detox:+') { transitive = true }
-    androidTestImplementation 'junit:junit:4.12'
-    implementation "androidx.annotation:annotation:1.1.0"
+    // The following 2 dependencies are needed for the NFC feature
+    implementation "net.sf.scuba:scuba-sc-android:0.0.23"
+    implementation "org.jmrtd:jmrtd:0.7.32"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -212,6 +213,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    androidTestImplementation('com.wix:detox:+') { transitive = true }
+    androidTestImplementation 'junit:junit:4.13.2'
 }
 
 // Run this once to be able to run the application with BUCK

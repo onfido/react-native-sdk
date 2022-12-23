@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## next-version
+
+### Added:
+
+## [7.2.0] - 2022-12-23
+
+### Added
+
+- Public: Extended localisation support to 44 languages
+- Public: Added RTL languages support
+
+### Changed:
+- Public: Update underlying Onfido native SDK versions:
+  - iOS 27.2.0 (up from 27.0.0)
+  - Android 15.1.0 (up from 14.0.0)
+
+### Fixed:
+
+- Public: Remove NFC dependencies from the SDK. They should be added in your app when utilizing NFC. 
+
 ## [7.1.0] - 2022-12-07
 
 ### Added:

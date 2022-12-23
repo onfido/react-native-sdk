@@ -1,5 +1,6 @@
 package com.onfido.reactnative.sdk;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import com.facebook.react.bridge.NoSuchKeyException;
@@ -26,8 +27,8 @@ import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStep
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
-import com.onfido.android.sdk.workflow.OnfidoWorkflow;
-import com.onfido.android.sdk.workflow.WorkflowConfig;
+import com.onfido.workflow.OnfidoWorkflow;
+import com.onfido.workflow.WorkflowConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +118,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     private void workflowSDKConfiguration(Activity currentActivity, String workflowRunId, String sdkToken) {
         final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
         this.activityEventListener.setWorkflow(flow);

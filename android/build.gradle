@@ -104,14 +104,12 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:14.0.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:15.1.0"
+    implementation "com.onfido.sdk:onfido-workflow:15.1.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.squareup.okhttp3:okhttp:3.8.0"
     // Fix for crash due to 'java.lang.NoClassDefFoundError: Failed resolution of: Landroidx/swiperefreshlayout/widget/SwipeRefreshLayout;''
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    // The following 2 dependencies are needed for NFC
-    implementation "net.sf.scuba:scuba-sc-android:0.0.23"
-    implementation "org.jmrtd:jmrtd:0.7.32"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
