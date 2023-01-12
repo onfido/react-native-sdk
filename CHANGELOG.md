@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## next-version
 
-### Added:
+### Changed:
+- Public: Updated underlying Onfido native SDKs versions:
+  - iOS 27.3.0 (up from 27.2.0)
+  - Android 15.3.0 (up from 15.1.0)
 
 ## [7.2.0] - 2022-12-23
 
