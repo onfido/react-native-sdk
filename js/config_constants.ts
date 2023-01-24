@@ -28,6 +28,7 @@ export type OnfidoResult = {
 
 export type OnfidoConfig = {
   sdkToken: string;
+  workflowRunId?: string;
   flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean
