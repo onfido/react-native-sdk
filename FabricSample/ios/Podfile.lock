@@ -80,7 +80,13 @@ PODS:
   - Onfido (27.3.0)
   - onfido-react-native-sdk (7.3.0):
     - Onfido (= 27.3.0)
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
     - React
+    - React-Codegen
+    - React-RCTFabric
+    - ReactCommon/turbomodule/core
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -943,7 +949,7 @@ SPEC CHECKSUMS:
   hermes-engine: 6351580c827b3b03e5f25aadcf989f582d0b0a86
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Onfido: e3117cd61ac93df6d2c315f4a93c9ad724fd8786
-  onfido-react-native-sdk: 7ddf00e9ca93a22b759d6c0d6582829f40530711
+  onfido-react-native-sdk: db95b9b75bae989aa44dfe794974c48e6d176ce1
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c154ebcfbf41d6fef86c52674fc1aa08837ff538
