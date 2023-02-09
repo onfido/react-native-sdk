@@ -24,7 +24,8 @@
     ],
     "testPathIgnorePatterns": [
       "/TestApp",
-      "/SampleApp"
+      "/SampleApp",
+      "/FabricSample"
     ],
     "globals": {
       "__DEV__": true
