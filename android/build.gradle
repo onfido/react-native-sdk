@@ -26,6 +26,43 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
+def resolveReactNativeDirectory() {
+    def reactNativeLocation = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
+    if (reactNativeLocation != null) {
+        return file(reactNativeLocation)
+    }
+
+    // monorepo workaround
+    // react-native can be hoisted or in project's own node_modules
+    def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
+    if (reactNativeFromProjectNodeModules.exists()) {
+        return reactNativeFromProjectNodeModules
+    }
+
+    def reactNativeFromNodeModulesWithOnfido = file("${projectDir}/../../react-native")
+    if (reactNativeFromNodeModulesWithOnfido.exists()) {
+        return reactNativeFromNodeModulesWithOnfido
+    }
+
+    throw new Exception(
+            "[react-native-async-storage] Unable to resolve react-native location in " +
+                    "node_modules. You should add project extension property (in app/build.gradle) " +
+                    "`REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
+    )
+}
+
+def getReactNativeMinorVersion() {
+    def REACT_NATIVE_DIR = resolveReactNativeDirectory()
+
+    def reactProperties = new Properties()
+    file("$REACT_NATIVE_DIR/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
+
+    def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME")
+    def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
+
+    return REACT_NATIVE_MINOR_VERSION
+}
+
 def androidExclusion = [
         '**/databinding/**/*.*',
         '**/android/databinding/*Binding.*',
@@ -105,6 +142,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets.main {
+        java {
+            if (!isNewArchitectureEnabled()) {
+                srcDirs += 'src/paper/java'
+            }
+        }
+    }
 }
 
 repositories {
@@ -125,7 +170,12 @@ repositories {
 
 dependencies {
     //noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+'  // From node_modules
+    if (isNewArchitectureEnabled() && getReactNativeMinorVersion() < 71) {
+        implementation project(":ReactAndroid")
+    } else {
+        implementation 'com.facebook.react:react-native:+' // from node_modules
+    }
+    
     implementation "com.onfido.sdk.capture:onfido-capture-sdk:15.3.0"
     implementation "com.onfido.sdk:onfido-workflow:15.1.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
