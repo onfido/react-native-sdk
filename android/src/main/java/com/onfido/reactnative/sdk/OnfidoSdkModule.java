@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UnexpectedNativeTypeException;
+import com.facebook.react.module.annotations.ReactModule;
 import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.EnterpriseFeatures;
 import com.onfido.android.sdk.capture.Onfido;
@@ -33,7 +34,10 @@ import com.onfido.workflow.WorkflowConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnfidoSdkModule extends ReactContextBaseJavaModule {
+@ReactModule(name = OnfidoSdkModule.NAME)
+public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
+
+    public static final String NAME = "OnfidoSdk";
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
@@ -59,7 +63,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "OnfidoSdk";
+        return NAME;
     }
 
     /**
@@ -70,6 +74,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    @Override
     public void start(final ReadableMap config, final Promise promise) {
 
         setPromise(promise);
