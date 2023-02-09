@@ -83,5 +83,13 @@
     "react-native": "0.64.3",
     "typescript": "^4.6.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "codegenConfig": {
+    "name": "rnonfidosdk",
+    "type": "modules",
+    "jsSrcsDir": "./js",
+    "android": {
+      "javaPackageName": "com.onfido.reactnative.sdk"
+    }
+  }
 }
