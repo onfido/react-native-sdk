@@ -37,7 +37,7 @@ import java.util.List;
 @ReactModule(name = OnfidoSdkModule.NAME)
 public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
 
-    public static final String NAME = "OnfidoSdk";
+    public static final String NAME = "RNOnfidoSdk";
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
