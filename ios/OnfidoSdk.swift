@@ -197,24 +197,22 @@ public func buildOnfidoFlow(from config: NSDictionary) throws -> OnfidoFlow {
     }
 }
 
-@objc(OnfidoSdk)
-class OnfidoSdk: NSObject {
+@objc public class OnfidoSdk: NSObject {
 
-    @objc static func requiresMainQueueSetup() -> Bool {
-        return false
-    }
-
-    @objc func start(_ config: NSDictionary,
-                     resolver resolve: @escaping RCTPromiseResolveBlock,
-                     rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    // TODO: Using React types here (RCTPromiseResolveBlock and RCTPromiseRejectBlock) causes the project to fail to build.
+    // For some reason marking them as @escaping causes the XCode to add an import to non-existent header file in onfido_react_native_sdk-Swift.h.
+    @objc public func start(_ config: NSDictionary,
+                     resolver resolve: @escaping (Any) -> Void,
+                     rejecter reject: @escaping (String, String, Error?) -> Void) -> Void {
         DispatchQueue.main.async {
             self.run(withConfig: config, resolver: resolve, rejecter: reject)
         }
     }
 
+    // TODO: Same as above
     private func run(withConfig config: NSDictionary,
-                     resolver resolve: @escaping RCTPromiseResolveBlock,
-                     rejecter reject: @escaping RCTPromiseRejectBlock) {
+                     resolver resolve: @escaping (Any) -> Void,
+                     rejecter reject: @escaping (String, String, Error?) -> Void) {
 
         do {
             //  Copy the face varient from the config since it is not contained in the response:
