@@ -176,7 +176,7 @@ dependencies {
         implementation 'com.facebook.react:react-native:+' // from node_modules
     }
     
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:15.3.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:15.4.0"
     implementation "com.onfido.sdk:onfido-workflow:15.1.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
     implementation "com.squareup.okhttp3:okhttp:3.8.0"

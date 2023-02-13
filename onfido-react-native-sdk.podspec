@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.exclude_files = "ios/OnfidoSdkTests/"
   s.requires_arc = true
 
-  s.dependency "Onfido", "27.3.0"
+  s.dependency "Onfido", "27.4.0"
 
   if fabric_enabled
     folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
