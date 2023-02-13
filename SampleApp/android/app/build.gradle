@@ -141,6 +141,16 @@ android {
         }
     }
 
+    // See https://stackoverflow.com/questions/74326839/error-execution-failed-for-task-appmergedebugnativelibs/74342256#74342256
+    // for more details.
+    packagingOptions {
+        pickFirst '**/libjsc.so'
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libfbjni.so'
+        pickFirst '**/llibturbomodulejsijni.so'
+        pickFirst '**/libturbomodulejsijni.so'
+    }
+
     defaultConfig {
         multiDexEnabled true
 
