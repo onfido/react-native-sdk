@@ -238,9 +238,9 @@ class OnfidoSdk: NSObject {
                         case .deniedConsent:
                             reject("deniedConsent", "User denied consent.", nil)
                         case .userExit:
-                            reject("userExit", "User canceled flow.", nil)
+                            reject("userExit", "User cancelled flow.", nil)
                         default:
-                            reject("userExit", "User canceled flow via unknown method.", nil)
+                            reject("userExit", "User cancelled flow via unknown method.", nil)
                         }
                         return;
                     default:
