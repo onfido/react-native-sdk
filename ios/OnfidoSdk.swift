@@ -122,19 +122,19 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
     if let docType = captureDocument?["docType"] as? String, let countryCode = captureDocument?["countryCode"] as? String {
         switch docType {
         case "PASSPORT":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .passport(config: PassportConfiguration()))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .passport(config: PassportConfiguration()))
         case "DRIVING_LICENCE":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .drivingLicence(config: DrivingLicenceConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .drivingLicence(config: DrivingLicenceConfiguration(country: countryCode)))
         case "NATIONAL_IDENTITY_CARD":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryCode)))
         case "RESIDENCE_PERMIT":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .residencePermit(config: ResidencePermitConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .residencePermit(config: ResidencePermitConfiguration(country: countryCode)))
         case "VISA":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .visa(config: VisaConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .visa(config: VisaConfiguration(country: countryCode)))
         case "WORK_PERMIT":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .workPermit(config: WorkPermitConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .workPermit(config: WorkPermitConfiguration(country: countryCode)))
         case "GENERIC":
-            onfidoConfig = onfidoConfig.withDocumentStep(ofType: .generic(config: GenericDocumentConfiguration(country: countryCode)))
+            onfidoConfig = onfidoConfig.withDocumentStep(type: .generic(config: GenericDocumentConfiguration(country: countryCode)))
         default:
             throw NSError(domain: "Unsupported document type", code: 0)
         }
