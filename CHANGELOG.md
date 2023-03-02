@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## next-version
+## [7.3.1] - 2023-03-01
+
+### Changed:
+- Updated underlying iOS SDK version to 27.3.1 (up from 27.3.0)
+
+## [7.3.0] - 2023-01-12
 
 ### Changed:
 - Public: Updated underlying Onfido native SDKs versions:
