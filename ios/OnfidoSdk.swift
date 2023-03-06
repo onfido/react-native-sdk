@@ -181,7 +181,23 @@ public func buildOnfidoFlow(from config: NSDictionary) throws -> OnfidoFlow {
     let sdkToken = config["sdkToken"] as! String
 
     if let workflowRunId = config["workflowRunId"] as? String {
+        let enterpriseFeatures = EnterpriseFeatures.builder()
+
+        if let hideLogo = config["hideLogo"] as? Bool {
+            enterpriseFeatures.withHideOnfidoLogo(hideLogo)
+        }
+
+if config["logoCobrand"] as? Bool == true {
+               if let cobrandLogoLight = UIImage(named: "cobrand-logo-light"), 
+               let cobrandLogoDark = UIImage(named: "cobrand-logo-dark") {
+                enterpriseFeatures.withCobrandingLogo(cobrandLogoLight, cobrandingLogoDarkMode: cobrandLogoDark)
+            } else {
+                throw NSError(domain: "Cobrand logos were not found", code: 0)
+            }
+        }
+
         let workflowConfig = WorkflowConfiguration(workflowRunId: workflowRunId, sdkToken: sdkToken)
+        workflowConfig.enterpriseFeatures = enterpriseFeatures.build()
         workflowConfig.appearance = appearance
 
         if let localisationFile = getLocalisationConfigFileName(from: config) {

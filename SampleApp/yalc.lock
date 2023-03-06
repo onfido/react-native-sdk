@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@onfido/react-native-sdk": {
-      "signature": "722032a1e92ac462f1957f4ac40f4197",
+      "signature": "cb5939e9ef5dd2b6ddd64031290b819e",
       "file": true
     }
   }

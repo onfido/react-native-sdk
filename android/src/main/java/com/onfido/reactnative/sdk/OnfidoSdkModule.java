@@ -95,7 +95,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
                 if (!workflowRunId.isEmpty()) {
-                    workflowSDKConfiguration(currentActivity, workflowRunId, sdkToken);
+                    workflowSDKConfiguration(config, currentActivity, sdkToken);
                 } else {
                     defaultSDKConfiguration(config, currentActivity, sdkToken);
                 }
@@ -119,21 +119,54 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private void workflowSDKConfiguration(Activity currentActivity, String workflowRunId, String sdkToken) {
+    private void workflowSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) {
+        final String workflowRunId = getWorkflowRunIdFromConfig(config);
+
         final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
         this.activityEventListener.setWorkflow(flow);
 
+        WorkflowConfig.Builder onfidoConfigBuilder = new WorkflowConfig.Builder(sdkToken, workflowRunId);
+
+        EnterpriseFeatures.Builder enterpriseFeaturesBuilder = getEnterpriseFeatures(config);
+        if (enterpriseFeaturesBuilder!=null) {
+            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        }
+
         flow.startActivityForResult(currentActivity,
                 OnfidoSdkActivityEventListener.workflowActivityCode,
-                new WorkflowConfig.Builder(sdkToken, workflowRunId).build());
+                onfidoConfigBuilder.build()
+                );
     }
 
     private void defaultSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
         final FlowStep[] flowStepsWithOptions = getFlowStepsFromConfig(config);
                 /* Native SDK seems to have a bug that if an empty EnterpriseFeatures is passed to it,
                  the logo will still be hidden, even if explicitly set to false */
+
+
+
+        OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(flowStepsWithOptions);
+
+        EnterpriseFeatures.Builder enterpriseFeaturesBuilder = getEnterpriseFeatures(config);
+        if (enterpriseFeaturesBuilder!=null) {
+            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        }
+
+        if(getBooleanFromConfig(config, "enableNFC")) {
+            onfidoConfigBuilder.withNFCReadFeature();
+        }
+
+        client.startActivityForResult(currentActivity,
+                OnfidoSdkActivityEventListener.checksActivityCode,
+                onfidoConfigBuilder.build());
+    }
+
+    private EnterpriseFeatures.Builder getEnterpriseFeatures(final ReadableMap config){
         EnterpriseFeatures.Builder enterpriseFeaturesBuilder = EnterpriseFeatures.builder();
         boolean hasSetEnterpriseFeatures = false;
+        Activity currentActivity = getCurrentActivityInParentClass();
 
         if (getBooleanFromConfig(config, "hideLogo")) {
             enterpriseFeaturesBuilder.withHideOnfidoLogo(true);
@@ -152,27 +185,13 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
                 currentPromise.reject("error", new Exception("Cobrand logos were not found"));
                 currentPromise = null;
-                return;
+                return null;
             }
             enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
             hasSetEnterpriseFeatures = true;
         }
 
-        OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
-                .withSDKToken(sdkToken)
-                .withCustomFlow(flowStepsWithOptions);
-
-        if (hasSetEnterpriseFeatures) {
-            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
-        }
-
-        if(getBooleanFromConfig(config, "enableNFC")) {
-            onfidoConfigBuilder.withNFCReadFeature();
-        }
-
-        client.startActivityForResult(currentActivity,
-                OnfidoSdkActivityEventListener.checksActivityCode,
-                onfidoConfigBuilder.build());
+        return hasSetEnterpriseFeatures ? enterpriseFeaturesBuilder : null;
     }
 
     public static String getSdkTokenFromConfig(final ReadableMap config) {
