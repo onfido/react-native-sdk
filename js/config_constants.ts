@@ -18,6 +18,9 @@ export type OnfidoResult = {
     back?: {
       id: string;
     };
+    nfcMediaId?: {
+      id: string;
+    };
   };
   face?: {
     id: string;

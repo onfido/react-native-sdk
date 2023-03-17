@@ -12,7 +12,8 @@ public class ResponseTest {
         String backId = "backId2";
         String faceId = "faceId3";
         String faceVariant = "faceVariant4";
-        Response testResponse = new Response(frontId, backId, faceId, faceVariant);
+        String nfcMediaUUID = "docNfcMediaId123";
+        Response testResponse = new Response(frontId, backId, faceId, faceVariant, nfcMediaUUID);
         assertEquals(frontId, testResponse.document.front.id);
         assertEquals(backId, testResponse.document.back.id);
         assertEquals(faceId, testResponse.face.id);
@@ -22,7 +23,7 @@ public class ResponseTest {
     @Test
     public void shouldCreateResponseDocFrontOnly() throws Exception {
         String frontId = "frontId1";
-        Response testResponse = new Response(frontId, null, null, null);
+        Response testResponse = new Response(frontId, null, null, null, null);
         assertEquals(frontId, testResponse.document.front.id);
         assertNull(testResponse.document.back);
         assertNull(testResponse.face);
@@ -32,7 +33,7 @@ public class ResponseTest {
     public void shouldCreateResponseFaceOnly() throws Exception {
         String faceId = "faceId3";
         String faceVariant = "faceVariant4";
-        Response testResponse = new Response(null, null, faceId, faceVariant);
+        Response testResponse = new Response(null, null, faceId, faceVariant, null);
         assertNull(testResponse.document);
         assertEquals(faceId, testResponse.face.id);
         assertEquals(faceVariant, testResponse.face.variant);

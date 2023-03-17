@@ -214,7 +214,8 @@ dependencies {
 
     // The following 2 dependencies are needed for the NFC feature
     implementation "net.sf.scuba:scuba-sc-android:0.0.23"
-    implementation "org.jmrtd:jmrtd:0.7.32"
+    implementation "org.jmrtd:jmrtd:0.7.34"
+    implementation "com.madgag.spongycastle:prov:1.58.0.0"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

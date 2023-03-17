@@ -89,6 +89,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                 if (currentPromise != null) {
                     String docFrontId = null;
                     String docBackId = null;
+                    String nfcMediaUUID = null;
                     String faceId = null;
                     String faceVarient = null;
                     if (captures.getDocument() != null) {
@@ -98,6 +99,9 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                         if (captures.getDocument().getBack() != null) {
                             docBackId = captures.getDocument().getBack().getId();
                         }
+                        if (captures.getDocument().getNfcMediaUUID() != null) {
+                            nfcMediaUUID = captures.getDocument().getNfcMediaUUID();
+                        }
                     }
                     if (captures.getFace() != null) {
                         faceId = captures.getFace().getId();
@@ -105,7 +109,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                         faceVarient = captures.getFace().getVariant().toString();
                     }
 
-                    final Response response = new Response(docFrontId, docBackId, faceId, faceVarient);
+                    final Response response = new Response(docFrontId, docBackId, faceId, faceVarient, nfcMediaUUID);
                     try {
                         final WritableMap responseMap = ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(response);
                         currentPromise.resolve(responseMap);

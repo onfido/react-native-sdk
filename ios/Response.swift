@@ -17,6 +17,7 @@ protocol ReactDocumentSideResult {
 protocol ReactDocumentResult {
     var reactFront: ReactDocumentSideResult { get }
     var reactBack: ReactDocumentSideResult? { get }
+    var reactNfcMediaId: String? { get }
 }
 
 protocol ReactFaceResult {
@@ -27,6 +28,7 @@ extension DocumentSideResult: ReactDocumentSideResult {}
 extension DocumentResult: ReactDocumentResult {
     var reactFront: ReactDocumentSideResult { front }
     var reactBack: ReactDocumentSideResult? { back }
+    var reactNfcMediaId: String? { nfcMediaId }
 }
 
 extension FaceResult: ReactFaceResult {}
@@ -56,6 +58,11 @@ func createResponse(
            backId != documentResponse.reactFront.id
         {
             response["document"]?["back"] = ["id": documentResponse.reactBack?.id]
+        }
+        
+        if let nfcId = documentResponse.reactNfcMediaId
+        {
+            response["document"]?["nfcMediaId"] = ["id": nfcId]
         }
     }
 

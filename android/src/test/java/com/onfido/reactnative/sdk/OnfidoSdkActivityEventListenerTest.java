@@ -1,55 +1,39 @@
 package com.onfido.reactnative.sdk;
 
 import static com.onfido.reactnative.sdk.OnfidoSdkActivityEventListener.checksActivityCode;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import android.app.Activity;
 import android.content.Intent;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
-import com.onfido.android.sdk.capture.OnfidoConfig;
-import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.errors.OnfidoException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
-import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.upload.Captures;
+import com.onfido.android.sdk.capture.upload.Document;
 import com.onfido.android.sdk.capture.upload.DocumentSide;
 import com.onfido.android.sdk.capture.upload.Face;
-import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.api.client.data.DocSide;
-import com.onfido.reactnative.sdk.OnfidoSdkModule;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Captures.class, ReactNativeBridgeUtiles.class, Captures.Document.class})
+@PrepareForTest({Captures.class, ReactNativeBridgeUtiles.class, Document.class})
 public class OnfidoSdkActivityEventListenerTest {
 
     private Promise promiseMock;
@@ -165,9 +149,11 @@ public class OnfidoSdkActivityEventListenerTest {
         int resultCode = 123;
         String docFrontId = "docFrontId123";
         String docBackId = "docBackId123";
-        Captures.Document documentMock = PowerMockito.mock(Captures.Document.class);
+        String nfcMediaUUID = "docNfcMediaId123";
+        Document documentMock = PowerMockito.mock(Document.class);
         when(documentMock.getFront()).thenReturn(new DocumentSide(docFrontId, DocSide.FRONT, DocumentType.DRIVING_LICENCE));
         when(documentMock.getBack()).thenReturn(new DocumentSide(docBackId, DocSide.BACK, DocumentType.DRIVING_LICENCE));
+        when(documentMock.getNfcMediaUUID()).thenReturn(nfcMediaUUID);
         when(capturesMock.getDocument()).thenReturn(documentMock);
 
         onfidoSdkActivityEventListener.onActivityResult(null, checksActivityCode, resultCode, null);
@@ -186,6 +172,7 @@ public class OnfidoSdkActivityEventListenerTest {
 
         assertEquals(responseCaptor.getValue().document.front.id, docFrontId);
         assertEquals(responseCaptor.getValue().document.back.id, docBackId);
+        assertEquals(responseCaptor.getValue().document.nfcMediaId.id, nfcMediaUUID);
         assertNull(responseCaptor.getValue().face);
     }
 }
