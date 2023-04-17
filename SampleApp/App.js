@@ -70,8 +70,12 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{this.state.title}</Text>
-        <Text style={styles.instructions}>{this.state.subtitle}</Text>
+        <Text testID="firstName" style={styles.welcome}>
+          {this.state.title}
+        </Text>
+        <Text testID="lastName" style={styles.instructions}>
+          {this.state.subtitle}
+        </Text>
         <Button title="Launch" onPress={() => this.startSDK()} />
         {this.state.sdkFlowComplete ? (
           <Redirect to={`/finish/${this.state.status}/${this.state.message}`} />

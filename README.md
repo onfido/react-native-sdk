@@ -153,6 +153,39 @@ android {
 ```
 </details>
 
+</br>
+
+
+NFC dependencies are not included in the SDK to avoid increasing the SDK size when the NFC feature is disabled. To use the NFC feature, you need to include the following dependencies (with the specified versions) in your build script:
+
+```gradle
+implementation "net.sf.scuba:scuba-sc-android:0.0.23"
+implementation "org.jmrtd:jmrtd:0.7.34"
+implementation "com.madgag.spongycastle:prov:1.58.0.0"
+```
+
+You also need to add the following Proguard rules to your `proguard-rules.pro` file:
+
+```
+-keep class org.jmrtd.** { *; }
+-keep class net.sf.scuba.** {*;}
+-keep class org.bouncycastle.** {*;}
+-keep class org.spongycastle.** {*;}
+-keep class org.ejbca.** {*;}
+
+-dontwarn kotlin.time.jdk8.DurationConversionsJDK8Kt
+-dontwarn org.ejbca.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.spongycastle.**
+
+-dontwarn module-info
+-dontwarn org.jmrtd.**
+-dontwarn net.sf.scuba.**
+```
+
+
+</br>
+
 #### 4.3 Update your iOS configuration files
 
 Change `ios/Podfile` to use version 11:

@@ -53,4 +53,11 @@ allprojects {
         maven { url "$rootDir/../node_modules/detox/Detox-android" }
         maven { url "https://maven.google.com" }
     }
+    def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+        }
+    }
 }

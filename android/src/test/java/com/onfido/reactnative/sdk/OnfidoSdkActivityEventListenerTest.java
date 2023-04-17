@@ -151,8 +151,8 @@ public class OnfidoSdkActivityEventListenerTest {
         String docBackId = "docBackId123";
         String nfcMediaUUID = "docNfcMediaId123";
         Document documentMock = PowerMockito.mock(Document.class);
-        when(documentMock.getFront()).thenReturn(new DocumentSide(docFrontId, DocSide.FRONT, DocumentType.DRIVING_LICENCE));
-        when(documentMock.getBack()).thenReturn(new DocumentSide(docBackId, DocSide.BACK, DocumentType.DRIVING_LICENCE));
+        when(documentMock.getFront()).thenReturn(new DocumentSide(docFrontId, DocSide.FRONT, DocumentType.DRIVING_LICENCE, false));
+        when(documentMock.getBack()).thenReturn(new DocumentSide(docBackId, DocSide.BACK, DocumentType.DRIVING_LICENCE, false));
         when(documentMock.getNfcMediaUUID()).thenReturn(nfcMediaUUID);
         when(capturesMock.getDocument()).thenReturn(documentMock);
 
