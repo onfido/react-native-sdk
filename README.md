@@ -305,6 +305,9 @@ config = {
 * **`captureFace`**: Optional.  This object object containing options for capture face screen.  If omitted, this screen does not appear in the flow.
 * **`type`**: Required if captureFace is specified.
   * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`, `MOTION`.
+* **`options`**: Required if captureFace is specified as MOTION.
+  * Valid values in `OnfidoFaceCaptureOptions`: `videoCaptureFallback`, `photoCaptureFallback`.
+    **Note**: In the scenario that the Motion variant is not supported on the user's device, if you configure the react native SDK `options` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
 * **`localisation`**: Optional. This object contains localisation configuration. See section [Localization](#localization) for the details.
   * Example usage:
 

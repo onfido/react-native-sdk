@@ -44,7 +44,7 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssert( configString.contains("document") )
     }
 
-    func testBuildOnfidoConfigWithAllParams() throws {
+    func testBuildOnfidoConfigWithoutMotion() throws {
         let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
         let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
         let appearanceRefString = String(describing: appearance)
@@ -57,8 +57,8 @@ class OnfidoSdkTests : XCTestCase {
                     "countryCode": "USA"
                 ],
                 "captureFace": [
-                    "type": "PHOTO",
-                ]
+                    "type": "PHOTO"
+                ],
             ]
         ]
         
@@ -70,6 +70,38 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssert( configString.contains("drivingLicence") )
         XCTAssert( configString.contains("photo") )
         XCTAssert( !configString.contains("video") )
+        XCTAssert( configString.contains(appearanceRefString) )
+    }
+    
+    func testBuildOnfidoConfigWithMotion() throws {
+        let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
+        let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
+        let appearanceRefString = String(describing: appearance)
+        let config: NSDictionary = [
+            "sdkToken" : "demo",
+            "flowSteps" : [
+                "welcome": NSNumber(value:true),
+                "captureDocument": [
+                    "docType": "DRIVING_LICENCE",
+                    "countryCode": "USA"
+                ],
+                "captureFace": [
+                    "type": "MOTION",
+                    "options": "photoCaptureFallback"
+                ],
+            ]
+        ]
+        
+        let onfidoConfigBuilder = try buildOnfidoConfig(config: config, appearance: appearance)
+        let builtOnfidoConfig = try onfidoConfigBuilder.build()
+        
+        let configString = String(describing: builtOnfidoConfig)
+        XCTAssert( configString.contains("intro"))
+        XCTAssert( configString.contains("drivingLicence") )
+        XCTAssert( !configString.contains("photo") )
+        XCTAssert( !configString.contains("video") )
+        XCTAssert( configString.contains("motion") )
+        XCTAssert( configString.contains("MotionStepConfiguration") ) //this is for fallback option as per implemented iOS SDK if we only have MotionStepConfiguration for fallback and audio.
         XCTAssert( configString.contains(appearanceRefString) )
     }
 }

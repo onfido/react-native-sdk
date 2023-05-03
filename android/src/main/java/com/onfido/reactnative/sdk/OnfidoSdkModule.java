@@ -123,7 +123,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
         final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
-        this.activityEventListener.setWorkflow(flow);
 
         WorkflowConfig.Builder onfidoConfigBuilder = new WorkflowConfig.Builder(sdkToken, workflowRunId);
 
@@ -274,14 +273,29 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 final boolean captureFaceTypeExists = captureFace.hasKey("type");
                 if (captureFaceTypeExists) {
                     final String captureFaceType = captureFace.getString("type");
-                    if (captureFaceType.equals("PHOTO")) {
-                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
-                    } else if (captureFaceType.equals("VIDEO")) {
-                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantVideo()));
-                    } else if (captureFaceType.equals("MOTION")) {
-                        flowStepList.add(FaceCaptureStepBuilder.forMotion().build());
-                    } else {
-                        throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
+                    switch (captureFaceType) {
+                        case "PHOTO":
+                            flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
+                            break;
+                        case "VIDEO":
+                            flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantVideo()));
+                            break;
+                        case "MOTION":
+
+                            final boolean optionsExists = captureFace.hasKey("options");
+                            if (optionsExists) {
+                                final String captureFaceFallbackOptions = captureFace.getString("options");
+                                if (captureFaceFallbackOptions.equalsIgnoreCase("videoCaptureFallback")) {
+                                    flowStepList.add(FaceCaptureStepBuilder.forMotion().withCaptureFallback(FaceCaptureStepBuilder.forVideo()).build());
+                                } else if (captureFaceFallbackOptions.equalsIgnoreCase("photoCaptureFallback")) {
+                                    flowStepList.add(FaceCaptureStepBuilder.forMotion().withCaptureFallback(FaceCaptureStepBuilder.forPhoto()).build());
+                                }
+                            } else {
+                                flowStepList.add(FaceCaptureStepBuilder.forMotion().build());
+                            }
+                            break;
+                        default:
+                            throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
                     }
                 } else {
                     // Default face capture type is photo.

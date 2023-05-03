@@ -7,6 +7,7 @@ export type OnfidoFlowSteps = {
   };
   captureFace?: {
     type: OnfidoCaptureType;
+    options?: OnfidoFaceCaptureOptions;
   };
 };
 
@@ -59,6 +60,11 @@ export enum OnfidoCaptureType {
   PHOTO = "PHOTO",
   VIDEO = "VIDEO",
   MOTION = "MOTION"
+}
+
+export enum OnfidoFaceCaptureOptions {
+  VIDEO_CAPTURE_FALLBACK = "videoCaptureFallback",
+  PHOTO_CAPTURE_FALLBACK = "photoCaptureFallback",
 }
 
 export enum OnfidoCountryCode {

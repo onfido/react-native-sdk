@@ -2,26 +2,35 @@ package com.onfido.reactnative.sdk;
 
 import android.app.Activity;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.ui.options.FlowAction;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
+import com.onfido.android.sdk.capture.ui.options.MotionCaptureVariantOptions;
+import com.onfido.android.sdk.capture.ui.options.PhotoCaptureVariantOptions;
+import com.onfido.android.sdk.capture.ui.options.VideoCaptureVariantOptions;
 import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.mockito.ArgumentMatcher;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -132,4 +141,130 @@ public class OnfidoSdkModuleTest {
         verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), any(OnfidoConfig.class));
     }
 
+    @Test
+    public void shouldHaveLivenessWithVideoFallbackParameters() throws Exception {
+        // Arrange
+        final ReadableMap flowStepsMock = mock(ReadableMap.class);
+        when(flowStepsMock.hasKey("welcome")).thenReturn(false);
+        when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
+        when(flowStepsMock.hasKey("captureFace")).thenReturn(true);
+
+        ReadableMap livenessMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(livenessMock.getString("sdkToken")).thenReturn(sdkToken);
+        String captureFaceType = "MOTION";
+
+        when(livenessMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                return flowStepsMock;
+            }
+        });
+
+        when(flowStepsMock.getMap("captureFace")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                final ReadableMap flowStepsMock = mock(ReadableMap.class);
+
+                when(flowStepsMock.getString("options")).thenReturn("videoCaptureFallback");
+                when(flowStepsMock.hasKey("type")).thenReturn(true);
+                when(flowStepsMock.getString("type")).thenReturn(captureFaceType);
+                when(flowStepsMock.hasKey("options")).thenReturn(true);
+                return flowStepsMock;
+            }
+        });
+
+        Activity currentActivityMock = mock(Activity.class);
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        // Act
+        OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
+
+        onfidoSdkModuleSpy.start(livenessMock, promiseMock);
+        ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), configCaptor.capture());
+
+        // Assert
+        OnfidoConfig createdConfig = configCaptor.getValue();
+        assertNotNull(createdConfig);
+        assertNotNull(createdConfig.getFlowSteps());
+        assertNotNull(createdConfig.getFlowSteps().get(0));
+        FlowStep videoCaptureFlowStep = createdConfig.getFlowSteps().get(0);
+        assertEquals(videoCaptureFlowStep.getAction(), FlowAction.ACTIVE_VIDEO_CAPTURE);
+        assertNotNull(videoCaptureFlowStep.getOptions());
+        MotionCaptureVariantOptions options = (MotionCaptureVariantOptions) videoCaptureFlowStep.getOptions();
+        assertNotNull(options);
+        assertNotNull(options.getCaptureFallback());
+        assertEquals(options.getCaptureFallback().getAction(), FlowAction.CAPTURE_LIVENESS);
+        VideoCaptureVariantOptions videoOptions = (VideoCaptureVariantOptions) options.getCaptureFallback().getOptions();
+        assertNotNull(videoOptions);
+        assertTrue(videoOptions.getShowIntroVideo());
+        assertTrue(videoOptions.getShowConfirmationVideo());
+    }
+
+    @Test
+    public void shouldHaveLivenessWithImageFallbackParameters() throws Exception {
+        // Arrange
+        final ReadableMap flowStepsMock = mock(ReadableMap.class);
+        when(flowStepsMock.hasKey("welcome")).thenReturn(false);
+        when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
+        when(flowStepsMock.hasKey("captureFace")).thenReturn(true);
+
+        ReadableMap livenessMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(livenessMock.getString("sdkToken")).thenReturn(sdkToken);
+        String captureFaceType = "MOTION";
+
+        when(livenessMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                return flowStepsMock;
+            }
+        });
+
+        when(flowStepsMock.getMap("captureFace")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                final ReadableMap flowStepsMock = mock(ReadableMap.class);
+
+                when(flowStepsMock.getString("options")).thenReturn("photoCaptureFallback");
+                when(flowStepsMock.hasKey("type")).thenReturn(true);
+                when(flowStepsMock.getString("type")).thenReturn(captureFaceType);
+                when(flowStepsMock.hasKey("options")).thenReturn(true);
+                return flowStepsMock;
+            }
+        });
+
+        Activity currentActivityMock = mock(Activity.class);
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        // Act
+        OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
+
+        onfidoSdkModuleSpy.start(livenessMock, promiseMock);
+        ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), configCaptor.capture());
+
+        // Assert
+        OnfidoConfig createdConfig = configCaptor.getValue();
+        assertNotNull(createdConfig);
+        assertNotNull(createdConfig.getFlowSteps());
+        assertNotNull(createdConfig.getFlowSteps().get(0));
+        FlowStep videoCaptureFlowStep = createdConfig.getFlowSteps().get(0);
+        assertEquals(videoCaptureFlowStep.getAction(), FlowAction.ACTIVE_VIDEO_CAPTURE);
+        assertNotNull(videoCaptureFlowStep.getOptions());
+        MotionCaptureVariantOptions options = (MotionCaptureVariantOptions) videoCaptureFlowStep.getOptions();
+        assertNotNull(options);
+        assertNotNull(options.getCaptureFallback());
+        assertEquals(options.getCaptureFallback().getAction(), FlowAction.CAPTURE_FACE);
+        PhotoCaptureVariantOptions videoOptions = (PhotoCaptureVariantOptions) options.getCaptureFallback().getOptions();
+        assertNotNull(videoOptions);
+        assertTrue(videoOptions.getWithIntroScreen());
+    }
 }

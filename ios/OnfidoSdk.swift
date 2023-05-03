@@ -148,7 +148,14 @@ public func buildOnfidoConfig(config:NSDictionary, appearance: Appearance) throw
         } else if faceVariant == "PHOTO" {
             onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .photo(withConfiguration: nil))
         } else if faceVariant == "MOTION" {
-            onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .motion(withConfiguration: nil))
+            let options = captureFace?["options"] as? String
+            if options == "photoCaptureFallback" {
+                onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .motion(withConfiguration: .init(captureFallback: .init(photoFallbackWithConfiguration: nil))))
+            } else if options == "videoCaptureFallback" {
+                onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .motion(withConfiguration: .init(captureFallback: .init(videoFallbackWithConfiguration: nil))))
+            } else {
+                 onfidoConfig = onfidoConfig.withFaceStep(ofVariant: .motion(withConfiguration: nil))
+            }
         }
         else {
             throw NSError(domain: "Invalid or unsupported face variant", code: 0)

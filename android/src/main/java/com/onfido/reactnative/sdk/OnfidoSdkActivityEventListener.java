@@ -19,7 +19,6 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
-    private OnfidoWorkflow workflow = null;
 
     static final int workflowActivityCode = 102030;
     static final int checksActivityCode = 102040;
@@ -38,16 +37,12 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
         this.currentPromise = currentPromise;
     }
 
-    public void setWorkflow(OnfidoWorkflow workflow) {
-        this.workflow = workflow;
-    }
-
     @Override
     public void onActivityResult(final Activity activity, final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(activity, requestCode, resultCode, data);
 
         if (requestCode == workflowActivityCode) {
-            handleOnfidoWorkflow(resultCode, data);
+            handleOnfidoWorkflow(OnfidoWorkflow.create(activity), resultCode, data);
         }
 
         if (requestCode == checksActivityCode) {
@@ -55,7 +50,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
         }
     }
 
-    private void handleOnfidoWorkflow(int resultCode, Intent data) {
+    private void handleOnfidoWorkflow(OnfidoWorkflow workflow, int resultCode, Intent data) {
         workflow.handleActivityResult(resultCode, data, new OnfidoWorkflow.ResultListener() {
             @Override
             public void onUserCompleted() {
