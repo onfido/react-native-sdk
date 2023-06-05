@@ -9,7 +9,7 @@ import {
   OnfidoResult
 } from "./config_constants";
 
-const { OnfidoSdk } = NativeModules;
+import OnfidoSdk from "./NativeOnfidoModule";
 
 const Onfido = {
   start(config: OnfidoConfig): Promise<OnfidoResult | OnfidoError> {
@@ -68,7 +68,7 @@ const Onfido = {
     return OnfidoSdk.start(config).catch((error: any) => {
       console.log(error);
       throw error;
-    });
+    }) as Promise<OnfidoResult | OnfidoError>;
   }
 };
 
