@@ -1,9 +1,7 @@
 //
-//  Response.swift
-//  OnfidoSdk
+//  OnfidoResponse.swift
 //
-//  Created by Santana, Luis on 3/5/20.
-//  Copyright © 2020 Onfido. All rights reserved.
+//  Copyright © 2016-2023 Onfido. All rights reserved.
 //
 
 import Foundation
@@ -38,13 +36,16 @@ func createResponse(_ results: [OnfidoResult], faceVariant: String?) -> [String:
         guard case let .document(documentResult) = result else { return nil }
         return documentResult
     }.first
+
     let face: FaceResult? = results.compactMap { result in
         guard case let .face(faceResult) = result else { return nil }
         return faceResult
     }.first
+
     return createResponse(document: document, face: face, faceVariant: faceVariant)
 }
 
+// TODO: Refactor to Encodable
 func createResponse(
     document: ReactDocumentResult? = nil,
     face: ReactFaceResult? = nil,
@@ -59,7 +60,7 @@ func createResponse(
         {
             response["document"]?["back"] = ["id": documentResponse.reactBack?.id]
         }
-        
+
         if let nfcId = documentResponse.reactNfcMediaId
         {
             response["document"]?["nfcMediaId"] = ["id": nfcId]

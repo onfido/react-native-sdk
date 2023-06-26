@@ -3,7 +3,11 @@ package com.onfido.reactnative.sdk;
 import android.app.Activity;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.JavaOnlyArray;
+import com.facebook.react.bridge.JavaOnlyMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
@@ -31,6 +35,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.mockito.ArgumentMatcher;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -44,6 +49,12 @@ import org.mockito.stubbing.Answer;
 import org.mockito.invocation.InvocationOnMock;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(OnfidoFactory.class)
@@ -164,10 +175,23 @@ public class OnfidoSdkModuleTest {
             public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
                 final ReadableMap flowStepsMock = mock(ReadableMap.class);
 
-                when(flowStepsMock.getString("options")).thenReturn("videoCaptureFallback");
+                when(flowStepsMock.hasKey("motionCaptureFallback")).thenReturn(true);
+                when(flowStepsMock.getMap("motionCaptureFallback")).thenAnswer(new Answer<ReadableMap>() {
+                    public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                        final ReadableMap motionCaptureFallbackMock = mock(ReadableMap.class);
+                        when(motionCaptureFallbackMock.hasKey("type")).thenReturn(true);
+                        when(motionCaptureFallbackMock.getString("type")).thenReturn("VIDEO");
+                        when(motionCaptureFallbackMock.hasKey("showIntro")).thenReturn(true);
+                        when(motionCaptureFallbackMock.getBoolean("showIntro")).thenReturn(false);
+                        when(motionCaptureFallbackMock.hasKey("showConfirmation")).thenReturn(true);
+                        when(motionCaptureFallbackMock.getBoolean("showConfirmation")).thenReturn(false);
+                        return motionCaptureFallbackMock;
+                    }
+                });
+
                 when(flowStepsMock.hasKey("type")).thenReturn(true);
                 when(flowStepsMock.getString("type")).thenReturn(captureFaceType);
-                when(flowStepsMock.hasKey("options")).thenReturn(true);
+
                 return flowStepsMock;
             }
         });
@@ -183,6 +207,7 @@ public class OnfidoSdkModuleTest {
                 .build();
 
         onfidoSdkModuleSpy.start(livenessMock, promiseMock);
+
         ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
 
         verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), configCaptor.capture());
@@ -201,12 +226,12 @@ public class OnfidoSdkModuleTest {
         assertEquals(options.getCaptureFallback().getAction(), FlowAction.CAPTURE_LIVENESS);
         VideoCaptureVariantOptions videoOptions = (VideoCaptureVariantOptions) options.getCaptureFallback().getOptions();
         assertNotNull(videoOptions);
-        assertTrue(videoOptions.getShowIntroVideo());
-        assertTrue(videoOptions.getShowConfirmationVideo());
+        assertFalse(videoOptions.getShowIntroVideo());
+        assertFalse(videoOptions.getShowConfirmationVideo());
     }
 
     @Test
-    public void shouldHaveLivenessWithImageFallbackParameters() throws Exception {
+    public void shouldHaveLivenessWithPhotoFallbackParameters() throws Exception {
         // Arrange
         final ReadableMap flowStepsMock = mock(ReadableMap.class);
         when(flowStepsMock.hasKey("welcome")).thenReturn(false);
@@ -228,7 +253,18 @@ public class OnfidoSdkModuleTest {
             public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
                 final ReadableMap flowStepsMock = mock(ReadableMap.class);
 
-                when(flowStepsMock.getString("options")).thenReturn("photoCaptureFallback");
+                when(flowStepsMock.hasKey("motionCaptureFallback")).thenReturn(true);
+                when(flowStepsMock.getMap("motionCaptureFallback")).thenAnswer(new Answer<ReadableMap>() {
+                    public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                        final ReadableMap motionCaptureFallbackMock = mock(ReadableMap.class);
+                        when(motionCaptureFallbackMock.hasKey("type")).thenReturn(true);
+                        when(motionCaptureFallbackMock.getString("type")).thenReturn("PHOTO");
+                        when(motionCaptureFallbackMock.hasKey("showIntro")).thenReturn(true);
+                        when(motionCaptureFallbackMock.getBoolean("showIntro")).thenReturn(false);
+                        return motionCaptureFallbackMock;
+                    }
+                });
+
                 when(flowStepsMock.hasKey("type")).thenReturn(true);
                 when(flowStepsMock.getString("type")).thenReturn(captureFaceType);
                 when(flowStepsMock.hasKey("options")).thenReturn(true);
@@ -247,6 +283,7 @@ public class OnfidoSdkModuleTest {
                 .build();
 
         onfidoSdkModuleSpy.start(livenessMock, promiseMock);
+
         ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
 
         verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), configCaptor.capture());
@@ -265,6 +302,122 @@ public class OnfidoSdkModuleTest {
         assertEquals(options.getCaptureFallback().getAction(), FlowAction.CAPTURE_FACE);
         PhotoCaptureVariantOptions videoOptions = (PhotoCaptureVariantOptions) options.getCaptureFallback().getOptions();
         assertNotNull(videoOptions);
-        assertTrue(videoOptions.getWithIntroScreen());
+        assertFalse(videoOptions.getWithIntroScreen());
+    }
+
+    @Test
+    public void shouldHaveLivenessWithRecordAudioParameters() throws Exception {
+        // Arrange
+        final ReadableMap flowStepsMock = mock(ReadableMap.class);
+        when(flowStepsMock.hasKey("welcome")).thenReturn(false);
+        when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
+        when(flowStepsMock.hasKey("captureFace")).thenReturn(true);
+
+        ReadableMap livenessMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(livenessMock.getString("sdkToken")).thenReturn(sdkToken);
+        String captureFaceType = "MOTION";
+
+        when(livenessMock.getMap("flowSteps")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                return flowStepsMock;
+            }
+        });
+
+        when(flowStepsMock.getMap("captureFace")).thenAnswer(new Answer<ReadableMap>() {
+            public ReadableMap answer(InvocationOnMock invocation) throws Throwable {
+                final ReadableMap flowStepsMock = mock(ReadableMap.class);
+
+                when(flowStepsMock.getBoolean("recordAudio")).thenReturn(true);
+                when(flowStepsMock.hasKey("recordAudio")).thenReturn(true);
+                when(flowStepsMock.hasKey("type")).thenReturn(true);
+                when(flowStepsMock.getString("type")).thenReturn(captureFaceType);
+                when(flowStepsMock.hasKey("options")).thenReturn(true);
+                return flowStepsMock;
+            }
+        });
+
+        Activity currentActivityMock = mock(Activity.class);
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        // Act
+        OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
+
+        onfidoSdkModuleSpy.start(livenessMock, promiseMock);
+
+        ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(eq(currentActivityMock), eq(OnfidoSdkActivityEventListener.checksActivityCode), configCaptor.capture());
+
+        // Assert
+        OnfidoConfig createdConfig = configCaptor.getValue();
+        assertNotNull(createdConfig);
+        assertNotNull(createdConfig.getFlowSteps());
+        assertNotNull(createdConfig.getFlowSteps().get(0));
+        FlowStep videoCaptureFlowStep = createdConfig.getFlowSteps().get(0);
+        assertEquals(videoCaptureFlowStep.getAction(), FlowAction.ACTIVE_VIDEO_CAPTURE);
+        assertNotNull(videoCaptureFlowStep.getOptions());
+        MotionCaptureVariantOptions options = (MotionCaptureVariantOptions) videoCaptureFlowStep.getOptions();
+        assertNotNull(options);
+        assertNotNull(options.getAudioEnabled());
+        assertTrue(options.getAudioEnabled());
+
+    }
+
+    @Test
+    public void shouldCallTheMockClientWithAllowedDocumentTypesParameters() throws Exception {
+        ReadableMap configMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(configMock.getString("sdkToken")).thenReturn(sdkToken);
+
+        JavaOnlyMap map = JavaOnlyMap.of("allowedDocumentTypes", JavaOnlyArray.of(
+                "NATIONAL_IDENTITY_CARD"
+        ));
+        final ReadableMap flowStepsMock = JavaOnlyMap.of(
+                "welcome", false,
+                "captureDocument", map
+        );
+        when(configMock.getMap("flowSteps")).thenAnswer(
+                (Answer<ReadableMap>) invocation -> flowStepsMock
+        );
+
+        // Use a spy to mock the internal call to getCurrentActivity
+        Activity currentActivityMock = mock(Activity.class);
+
+        final OnfidoConfig onfidoConfigExpected = OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withAllowedDocumentTypes(Collections.singletonList(DocumentType.NATIONAL_IDENTITY_CARD))
+                .build();
+
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        // Act
+        OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
+
+        onfidoSdkModuleSpy.start(configMock, promiseMock);
+
+        ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(
+                eq(currentActivityMock),
+                eq(OnfidoSdkActivityEventListener.checksActivityCode),
+                configCaptor.capture()
+        );
+
+        // Assert
+        OnfidoConfig createdConfig = configCaptor.getValue();
+
+        assertEquals(
+                Arrays.asList(DocumentType.NATIONAL_IDENTITY_CARD),
+                createdConfig.getDocumentTypes()
+        );
     }
 }

@@ -4,11 +4,9 @@ export type OnfidoFlowSteps = {
     countryCode?: OnfidoCountryCode;
     alpha2CountryCode?: OnfidoAlpha2CountryCode;
     docType?: OnfidoDocumentType;
+    allowedDocumentTypes?: [OnfidoDocumentType]
   };
-  captureFace?: {
-    type: OnfidoCaptureType;
-    options?: OnfidoFaceCaptureOptions;
-  };
+  captureFace?: OnfidoFaceCapture;
 };
 
 export type OnfidoResult = {
@@ -45,6 +43,33 @@ export interface OnfidoError extends Error {
   code?: string;
 }
 
+export interface OnfidoMediaResult {
+}
+
+export interface OnfidoDocumentResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+  documentMetadata: OnfidoDocumentMetadata;
+}
+
+export interface OnfidoLivenessResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+}
+
+export interface OnfidoSelfieResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+}
+
+export type OnfidoDocumentMetadata = {
+  side: string;
+  type: string;
+  issuingCountry?: string;
+}
+
+export type OnfidoMediaFile = {
+  fileData: string;
+  fileType: string;
+  fileName: string;
+}
 
 export enum OnfidoDocumentType {
   PASSPORT = "PASSPORT",
@@ -62,10 +87,28 @@ export enum OnfidoCaptureType {
   MOTION = "MOTION"
 }
 
-export enum OnfidoFaceCaptureOptions {
-  VIDEO_CAPTURE_FALLBACK = "videoCaptureFallback",
-  PHOTO_CAPTURE_FALLBACK = "photoCaptureFallback",
-}
+export type OnfidoFaceCapture =
+  | OnfidoFaceSelfieCapture
+  | OnfidoFaceVideoCapture
+  | OnfidoFaceMotionCapture
+
+export type OnfidoFaceSelfieCapture = {
+  type: OnfidoCaptureType.PHOTO;
+  showIntro?: boolean
+};
+
+export type OnfidoFaceVideoCapture = {
+  type: OnfidoCaptureType.VIDEO;
+  showIntro?: boolean;
+  showConfirmation?: boolean;
+  manualVideoCapture?: boolean;
+};
+
+export type OnfidoFaceMotionCapture = {
+    type: OnfidoCaptureType.MOTION;
+    recordAudio?: boolean;
+    motionCaptureFallback?: OnfidoFaceSelfieCapture | OnfidoFaceVideoCapture;
+};
 
 export enum OnfidoCountryCode {
   ABW = "ABW",

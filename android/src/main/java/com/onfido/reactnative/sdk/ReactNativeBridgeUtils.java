@@ -1,8 +1,13 @@
 package com.onfido.reactnative.sdk;
 
+import android.os.Bundle;
+
 import java.lang.reflect.Field;
+import java.util.Arrays;
+
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
+import com.onfido.android.sdk.capture.ui.CaptureType;
 
 /**
  * Utility methods for the SDK bridge.
@@ -16,7 +21,7 @@ class ReactNativeBridgeUtiles {
      * <li>It does not use Java bean getters, or private, protected, or package fields.</li>
      * <li>This does not check for circular dependencies: A stack overflow error will occur if there are cycles.</li>
      * </ul>
-     * 
+     *
      * @param o The object to convert
      * @return The object values as nested WritableMaps
      * @throws Exception if there are any errors converting the object.
@@ -38,11 +43,46 @@ class ReactNativeBridgeUtiles {
                 map.putInt(key, (Integer) value);
             } else if (value instanceof Double) {
                 map.putDouble(key, (Double) value);
-            } else if (value instanceof String)  {
+            } else if (value instanceof String) {
                 map.putString(key, (String) value);
-            } else if (value instanceof Object)  {
+            } else if (value instanceof Object) {
                 map.putMap(key, convertPublicFieldsToWritableMap(value));
             }
+        }
+        return map;
+    }
+
+    // MediaFile attributes (as defined and expected in React)
+    public static final String KEY_FILE_DATA = "fileData";
+    public static final String KEY_FILE_NAME = "fileName";
+    public static final String KEY_FILE_TYPE = "fileType";
+    // MediaFile#DocumentMetadata attributes (as defined and expected in React)
+    public static final String KEY_DOCUMENT_SIDE = "side";
+    public static final String KEY_DOCUMENT_TYPE = "type";
+    public static final String KEY_DOCUMENT_ISSUING_COUNTRY = "issuingCountry";
+
+    public static final String KEY_DATA = "data";
+    public static final String KEY_INDEX = "index";
+    public static final String KEY_COUNT = "count";
+    public static final String KEY_CAPTURE_TYPE = "captureType";
+
+    public static WritableMap getMediaResultMapFromBundle(Bundle resultBundle, byte[] file) {
+        WritableMap map = Arguments.createMap();
+
+        map.putString(KEY_FILE_DATA, Arrays.toString(file));
+        map.putString(KEY_FILE_TYPE, resultBundle.getString(KEY_FILE_TYPE, ""));
+        map.putString(KEY_FILE_NAME, resultBundle.getString(KEY_FILE_NAME, ""));
+
+        CaptureType captureType = (CaptureType) resultBundle.getSerializable(KEY_CAPTURE_TYPE);
+        map.putString(KEY_CAPTURE_TYPE, captureType.toString());
+
+        if (captureType.isDocument()) {
+            map.putString(KEY_DOCUMENT_SIDE, resultBundle.getString(KEY_DOCUMENT_SIDE, ""));
+            map.putString(KEY_DOCUMENT_TYPE, resultBundle.getString(KEY_DOCUMENT_TYPE, ""));
+            map.putString(
+                    KEY_DOCUMENT_ISSUING_COUNTRY,
+                    resultBundle.getString(KEY_DOCUMENT_ISSUING_COUNTRY, "")
+            );
         }
         return map;
     }

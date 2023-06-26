@@ -4,5 +4,16 @@
   "onfidoPrimaryButtonColorPressed": "#FFA500",
   "onfidoAndroidStatusBarColor": "#A52A2A",
   "onfidoAndroidToolBarColor": "#800080",
-  "onfidoIosSupportDarkMode": true
+  "onfidoIosSupportDarkMode": true,
+  "secondaryTitleColor": "#FF0000",
+  "secondaryBackgroundPressedColor": "#FF0000",
+  "bubbleErrorBackgroundColor": "#F53636",
+  "buttonCornerRadius": 12,
+  "fontFamilyBody": "",
+  "fontFamilyTitle": "",
+  "captureSuccessColors": {
+    "borderColor": "#51D17B",
+    "tickViewImageTintColor": "#058731",
+    "tickViewBackgroundColor": "#CBF8DA"
+  }
 }

@@ -305,9 +305,17 @@ config = {
 * **`captureFace`**: Optional.  This object object containing options for capture face screen.  If omitted, this screen does not appear in the flow.
 * **`type`**: Required if captureFace is specified.
   * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`, `MOTION`.
-* **`options`**: Required if captureFace is specified as MOTION.
-  * Valid values in `OnfidoFaceCaptureOptions`: `videoCaptureFallback`, `photoCaptureFallback`.
-    **Note**: In the scenario that the Motion variant is not supported on the user's device, if you configure the react native SDK `options` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
+* **`showIntro`**: Optional. This toggles the intro screen in Selfie step or the intro video on the Video step. Default `true`
+* **`showConfirmation`**: Optional. This toggles the confirmation screen in Video step (Android only). Default `true`
+* **`manualVideoCapture`**: Optional. This enables manual video capture (iOS only). Default `false`
+* **`motionCaptureFallback`**: Required if captureFace is specified as MOTION.
+  * Valid values in `OnfidoFaceCapture`: `OnfidoFaceSelfieCapture`, `OnfidoFaceVideoCapture`.
+    * Valid values in `OnfidoFaceSelfieCapture`: `type`: OnfidoCaptureType.PHOTO
+    * Valid values in `OnfidoFaceVideoCapture`: `type`: OnfidoCaptureType.VIDEO
+
+    **Note**: In the scenario that the Motion variant is not supported on the user's device, if you configure the `motionCaptureFallback` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
+* **`recordAudio`**: Required if captureFace is specified as MOTION.
+  * Valid values: `true`, `false`
 * **`localisation`**: Optional. This object contains localisation configuration. See section [Localization](#localization) for the details.
   * Example usage:
 
@@ -463,11 +471,22 @@ You can customize the SDK by adding a `colors.json` file to your project at the 
 ```json
 {
   "onfidoPrimaryColor": "#FF0000",
-  "onfidoPrimaryButtonTextColor": "#008000",
+  "onfidoPrimaryButtonTextColor": "#FFFFFF",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
   "onfidoAndroidStatusBarColor": "#A52A2A",
   "onfidoAndroidToolBarColor": "#800080",
-  "onfidoIosSupportDarkMode": true
+  "onfidoIosSupportDarkMode": true,
+  "secondaryTitleColor": "#FF0000",
+  "secondaryBackgroundPressedColor": "#FF0000",
+  "bubbleErrorBackgroundColor": "#F53636",
+  "buttonCornerRadius": 20,
+  "fontFamilyTitle": "FONT_NAME_FOR_TITLES",
+  "fontFamilyBody": "FONT_NAME_FOR_CONTENT",
+  "captureSuccessColors": {
+    "borderColor": "#51D17B",
+    "tickViewImageTintColor": "#058731",
+    "tickViewBackgroundColor": "#CBF8DA"
+  }
 }
 ```
 
