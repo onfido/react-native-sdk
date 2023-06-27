@@ -186,7 +186,41 @@ You also need to add the following Proguard rules to your `proguard-rules.pro` f
 
 </br>
 
-#### 4.3 Update your iOS configuration files
+#### 4.3  Custom Android Application Class
+**Note**: You can skip this step if you don't have any custom application class.
+
+⚠️ After the release of version 9.0.0, Onfido RN SDK runs in a separate process. This means that when the Onfido SDK started, a new application instance will be created. To prevent reinitializing you have in the Android application class, you can use the `isOnfidoProcess` extension function and return from `onCreate` as shown below:
+
+This will prevent initialization-related crashes such as: [`FirebaseApp is not initialized in this process`](https://github.com/firebase/firebase-android-sdk/issues/4693)
+
+##### Kotlin
+
+```kotlin
+class YourCustomApplication : MultiDexApplication() {
+	override fun onCreate() {
+	    super.onCreate()
+	    if (isOnfidoProcess()) {
+	        return
+	    }
+	    
+	    // Your custom initialization calls ...
+	 }
+
+  	private fun isOnfidoProcess(): Boolean {
+            val pid = Process.myPid()
+	    val manager = this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+
+            return manager.runningAppProcesses.any {
+                it.pid == pid && it.processName.endsWith(":onfido_process")
+            }
+        }
+}
+
+```
+
+</br>
+
+#### 4.4 Update your iOS configuration files
 
 Change `ios/Podfile` to use version 11:
 ```
