@@ -11,24 +11,35 @@
   - [2. Creating an Applicant](#2-creating-an-applicant)
   - [3. Configuring SDK with Tokens](#3-configuring-sdk-with-tokens)
   - [4. Adding the Onfido React Native SDK to your project](#4-adding-the-onfido-react-native-sdk-to-your-project)
-    - [This SDK supports React Native versions 0.68.2 and later](#this-sdk-supports-react-native-versions-0600-and-later)
+    - [This SDK supports React Native versions 0.68.2 and later](#this-sdk-supports-react-native-versions-0682-and-later)
     - [4.1 Adding SDK dependency through npm](#41-adding-sdk-dependency-through-npm)
     - [4.2 Update your Android build.gradle files](#42-update-your-android-buildgradle-files)
-    - [4.3 Update your iOS configuration files](#43-update-your-ios-configuration-files)
+    - [4.3  Custom Android Application Class](#43--custom-android-application-class)
+      - [Kotlin](#kotlin)
+    - [4.4 Update your iOS configuration files](#44-update-your-ios-configuration-files)
+      - [Enabling NFC extraction](#enabling-nfc-extraction)
+        - [Pre-requisites](#pre-requisites)
 - [Usage](#usage)
+  - [User data](#user-data)
   - [1. Creating the SDK configuration](#1-creating-the-sdk-configuration)
   - [2. Parameter details](#2-parameter-details)
   - [3. Success Response](#3-success-response)
   - [4. Failure Response](#4-failure-response)
   - [5. Localization](#5-localization)
+    - [Android](#android)
+    - [iOS](#ios)
 - [Creating checks](#creating-checks)
   - [1. Obtaining an API token](#1-obtaining-an-api-token-1)
   - [2. Creating a check](#2-creating-a-check)
 - [Theme Customization](#theme-customization)
+  - [Android](#android-1)
+    - [Customizing Dimensions](#customizing-dimensions)
+  - [iOS](#ios-1)
 - [Going live](#going-live)
 - [More Information](#more-information)
-  - [Support](#support)
   - [Troubleshooting](#troubleshooting)
+  - [Discrepancies between underlying Onfido native SDKs](#discrepancies-between-underlying-onfido-native-sdks)
+  - [Support](#support)
 - [How is the Onfido React Native SDK licensed?](#how-is-the-onfido-react-native-sdk-licensed)
 
 
@@ -189,7 +200,7 @@ You also need to add the following Proguard rules to your `proguard-rules.pro` f
 #### 4.3  Custom Android Application Class
 **Note**: You can skip this step if you don't have any custom application class.
 
-⚠️ After the release of version 9.0.0, Onfido RN SDK runs in a separate process. This means that when the Onfido SDK started, a new application instance will be created. To prevent reinitializing you have in the Android application class, you can use the `isOnfidoProcess` extension function and return from `onCreate` as shown below:
+⚠️ As of version 9.0.0, Onfido SDK runs in a separate process on Android. This means that when the Onfido SDK is started, a new application instance will be created. To prevent re-running any initialization code that you have in your custom Application class, you can use the following `isOnfidoProcess` function and return from the `onCreate` method as shown below:
 
 This will prevent initialization-related crashes such as: [`FirebaseApp is not initialized in this process`](https://github.com/firebase/firebase-android-sdk/issues/4693)
 
@@ -206,19 +217,17 @@ class YourCustomApplication : MultiDexApplication() {
 	    // Your custom initialization calls ...
 	 }
 
-  	private fun isOnfidoProcess(): Boolean {
-            val pid = Process.myPid()
-	    val manager = this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+  private fun isOnfidoProcess(): Boolean {
+    val pid = Process.myPid()
+    val manager = this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
 
-            return manager.runningAppProcesses.any {
-                it.pid == pid && it.processName.endsWith(":onfido_process")
-            }
-        }
+    return manager.runningAppProcesses.any {
+        it.pid == pid && it.processName.endsWith(":onfido_process")
+    }
+  }
 }
 
 ```
-
-</br>
 
 #### 4.4 Update your iOS configuration files
 
@@ -253,6 +262,44 @@ Install the pods:
 cd ios
 pod install
 cd ..
+```
+
+##### Enabling NFC extraction
+
+Recent passports, national identity cards and residence permits contain a chip that can be accessed using Near Field Communication (NFC).
+The Onfido SDKs provide a set of screens and functionalities to extract this information, verify its authenticity and provide the results as part of a Document report.
+With version [8.4.0] of the Onfido React Native SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
+
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
+
+###### Pre-requisites
+
+
+This feature requires Near Field Communication Tag Reading capability in your app target. If you haven't added it before, please follow the steps in Apple's documentation.
+
+
+You're required to have the following key in your application's Info.plist file:
+
+```xml
+<key>NFCReaderUsageDescription</key>
+<string>Required to read ePassports</string>
+```
+
+
+You have to include the entries below in your app target's Info.plist file to be able to read NFC tags properly.
+
+```xml
+<key>com.apple.developer.nfc.readersession.felica.systemcodes</key>
+<array>
+  <string>12FC</string>
+</array>
+<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+<array>
+  <string>A0000002471001</string>
+  <string>A0000002472001</string>
+  <string>00000000000000</string>
+  <string>D2760000850101</string>
+</array>
 ```
 
 ## Usage
@@ -297,6 +344,72 @@ export default class App extends Component {
   }
 }
 
+### Media Callbacks (beta)
+
+### Introduction
+Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
+
+**This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
+
+### Implementation
+To use this feature, use `Onfido.addCustomMediaCallback` and provide the callback.
+
+```javascript
+Onfido.addCustomMediaCallback(
+  mediaResult => {
+    if (mediaResult.captureType === 'DOCUMENT') {
+      // Callback code here
+    } else if (mediaResult.captureType === 'FACE') {
+      // Callback code here
+    } else if (mediaResult.captureType === 'VIDEO') {
+      // Callback code here
+    }
+  }
+);
+```
+
+### User data
+The callbacks return an object including the information that the SDK normally sends directly to Onfido. The callbacks are invoked when the end user confirms submission of their image through the SDK’s user interface.
+
+**Note:** Currently, end user data will still automatically be sent to the Onfido backend, but you are not required to use Onfido to process this data.
+
+The callback returns 3 possible objects. Please note, `captureType` refers to the type of the media capture in each case.
+These can be `DOCUMENT`, `FACE` or `VIDEO`.
+
+1. For documents(`captureType` is `DOCUMENT`), the callback returns:
+```json5
+     {
+         captureType: String
+         side: String
+         type: String
+         issuingCountry: String?
+         fileData: Data
+         fileName: String
+         fileType: String
+     }
+```
+
+**Note:** `issuingCountry` is optional based on end-user selection, and can be `null`.
+**Note:** If a document was scanned using NFC, the callback will return the passport photo in `file` but no additional data.
+
+2. For live photos (`captureType` is `FACE`), the callback returns:
+```json5
+{
+    captureType: String
+    fileData: Data
+    fileName: String
+    fileType: String
+}
+```
+
+3. For videos(`captureType` is `VIDEO`), the callback returns:
+```json5
+{
+    captureType: String
+    fileData: Data
+    fileName: String
+    fileType: String
+}
 ```
 
 ### 1. Creating the SDK configuration
@@ -500,7 +613,78 @@ Finally, as you are testing with the sandbox token, please be aware that the res
 
 ## Theme Customization
 
-You can customize the SDK by adding a `colors.json` file to your project at the same level as your `node_modules` directory. The file should contain a single json object with the desired keys and values.  For example:
+### Android
+
+You can customize the SDK's appearance by overriding `OnfidoActivityTheme` in `app/src/main/res/values/styles.xml` or `app/src/main/res/values/themes.xml` in the `android` directory of your project. Make sure to set `OnfidoBaseActivityTheme` as the parent of `OnfidoActivityTheme` in your style definition. 
+
+You can use the following snippet as an example:
+
+```xml
+<style name="OnfidoActivityTheme" parent="OnfidoBaseActivityTheme">
+        <!-- 
+          All colors referenced in this theme should be defined in your colors.xml. 
+          Alternatively, you can use hexadecimal color values directly in this theme.
+        -->
+        <item name="onfidoColorToolbarBackground">@color/brand_dark_blue</item>
+        <item name="colorPrimary">@color/brand_dark_blue</item>
+        <item name="colorPrimaryDark">@color/brand_transparent</item>
+        <item name="colorAccent">@color/brand_accent_color</item>
+
+        <!-- 
+          All referenced fonts need to be added to your project first.
+          See https://developer.android.com/develop/ui/views/text-and-emoji/fonts-in-xml
+        -->
+        <item name="onfidoFontFamilyTitle">@font/montserrat_semibold</item>
+        <item name="onfidoFontFamilyBody">@font/font_montserrat</item>
+        <item name="onfidoFontFamilyButton">@font/font_montserrat</item>
+        <item name="onfidoFontFamilyDialogButton">@font/font_montserrat</item>
+</style>
+```
+
+The following attributes are currently supported:
+
+* **`onfidoColorToolbarBackground` and `colorPrimary`**: Background color of the tool bar that guides the user through the flow. Both attributes need to be provided if you want to customize the tool bar across all screens in the SDK.
+* **`onfidoColorToolbarBackgroundDark`**: Background color of the tool bar in screens with a dark background such as the capture screen (when overlay views are displayed)
+* **`colorPrimaryDark`**: Color of the status bar (above the tool bar)
+* **`onfidoColorToolbarTitle`**: Color of the tool bar's title text
+* **`onfidoColorToolbarTitleDark`**: Color of the tool bar's title text in screens with a dark background
+* **`colorAccent`**: Accent color. Default value is blue
+* **`onfidoColorButtonPrimary`**: Background color of primary buttons
+* **`onfidoColorButtonPrimaryText`**: Text color of primary buttons
+* **`onfidoColorButtonPrimaryPressed`**: Background color of primary buttons when pressed
+* **`onfidoColorTextPrimary`**: Color of primary texts on screen
+* **`onfidoColorTextSecondary`**: Color of secondary texts on screen
+* **`onfidoColorTextPrimaryDark`**: Color of primary texts on dark backgrounds (in the light theme) such as Motion screens and overlay views in the capture screen
+* **`onfidoFontFamilyTitle`**: Name of the font used for title texts
+* **`onfidoFontFamilySubtitle`**: Name of the font used for subtitle texts
+* **`onfidoFontFamilyBody`**: Name of the font used for body/content texts
+* **`onfidoFontFamilyButton`**: Name of the font used in buttons
+* **`onfidoFontFamilyToolbarTitle`**: Name of the font used for toolbar title texts
+* **`onfidoFontFamilyDialogButton`**: Name of the font used in dialogs' buttons
+
+**Note:**
+The usage of `color.json` and the `updateColors` command is now deprecated for Android. Please provide the theme attributes in your `styles.xml` or `themes.xml` as mentioned above. 
+
+#### Customizing Dimensions
+
+To customize supported dimnesions, you can add an Android resource file named `dimens.xml` in the following directory of your project: `android/app/src/main/res/values`. 
+
+Please see the snippet below as an example.
+
+```xml
+<resources>
+  <dimen name="onfidoButtonCornerRadius">8dp</dimen>
+</resources>
+```
+
+The following dimensions are currently supported:
+
+* **`onfidoButtonCornerRadius`**: The corner radius of all buttons in the SDK, provided in the `dp` unit
+
+
+### iOS
+
+You can customize the SDK by adding a `colors.json` file to your xcode project as bundle resource. The file should contain a single json object with the desired keys and values.  For example:
 
 ```json
 {
@@ -512,32 +696,25 @@ You can customize the SDK by adding a `colors.json` file to your project at the 
   "onfidoIosSupportDarkMode": true,
   "secondaryTitleColor": "#FF0000",
   "secondaryBackgroundPressedColor": "#FF0000",
-  "bubbleErrorBackgroundColor": "#F53636",
   "buttonCornerRadius": 20,
   "fontFamilyTitle": "FONT_NAME_FOR_TITLES",
   "fontFamilyBody": "FONT_NAME_FOR_CONTENT",
-  "captureSuccessColors": {
-    "borderColor": "#51D17B",
-    "tickViewImageTintColor": "#058731",
-    "tickViewBackgroundColor": "#CBF8DA"
-  }
 }
 ```
 
-Below is a description of all available keys:
-* **`onfidoPrimaryColor`**: Defines the background color of views such as the document type icon, capture confirmation buttons, and back navigation button.
-* **`onfidoPrimaryButtonTextColor`**: Defines the text color of labels included in views such as capture confirmation buttons.
-* **`onfidoPrimaryButtonColorPressed`**: Defines the background color of capture confirmation buttons when pressed.
-* **`onfidoAndroidStatusBarColor`**: Android only.  Defines the background color of the `Toolbar` that guides the user through the flow.
-* **`onfidoAndroidToolBarColor`**: Android only.  Defines the color of the status bar above the `Toolbar`.
-* **`onfidoIosSupportDarkMode`**: iOS Only.  Defines if Dark Mode will be supported on SDK screens. The value is true by default.
+The following attributes are currently supported:
 
-Once you've added the colors.json to your project, you should add colors.json file to your xcode project as bundle resource. You can create symbolic link (rather than copy paste) to prevent redundancy. You can check out SampleApp project to see example usage.
- Then when running on an iOS device the values will be picked up dynamically at runtime. For Android devices to pick up the values you will need to run the following command at the same level of your `node_modules` directory.  This will also be run when running the `npm --prefix node_modules/@onfido/react-native-sdk/ run updateOnfido` command.
+* **`onfidoPrimaryColor`**: Background color of views such as capture confirmation buttons, back navigation button, and play and pause buttons in liveness/video capture intro
+* **`onfidoPrimaryButtonTextColor`**: Text color of labels included in views such as capture confirmation buttons
+* **`onfidoPrimaryButtonColorPressed`**: Defines the background color of capture confirmation buttons when pressed
+* **`onfidoIosSupportDarkMode`**: Defines whether dark mode will be supported (true by default)
+* **`secondaryTitleColor`**: Secondary button text and border color
+* **`secondaryBackgroundPressedColor`**: Secondary button pressed state color
+* **`buttonCornerRadius`**: Border corner radius for all buttons (default value is 5.0)
+* **`fontFamilyTitle`**: Name of the font used for title texts
+* **`fontFamilyBody`**: Name of the font used for body/content texts
 
-```shell
-$ npm --prefix node_modules/@onfido/react-native-sdk/ run updateColors
-```
+You can check out the [iOS SampleApp](https://github.com/onfido/onfido-ios-sdk/tree/master/SampleApp) for example usage. When running on an iOS device, the values will be picked up dynamically at runtime. 
 
 ## Going live
 
