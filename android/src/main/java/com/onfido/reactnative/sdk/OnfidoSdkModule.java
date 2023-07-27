@@ -1,16 +1,7 @@
 package com.onfido.reactnative.sdk;
 
-import static com.onfido.reactnative.sdk.ReactNativeBridgeUtiles.KEY_COUNT;
-import static com.onfido.reactnative.sdk.ReactNativeBridgeUtiles.KEY_DATA;
-import static com.onfido.reactnative.sdk.ReactNativeBridgeUtiles.KEY_FILE_DATA;
-import static com.onfido.reactnative.sdk.ReactNativeBridgeUtiles.KEY_INDEX;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.ResultReceiver;
 
 import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.Promise;
@@ -27,6 +18,7 @@ import com.onfido.android.sdk.capture.EnterpriseFeatures;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.config.MediaCallback;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
@@ -42,7 +34,6 @@ import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.workflow.OnfidoWorkflow;
 import com.onfido.workflow.WorkflowConfig;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,8 +168,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
         }
 
-        if (getBooleanFromConfig(config, "enableNFC")) {
-            onfidoConfigBuilder.withNFCReadFeature();
+        if (getBooleanFromConfig(config, "disableNFC")) {
+            onfidoConfigBuilder.disableNFC();
         }
 
         client.startActivityForResult(currentActivity,
@@ -213,6 +204,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
             hasSetEnterpriseFeatures = true;
         }
+        if (getBooleanFromConfig(config, "disableMobileSdkAnalytics")) {
+            enterpriseFeaturesBuilder.disableMobileSdkAnalytics();
+            hasSetEnterpriseFeatures = true;
+        }
 
         return hasSetEnterpriseFeatures ? enterpriseFeaturesBuilder : null;
     }
@@ -234,11 +229,18 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
             final ReadableMap flowSteps = config.getMap("flowSteps");
 
-            final Boolean welcomePageIsIncluded;
+            final boolean welcomePageIsIncluded;
             if (flowSteps.hasKey("welcome")) {
                 welcomePageIsIncluded = flowSteps.getBoolean("welcome");
             } else {
                 welcomePageIsIncluded = false;
+            }
+
+            final boolean proofOfAddress;
+            if(flowSteps.hasKey("proofOfAddress")){
+                proofOfAddress = flowSteps.getBoolean("proofOfAddress");
+            }else{
+                proofOfAddress = false;
             }
             final List<FlowStep> flowStepList = new ArrayList<>();
 
@@ -274,6 +276,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     // Default face capture type is photo.
                     flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
                 }
+            }
+
+            if(proofOfAddress){
+                flowStepList.add(FlowStep.PROOF_OF_ADDRESS);
             }
 
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
@@ -382,34 +388,34 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         flowStepList.add(new CaptureScreenStep(docTypeEnum, countryCodeEnum));
     }
 
-     private static PhotoCaptureStepBuilder faceStepFromPhotoDefinitionBuilder(ReadableMap definition) {
+    private static PhotoCaptureStepBuilder faceStepFromPhotoDefinitionBuilder(ReadableMap definition) {
         final PhotoCaptureStepBuilder builder = FaceCaptureStepBuilder.forPhoto();
-            if (definition.hasKey("showIntro")) {
-                builder.withIntro(definition.getBoolean("showIntro"));
-            }
+        if (definition.hasKey("showIntro")) {
+            builder.withIntro(definition.getBoolean("showIntro"));
+        }
         return builder;
-     }
+    }
 
-     private static FlowStep faceStepFromPhotoDefinition(ReadableMap definition) {
-         return faceStepFromPhotoDefinitionBuilder(definition).build();
+    private static FlowStep faceStepFromPhotoDefinition(ReadableMap definition) {
+        return faceStepFromPhotoDefinitionBuilder(definition).build();
     }
 
     private static VideoCaptureStepBuilder faceStepFromVideoDefinitionBuilder(ReadableMap definition) {
         final VideoCaptureStepBuilder builder = FaceCaptureStepBuilder.forVideo();
-            if (definition.hasKey("showIntro")) {
-                builder.withIntro(definition.getBoolean("showIntro"));
-            }
-            if (definition.hasKey("showConfirmation")) {
-                builder.withConfirmationVideoPreview(definition.getBoolean("showConfirmation"));
-            }
-         return builder;
+        if (definition.hasKey("showIntro")) {
+            builder.withIntro(definition.getBoolean("showIntro"));
+        }
+        if (definition.hasKey("showConfirmation")) {
+            builder.withConfirmationVideoPreview(definition.getBoolean("showConfirmation"));
+        }
+        return builder;
     }
 
     private static FlowStep faceStepFromVideoDefinition(ReadableMap definition) {
         return faceStepFromVideoDefinitionBuilder(definition).build();
     }
 
-   private static FlowStep faceStepFromMotionDefinition(ReadableMap definition) {
+    private static FlowStep faceStepFromMotionDefinition(ReadableMap definition) {
         final MotionCaptureStepBuilder builder = FaceCaptureStepBuilder.forMotion();
         if (definition.hasKey("recordAudio")) {
             builder.withAudio(definition.getBoolean("recordAudio"));
@@ -454,64 +460,21 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addListener(String type) {
-        // Keep: Required for RN build in Event Emitter Calls
+        // Keep: Required for RN build in the Event Emitter Calls
     }
 
     @ReactMethod
     public void removeListeners(int type) {
-        // Keep: Required for RN build in Event Emitter Calls
+        // Keep: Required for RN build in the Event Emitter Calls
     }
 
-    private CallbackResultReceiver addMediaCallback() {
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        ResultReceiver receiver = new ResultReceiver(handler) {
-            @Override
-            protected void onReceiveResult(int resultCode, Bundle resultData) {
-                super.onReceiveResult(resultCode, resultData);
-
-                if (resultCode == Activity.RESULT_OK && resultData != null) {
-                    collectChunks(resultData);
-                    boolean hasChunksLeft = receivedChunkCount != arrayOfChunks.length;
-                    if (hasChunksLeft) return;
-
-                    receivedChunkCount = 0;
-                    WritableMap map = ReactNativeBridgeUtiles.getMediaResultMapFromBundle(resultData, allocateAll(arrayOfChunks));
-                    getReactApplicationContext()
-                            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                            .emit("onfidoMediaCallback", map);
-                }
-            }
+    private MediaCallback addMediaCallback() {
+        return mediaResult -> {
+            WritableMap map = ReactNativeBridgeUtiles.getMediaResultMap(mediaResult);
+            getReactApplicationContext()
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("onfidoMediaCallback", map);
         };
-        ResultReceiver receiverForSending = CallbackResultReceiver.receiverForSending(receiver);
-        return new CallbackResultReceiver(receiverForSending);
-    }
-
-    int receivedChunkCount = 0;
-    byte[][] arrayOfChunks;
-
-    private void collectChunks(Bundle resultData) {
-        Bundle fileBundle = resultData.getBundle(KEY_FILE_DATA);
-        byte[] file = fileBundle.getByteArray(KEY_DATA);
-        int index = fileBundle.getInt(KEY_INDEX);
-        int count = fileBundle.getInt(KEY_COUNT);
-        if (receivedChunkCount == 0) {
-            arrayOfChunks = new byte[count][];
-        }
-        arrayOfChunks[index] = file;
-        receivedChunkCount++;
-    }
-
-    private byte[] allocateAll(byte[][] array) {
-        int sum = 0;
-        for (byte[] item : array) {
-            sum += item.length;
-        }
-        ByteBuffer allocatedByteArrays = ByteBuffer.allocate(sum);
-        for (byte[] item : array) {
-            allocatedByteArrays.put(item);
-        }
-        return allocatedByteArrays.array();
     }
 
     //endregion

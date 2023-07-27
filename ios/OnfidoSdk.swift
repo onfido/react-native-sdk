@@ -10,10 +10,10 @@ import React
 
 @objc(OnfidoSdk)
 final class OnfidoSdk: RCTEventEmitter {
-    
+
     private let onfidoFlowBuilder = OnfidoFlowBuilder()
     private let configParser = OnfidoConfigParser()
-    
+
     @objc
     func start(_ config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
@@ -22,7 +22,7 @@ final class OnfidoSdk: RCTEventEmitter {
             self?.run(withConfig: config, resolver: resolve, rejecter: reject)
         }
     }
-    
+
     private func run(withConfig config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
                      rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -41,13 +41,13 @@ final class OnfidoSdk: RCTEventEmitter {
             } else {
                 mediaCallback = nil
             }
-            
+
             let onfidoFlow: OnfidoFlow = try onfidoFlowBuilder.build(
                 with: onfidoConfig,
                 appearance: appearance,
                 customMediaCallback: mediaCallback
             )
-            
+
             onfidoFlow
                 .with(responseHandler: { response in
                     switch response {
@@ -72,7 +72,7 @@ final class OnfidoSdk: RCTEventEmitter {
                         return
                     }
                 })
-            
+
             let onfidoViewController = try onfidoFlow.run()
             onfidoViewController.modalPresentationStyle = .fullScreen
             UIApplication.shared.windows.first?.rootViewController?

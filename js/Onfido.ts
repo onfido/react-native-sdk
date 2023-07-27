@@ -75,8 +75,12 @@ const Onfido = {
                 }
             }
 
-            if (!config.flowSteps.captureDocument && !config.flowSteps.captureFace) {
-                return configError("flowSteps doesn't include either valid captureDocument options or valid captureFace options");
+            if (
+                !config.flowSteps.captureDocument &&
+                !config.flowSteps.captureFace &&
+                !config.flowSteps.proofOfAddress
+            ) {
+                return configError("flowSteps is empty");
             }
 
             if (config.flowSteps.captureFace && !(config.flowSteps.captureFace.type in OnfidoCaptureType)) {

@@ -1,13 +1,16 @@
 package com.onfido.reactnative.sdk;
 
-import android.os.Bundle;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
-import com.onfido.android.sdk.capture.ui.CaptureType;
+import com.onfido.android.sdk.capture.config.DocumentMetadata;
+import com.onfido.android.sdk.capture.config.MediaFile;
+import com.onfido.android.sdk.capture.config.MediaResult;
+import com.onfido.android.sdk.capture.config.MediaResult.DocumentResult;
+import com.onfido.android.sdk.capture.config.MediaResult.LivenessResult;
+import com.onfido.android.sdk.capture.config.MediaResult.SelfieResult;
 
 /**
  * Utility methods for the SDK bridge.
@@ -61,28 +64,37 @@ class ReactNativeBridgeUtiles {
     public static final String KEY_DOCUMENT_TYPE = "type";
     public static final String KEY_DOCUMENT_ISSUING_COUNTRY = "issuingCountry";
 
-    public static final String KEY_DATA = "data";
-    public static final String KEY_INDEX = "index";
-    public static final String KEY_COUNT = "count";
-    public static final String KEY_CAPTURE_TYPE = "captureType";
-
-    public static WritableMap getMediaResultMapFromBundle(Bundle resultBundle, byte[] file) {
+    public static WritableMap getMediaResultMap(MediaResult mediaResult) {
         WritableMap map = Arguments.createMap();
 
-        map.putString(KEY_FILE_DATA, Arrays.toString(file));
-        map.putString(KEY_FILE_TYPE, resultBundle.getString(KEY_FILE_TYPE, ""));
-        map.putString(KEY_FILE_NAME, resultBundle.getString(KEY_FILE_NAME, ""));
+        // Ugly Java code :(
 
-        CaptureType captureType = (CaptureType) resultBundle.getSerializable(KEY_CAPTURE_TYPE);
-        map.putString(KEY_CAPTURE_TYPE, captureType.toString());
+        if (mediaResult instanceof DocumentResult) {
+            DocumentResult documentResult = (DocumentResult) mediaResult;
 
-        if (captureType.isDocument()) {
-            map.putString(KEY_DOCUMENT_SIDE, resultBundle.getString(KEY_DOCUMENT_SIDE, ""));
-            map.putString(KEY_DOCUMENT_TYPE, resultBundle.getString(KEY_DOCUMENT_TYPE, ""));
-            map.putString(
-                    KEY_DOCUMENT_ISSUING_COUNTRY,
-                    resultBundle.getString(KEY_DOCUMENT_ISSUING_COUNTRY, "")
-            );
+            MediaFile mediaFile = documentResult.getFileData();
+            map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
+            map.putString(KEY_FILE_TYPE, mediaFile.getFileType());
+            map.putString(KEY_FILE_NAME, mediaFile.getFileName());
+
+            DocumentMetadata metadata = documentResult.getDocumentMetadata();
+            map.putString(KEY_DOCUMENT_TYPE, metadata.getType());
+            map.putString(KEY_DOCUMENT_SIDE, metadata.getSide());
+            map.putString(KEY_DOCUMENT_ISSUING_COUNTRY, metadata.getIssuingCountry());
+
+        } else if (mediaResult instanceof LivenessResult) {
+            LivenessResult livenessResult = (LivenessResult) mediaResult;
+            MediaFile mediaFile = livenessResult.getFileData();
+            map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
+            map.putString(KEY_FILE_TYPE, mediaFile.getFileType());
+            map.putString(KEY_FILE_NAME, mediaFile.getFileName());
+
+        } else if (mediaResult instanceof SelfieResult) {
+            SelfieResult selfieResult = (SelfieResult) mediaResult;
+            MediaFile mediaFile = selfieResult.getFileData();
+            map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
+            map.putString(KEY_FILE_TYPE, mediaFile.getFileType());
+            map.putString(KEY_FILE_NAME, mediaFile.getFileName());
         }
         return map;
     }

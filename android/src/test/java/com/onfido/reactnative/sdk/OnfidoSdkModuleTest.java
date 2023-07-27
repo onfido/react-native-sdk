@@ -420,4 +420,57 @@ public class OnfidoSdkModuleTest {
                 createdConfig.getDocumentTypes()
         );
     }
+
+    @Test
+    public void shouldIncludeProofOfAddress() throws Exception {
+        ReadableMap configMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(configMock.getString("sdkToken")).thenReturn(sdkToken);
+
+        JavaOnlyMap map = JavaOnlyMap.of("allowedDocumentTypes", JavaOnlyArray.of(
+                "NATIONAL_IDENTITY_CARD"
+        ));
+        final ReadableMap flowStepsMock = JavaOnlyMap.of(
+                "welcome", false,
+                "proofOfAddress", true
+        );
+        when(configMock.getMap("flowSteps")).thenAnswer(
+                (Answer<ReadableMap>) invocation -> flowStepsMock
+        );
+
+        // Use a spy to mock the internal call to getCurrentActivity
+        Activity currentActivityMock = mock(Activity.class);
+
+        final OnfidoConfig onfidoConfigExpected = OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withAllowedDocumentTypes(Collections.singletonList(DocumentType.NATIONAL_IDENTITY_CARD))
+                .build();
+
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        // Act
+        OnfidoConfig.builder(currentActivityMock)
+                .withSDKToken(sdkToken)
+                .withCustomFlow(new FlowStep[0])
+                .build();
+
+        onfidoSdkModuleSpy.start(configMock, promiseMock);
+
+        ArgumentCaptor<OnfidoConfig> configCaptor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(
+                eq(currentActivityMock),
+                eq(OnfidoSdkActivityEventListener.checksActivityCode),
+                configCaptor.capture()
+        );
+
+        // Assert
+        OnfidoConfig createdConfig = configCaptor.getValue();
+
+        assertEquals(
+                FlowStep.PROOF_OF_ADDRESS,
+                createdConfig.getFlowSteps().get(0)
+        );
+    }
 }

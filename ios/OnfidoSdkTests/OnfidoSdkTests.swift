@@ -47,7 +47,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -92,7 +93,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -134,7 +136,11 @@ class OnfidoSdkTests : XCTestCase {
                     captureFace: .init(
                         type: .motion,
                         recordAudio: nil,
-                        motionCaptureFallback: ["type": "PHOTO"],
+                        motionCaptureFallback: .init(
+                          type: .photo,
+                          showIntro: nil,
+                          manualVideoCapture: nil
+                        ),
                         showIntro: nil,
                         manualVideoCapture: nil
                     )
@@ -142,7 +148,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -194,7 +201,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -238,7 +246,11 @@ class OnfidoSdkTests : XCTestCase {
                     captureFace: .init(
                         type: .motion,
                         recordAudio: false,
-                        motionCaptureFallback: ["type": "PHOTO"],
+                        motionCaptureFallback: .init(
+                          type: .photo,
+                          showIntro: nil,
+                          manualVideoCapture: nil
+                        ),
                         showIntro: false,
                         manualVideoCapture: nil
                     )
@@ -246,7 +258,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: false
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -292,7 +305,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -333,7 +347,8 @@ class OnfidoSdkTests : XCTestCase {
                 localisation: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
-                enableNFC: nil
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
             mediaCallBack: nil
@@ -349,5 +364,34 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssert(configString.contains("DocumentType.drivingLicence(config: nil)"))
         XCTAssert(configString.contains("DocumentType.nationalIdentityCard(config: nil)"))
         XCTAssert(configString.contains("DocumentType.residencePermit(config: nil)"))
+    }
+
+    func testBuildOnfidoWithProofOfAddress() throws {
+        let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
+        let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
+
+        let builder = OnfidoConfigBuilder()
+        let onfidoMode = try builder.build(
+            config: .init(
+                sdkToken: "demo",
+                workflowRunId: nil,
+                flowSteps: .init(proofOfAddress: true),
+                localisation: nil,
+                hideLogo: nil,
+                logoCoBrand: nil,
+                disableNFC: nil,
+                disableMobileSdkAnalytics: nil
+            ),
+            appearance: appearance,
+            mediaCallBack: nil
+        )
+
+        guard case .classic(let configBuilder) = onfidoMode else {
+            fatalError("Expected to receive classic mode")
+        }
+
+        let onfidoConfig = try configBuilder.build()
+        let configString = String(describing: onfidoConfig)
+        XCTAssert(configString.contains("proofOfAddress"))
     }
 }

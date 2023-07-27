@@ -18,7 +18,6 @@
       - [Kotlin](#kotlin)
     - [4.4 Update your iOS configuration files](#44-update-your-ios-configuration-files)
       - [Enabling NFC extraction](#enabling-nfc-extraction)
-        - [Pre-requisites](#pre-requisites)
 - [Usage](#usage)
   - [User data](#user-data)
   - [1. Creating the SDK configuration](#1-creating-the-sdk-configuration)
@@ -33,7 +32,6 @@
   - [2. Creating a check](#2-creating-a-check)
 - [Theme Customization](#theme-customization)
   - [Android](#android-1)
-    - [Customizing Dimensions](#customizing-dimensions)
   - [iOS](#ios-1)
 - [Going live](#going-live)
 - [More Information](#more-information)
@@ -166,6 +164,12 @@ android {
 
 </br>
 
+##### Enabling NFC extraction
+
+With version 10.0.0 of the Onfido React Native SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
+
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
+
 
 NFC dependencies are not included in the SDK to avoid increasing the SDK size when the NFC feature is disabled. To use the NFC feature, you need to include the following dependencies (with the specified versions) in your build script:
 
@@ -200,7 +204,7 @@ You also need to add the following Proguard rules to your `proguard-rules.pro` f
 #### 4.3  Custom Android Application Class
 **Note**: You can skip this step if you don't have any custom application class.
 
-⚠️ As of version 9.0.0, Onfido SDK runs in a separate process on Android. This means that when the Onfido SDK is started, a new application instance will be created. To prevent re-running any initialization code that you have in your custom Application class, you can use the following `isOnfidoProcess` function and return from the `onCreate` method as shown below:
+⚠️ After the release of version 9.0.0, Onfido RN SDK runs in a separate process. This means that when the Onfido SDK started, a new application instance will be created. To prevent reinitializing you have in the Android application class, you can use the `isOnfidoProcess` extension function and return from `onCreate` as shown below:
 
 This will prevent initialization-related crashes such as: [`FirebaseApp is not initialized in this process`](https://github.com/firebase/firebase-android-sdk/issues/4693)
 
@@ -266,14 +270,9 @@ cd ..
 
 ##### Enabling NFC extraction
 
-Recent passports, national identity cards and residence permits contain a chip that can be accessed using Near Field Communication (NFC).
-The Onfido SDKs provide a set of screens and functionalities to extract this information, verify its authenticity and provide the results as part of a Document report.
-With version [8.4.0] of the Onfido React Native SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
+With version 10.0.0 of the Onfido React Native SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
 
 For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
-
-###### Pre-requisites
-
 
 This feature requires Near Field Communication Tag Reading capability in your app target. If you haven't added it before, please follow the steps in Apple's documentation.
 
@@ -284,7 +283,6 @@ You're required to have the following key in your application's Info.plist file:
 <key>NFCReaderUsageDescription</key>
 <string>Required to read ePassports</string>
 ```
-
 
 You have to include the entries below in your app target's Info.plist file to be able to read NFC tags properly.
 
@@ -429,9 +427,8 @@ config = {
     },
     captureFace: {
       type: OnfidoCaptureType.VIDEO
-    },
-  },
-  enableNFC: true
+    }
+  }
 }
 ```
 
@@ -441,14 +438,14 @@ config = {
 * **`flowSteps`**: Required.  This object is used to toggle individual screens on and off and set configurations inside the screens.
 * **`welcome`**: Optional.  This toggles the welcome screen on or off.  If omitted, this screen does not appear in the flow.
   * Valid values: `true`, `false`
+* **`proofOfAddress`**: Optional. This toggles the proof of address screen on or off. If omitted, this screen does not appear in the flow.
+  * Valid values: `true`, `false`
 * **`captureDocument`**: Optional. This object contains configuration for the capture document screen. If docType and countryCode are not specified, a screen will appear allowing the user to choose these values.  If omitted, this screen does not appear in the flow.
 * **`docType`**: Required if countryCode is specified.
   * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`.
     **Note**: `GENERIC` document type doesn't offer an optimised capture experience for a desired document type.
 * **`countryCode`**: Required if docType is specified.
   * Valid values in `OnfidoCountryCode`: Any ISO 3166-1 alpha-3 code. For example: `OnfidoCountryCode.USA`.
-* **`enableNFC`**: Optional. This toggles the ePassport NFC extraction feature. If omitted, this feature is not enabled in the flow. There is also application configuration changes needed to use this feature. To do that please follow [Onfido Developer Hub](#https://developers.onfido.com/guide/document-report-nfc#enable-nfc-in-the-onfido-sdks)
-  * Valid values: `true`, `false`.
 * **`captureFace`**: Optional.  This object object containing options for capture face screen.  If omitted, this screen does not appear in the flow.
 * **`type`**: Required if captureFace is specified.
   * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`, `MOTION`.
@@ -691,8 +688,6 @@ You can customize the SDK by adding a `colors.json` file to your xcode project a
   "onfidoPrimaryColor": "#FF0000",
   "onfidoPrimaryButtonTextColor": "#FFFFFF",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
-  "onfidoAndroidStatusBarColor": "#A52A2A",
-  "onfidoAndroidToolBarColor": "#800080",
   "onfidoIosSupportDarkMode": true,
   "secondaryTitleColor": "#FF0000",
   "secondaryBackgroundPressedColor": "#FF0000",

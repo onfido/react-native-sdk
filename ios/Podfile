@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 
 target 'OnfidoSdk' do
-  pod 'Onfido', '~> 29.0.0'
+  pod 'Onfido', '~> 29.2.1'
 
   config = use_native_modules!
   use_react_native!(

@@ -13,11 +13,13 @@ struct OnfidoPluginConfig: Codable {
     let localisation: OnfidoLocalisation?
     let hideLogo: Bool?
     let logoCoBrand: Bool?
-    let enableNFC: Bool?
+    let disableNFC: Bool?
+    let disableMobileSdkAnalytics: Bool?
 }
 
 struct OnfidoFlowSteps: Codable {
     var welcome: Bool?
+    var proofOfAddress: Bool?
     var captureDocument: OnfidoCaptureDocument?
     var captureFace: OnfidoCaptureFace?
 }
@@ -32,7 +34,13 @@ struct OnfidoCaptureDocument: Codable {
 struct OnfidoCaptureFace: Codable {
     let type: OnfidoCaptureType
     let recordAudio: Bool?
-    let motionCaptureFallback: [String: String]?
+    let motionCaptureFallback: OnfidoCaptureFaceFallback?
+    let showIntro: Bool?
+    let manualVideoCapture: Bool?
+}
+
+struct OnfidoCaptureFaceFallback: Codable {
+    let type: OnfidoCaptureFaceFallbackType
     let showIntro: Bool?
     let manualVideoCapture: Bool?
 }
@@ -59,6 +67,11 @@ enum OnfidoCaptureType: String, Codable {
     case photo = "PHOTO"
     case video = "VIDEO"
     case motion = "MOTION"
+}
+
+enum OnfidoCaptureFaceFallbackType: String, Codable {
+    case photo = "PHOTO"
+    case video = "VIDEO"
 }
 
 struct OnfidoAppearanceConfig: Codable {

@@ -7,6 +7,7 @@ export type OnfidoFlowSteps = {
     allowedDocumentTypes?: [OnfidoDocumentType]
   };
   captureFace?: OnfidoFaceCapture;
+  proofOfAddress?: boolean;
 };
 
 export type OnfidoResult = {
@@ -34,6 +35,7 @@ export type OnfidoConfig = {
   hideLogo?: boolean;
   logoCoBrand?: boolean;
   enableNFC?: boolean;
+  disableMobileSdkAnalytics?: boolean;
   localisation?: {
     ios_strings_file_name?: string;
   };

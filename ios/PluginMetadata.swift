@@ -7,5 +7,5 @@
 @objcMembers
 final class PluginMetadata: NSObject {
     let pluginPlatform = "react-native"
-    let pluginVersion = "9.0.0"
+    let pluginVersion = "10.0.0"
 }

@@ -2,8 +2,6 @@
   "onfidoPrimaryColor": "#FF0000",
   "onfidoPrimaryButtonTextColor": "#00FF00",
   "onfidoPrimaryButtonColorPressed": "#0000FF",
-  "onfidoAndroidStatusBarColor": "#FFFF00",
-  "onfidoAndroidToolBarColor": "#FF00FF",
   "onfidoIosSupportDarkMode": true,
   "secondaryTitleColor": "#FF0000",
   "secondaryBackgroundPressedColor": "#FF0000",

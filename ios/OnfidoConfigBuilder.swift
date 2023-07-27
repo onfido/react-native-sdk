@@ -41,7 +41,7 @@ struct OnfidoConfigBuilder {
         var workflowConfig = WorkflowConfiguration(workflowRunId: workflowId, sdkToken: config.sdkToken)
         
         // Enterprise features
-        let enterpriseFeatures = try enterptiseFeatures(for: config)
+        let enterpriseFeatures = try enterpriseFeatures(for: config)
         workflowConfig = workflowConfig.withEnterpriseFeatures(enterpriseFeatures)
         
         // Appearance
@@ -75,12 +75,17 @@ struct OnfidoConfigBuilder {
         try configureClassicSteps(builder: builder, config: config)
         
         // Enterprise features
-        let enterpriseFeatures = try enterptiseFeatures(for: config)
+        let enterpriseFeatures = try enterpriseFeatures(for: config)
         builder.withEnterpriseFeatures(enterpriseFeatures)
         
         // NFC
-        if let enableNFC = config.enableNFC, enableNFC == true {
-            builder.withNFCReadFeatureEnabled()
+        if let disableNFC = config.disableNFC, disableNFC == true {
+            builder.disableNFC()
+        }
+
+        // Proof of Address
+        if let isProofOfAddressEnabled = config.flowSteps?.proofOfAddress, isProofOfAddressEnabled {
+            builder.withProofOfAddressStep()
         }
         
         // Localization
@@ -188,46 +193,43 @@ struct OnfidoConfigBuilder {
             )))
         case .motion:
             let shouldRecordAudio = captureFace?.recordAudio ?? false
-            let motionCaptureFallback = captureFace?.motionCaptureFallback
-            let fallbackOption = motionCaptureFallback?["type"] as? String
+            guard let motionCaptureFallback = captureFace?.motionCaptureFallback else {
+               builder.withFaceStep(ofVariant: .motion(withConfiguration: .init(recordAudio: shouldRecordAudio)))
+               return
+            }
+            let fallbackOption = motionCaptureFallback.type 
+            let shouldShowIntro = motionCaptureFallback.showIntro ?? true
+            let shouldUseManualVideoCapture = motionCaptureFallback.manualVideoCapture ?? false
 
-            if shouldRecordAudio, motionCaptureFallback == nil {
+            switch fallbackOption {
+            case .photo:
+                builder.withFaceStep(ofVariant: .motion(withConfiguration:
+                    .init(
+                        captureFallback: .init(
+                            photoFallbackWithConfiguration: .init(showSelfieIntroScreen: shouldShowIntro)
+                        ),
+                        recordAudio: shouldRecordAudio
+                    )
+                ))
+            case .video:
+                builder.withFaceStep(ofVariant: .motion(withConfiguration:
+                    .init(
+                        captureFallback: .init(videoFallbackWithConfiguration: .init(
+                            showIntroVideo: shouldShowIntro,
+                            manualLivenessCapture: shouldUseManualVideoCapture
+                        )),
+                        recordAudio: shouldRecordAudio
+                    )
+                ))
+            default:
                 builder.withFaceStep(ofVariant: .motion(withConfiguration: .init(recordAudio: shouldRecordAudio)))
-            } else {
-                switch fallbackOption {
-                case "PHOTO":
-                    builder.withFaceStep(ofVariant: .motion(withConfiguration:
-                        .init(
-                            captureFallback: .init(
-                                photoFallbackWithConfiguration: .init(showSelfieIntroScreen: shouldShowIntro)
-                            ),
-                            recordAudio: shouldRecordAudio
-                        )
-                    ))
-                case "VIDEO":
-                    builder.withFaceStep(ofVariant: .motion(withConfiguration:
-                        .init(
-                            captureFallback: .init(videoFallbackWithConfiguration: .init(
-                                showIntroVideo: shouldShowIntro,
-                                manualLivenessCapture: shouldUseManualVideoCapture
-                            )),
-                            recordAudio: shouldRecordAudio
-                        )
-                    ))
-                case "":
-                    builder.withFaceStep(ofVariant: .motion(withConfiguration:
-                        .init(recordAudio: shouldRecordAudio)
-                    ))
-                default:
-                    builder.withFaceStep(ofVariant: .motion(withConfiguration: nil))
-                }
             }
         }
     }
     
-    // MARK: - Enterptise features
+    // MARK: - Enterprise features
     
-    private func enterptiseFeatures(for config: OnfidoPluginConfig) throws -> EnterpriseFeatures {
+    private func enterpriseFeatures(for config: OnfidoPluginConfig) throws -> EnterpriseFeatures {
         let enterpriseFeatures = EnterpriseFeatures.builder()
         
         if let hideLogo = config.hideLogo {
@@ -241,6 +243,10 @@ struct OnfidoConfigBuilder {
                 throw NSError(domain: "Cobrand logos were not found", code: 0)
             }
             enterpriseFeatures.withCobrandingLogo(cobrandLogo, cobrandingLogoDarkMode: cobrandLogoDark)
+        }
+        
+        if let disableMobileSdkAnalytics = config.disableMobileSdkAnalytics {
+            enterpriseFeatures.withDisableMobileSdkAnalytics(disableMobileSdkAnalytics)
         }
         
         return enterpriseFeatures.build()
