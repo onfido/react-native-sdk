@@ -39,6 +39,7 @@ export type OnfidoConfig = {
   localisation?: {
     ios_strings_file_name?: string;
   };
+  theme: OnfidoTheme;
 };
 
 export interface OnfidoError extends Error {
@@ -87,6 +88,12 @@ export enum OnfidoCaptureType {
   PHOTO = "PHOTO",
   VIDEO = "VIDEO",
   MOTION = "MOTION"
+}
+
+export enum OnfidoTheme {
+  LIGHT = "LIGHT",
+  DARK = "DARK",
+  AUTOMATIC = "AUTOMATIC"
 }
 
 export type OnfidoFaceCapture =

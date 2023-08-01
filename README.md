@@ -474,6 +474,11 @@ config = {
     },
   }
   ```
+* `theme`: The theme in which Onfido SDK is displayed. By default, the user's active device theme will be
+  automatically applied to the Onfido SDK. However, you can opt out from dynamic theme switching at run time
+  and instead set a theme statically at the build time as shown below. In this case, the flow will always be in displayed
+  in the selected theme regardless of the user's device theme. 
+  * Valid values in `OnfidoTheme`: `AUTOMATIC`, `LIGHT`, `DARK`. 
 
 ### 3. Success Response
 
@@ -612,52 +617,93 @@ Finally, as you are testing with the sandbox token, please be aware that the res
 
 ### Android
 
-You can customize the SDK's appearance by overriding `OnfidoActivityTheme` in `app/src/main/res/values/styles.xml` or `app/src/main/res/values/themes.xml` in the `android` directory of your project. Make sure to set `OnfidoBaseActivityTheme` as the parent of `OnfidoActivityTheme` in your style definition. 
+Onfido SDK supports the dark theme. By default, the user's active device theme will be
+automatically applied to the Onfido SDK. However, you can opt out from dynamic theme switching at run time
+and instead set a theme statically at the build time. In this case, the flow will always be in displayed
+in the selected theme regardless of the user's device theme. To set a static theme, use the `theme` parameter in the SDK 
+initialization config. The value type should be `OnfidoTheme`. 
+Valid values in `OnfidoTheme` are: `AUTOMATIC` (default value), `LIGHT`, `DARK`.
+
+You can customize the SDK's appearance by overriding Onfido's light and dark themes (`OnfidoActivityTheme` and `OnfidoDarkTheme`)
+in `app/src/main/res/values/styles.xml` or `app/src/main/res/values/themes.xml` in the `android` directory of your project. 
+Make sure to set `OnfidoBaseActivityTheme` as the parent of `OnfidoActivityTheme` and `OnfidoBaseDarkTheme` as the parent of `OnfidoDarkTheme` in your style definition.
 
 You can use the following snippet as an example:
 
 ```xml
+<!-- Light theme -->
 <style name="OnfidoActivityTheme" parent="OnfidoBaseActivityTheme">
-        <!-- 
-          All colors referenced in this theme should be defined in your colors.xml. 
-          Alternatively, you can use hexadecimal color values directly in this theme.
-        -->
-        <item name="onfidoColorToolbarBackground">@color/brand_dark_blue</item>
-        <item name="colorPrimary">@color/brand_dark_blue</item>
-        <item name="colorPrimaryDark">@color/brand_transparent</item>
-        <item name="colorAccent">@color/brand_accent_color</item>
+    <item name="onfidoColorToolbarBackground">@color/brand_dark_blue</item>
+    <item name="onfidoColorActionMain">@color/brand_accent_color</item>
+</style>
 
-        <!-- 
-          All referenced fonts need to be added to your project first.
-          See https://developer.android.com/develop/ui/views/text-and-emoji/fonts-in-xml
-        -->
-        <item name="onfidoFontFamilyTitle">@font/montserrat_semibold</item>
-        <item name="onfidoFontFamilyBody">@font/font_montserrat</item>
-        <item name="onfidoFontFamilyButton">@font/font_montserrat</item>
-        <item name="onfidoFontFamilyDialogButton">@font/font_montserrat</item>
+<!-- Dark theme -->
+<style name="OnfidoDarkTheme" parent="OnfidoBaseDarkTheme">
+   <item name="onfidoColorToolbarBackground">@color/brand_dark_blue</item>
+    <item name="onfidoColorActionMain">@color/brand_accent_color</item>
 </style>
 ```
 
 The following attributes are currently supported:
 
-* **`onfidoColorToolbarBackground` and `colorPrimary`**: Background color of the tool bar that guides the user through the flow. Both attributes need to be provided if you want to customize the tool bar across all screens in the SDK.
-* **`onfidoColorToolbarBackgroundDark`**: Background color of the tool bar in screens with a dark background such as the capture screen (when overlay views are displayed)
-* **`colorPrimaryDark`**: Color of the status bar (above the tool bar)
-* **`onfidoColorToolbarTitle`**: Color of the tool bar's title text
-* **`onfidoColorToolbarTitleDark`**: Color of the tool bar's title text in screens with a dark background
-* **`colorAccent`**: Accent color. Default value is blue
-* **`onfidoColorButtonPrimary`**: Background color of primary buttons
-* **`onfidoColorButtonPrimaryText`**: Text color of primary buttons
-* **`onfidoColorButtonPrimaryPressed`**: Background color of primary buttons when pressed
-* **`onfidoColorTextPrimary`**: Color of primary texts on screen
-* **`onfidoColorTextSecondary`**: Color of secondary texts on screen
-* **`onfidoColorTextPrimaryDark`**: Color of primary texts on dark backgrounds (in the light theme) such as Motion screens and overlay views in the capture screen
-* **`onfidoFontFamilyTitle`**: Name of the font used for title texts
-* **`onfidoFontFamilySubtitle`**: Name of the font used for subtitle texts
-* **`onfidoFontFamilyBody`**: Name of the font used for body/content texts
-* **`onfidoFontFamilyButton`**: Name of the font used in buttons
-* **`onfidoFontFamilyToolbarTitle`**: Name of the font used for toolbar title texts
-* **`onfidoFontFamilyDialogButton`**: Name of the font used in dialogs' buttons
+* `onfidoColorToolbarBackground`: Background color of the `Toolbar` which guides the user through the flow
+
+* `colorPrimaryDark`: Color of the status bar (with system icons) above the `Toolbar`
+
+* `onfidoColorContentToolbarTitle`: Color of the `Toolbar`'s title text
+
+* `onfidoColorContentMain`: Color of primary texts on screen, e.g. titles and regular body texts
+
+* `onfidoColorContentSecondary`: Color of secondary texts on screen, e.g. subtitles
+
+* `onfidoColorContentNegative`: Color of error texts
+
+* `onfidoColorActionMain`: Background color of primary buttons
+
+* `onfidoColorActionMainPressed`: Background color of primary buttons when pressed
+
+* `onfidoColorActionMainDisabled`: Background color of primary buttons when disabled
+
+* `onfidoColorContentOnAction`: Text color of primary buttons
+
+* `onfidoColorContentOnActionDisabled`: Text color of primary buttons when disabled
+
+* `onfidoColorActionSecondary`: Background color of secondary buttons
+
+* `onfidoColorActionSecondaryPressed`: Background color of secondary buttons when pressed
+
+* `onfidoColorActionSecondaryDisabled`: Background color of secondary buttons when disabled
+
+* `onfidoColorContentOnActionSecondary`: Text color of secondary buttons
+
+* `onfidoColorContentOnActionSecondaryDisabled`: Text color of secondary buttons when disabled
+
+* `onfidoColorActionSecondaryBorder`: Border of the secondary buttons
+
+* `onfidoColorActionSecondaryBorderDisabled`: Border of the secondary buttons when disabled
+
+* `onfidoColorProgressTrack`: Track color of progress indicators (background color)
+
+* `onfidoColorProgressIndicator`: Indicator color of progress indicators (foreground color)
+
+* `colorAccent`: Defines alert dialogs' accent color, and text input fields' focused underline, cursor, and floating
+  label color
+
+* `onfidoColorWatermark`: Color of the Onfido logo and co-brand logo in the footer of screens
+
+* `onfidoColorDisclaimerBackground`: Background color of disclaimer boxes
+
+* `onfidoColorContentDisclaimer`: Text color of disclaimer boxes
+
+* `onfidoColorIconDisclaimer`: Icon color of disclaimer boxes
+
+* `onfidoColorIconStroke`: Stroke color of icons
+
+* `onfidoColorIconFill`: Fill color of icons
+
+* `onfidoColorIconBackground`: Background color of icons
+
+* `onfidoColorIconAccent`: Background color of accented icons
 
 **Note:**
 The usage of `color.json` and the `updateColors` command is now deprecated for Android. Please provide the theme attributes in your `styles.xml` or `themes.xml` as mentioned above. 
@@ -688,12 +734,16 @@ You can customize the SDK by adding a `colors.json` file to your xcode project a
   "onfidoPrimaryColor": "#FF0000",
   "onfidoPrimaryButtonTextColor": "#FFFFFF",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
-  "onfidoIosSupportDarkMode": true,
+  "interfaceStyle": <"unspecified" | "light" | "dark">,
   "secondaryTitleColor": "#FF0000",
   "secondaryBackgroundPressedColor": "#FF0000",
   "buttonCornerRadius": 20,
   "fontFamilyTitle": "FONT_NAME_FOR_TITLES",
   "fontFamilyBody": "FONT_NAME_FOR_CONTENT",
+  "backgroundColor": {
+    "light": "#FCFCFD",
+    "dark": "#000000"
+  },
 }
 ```
 
@@ -702,7 +752,7 @@ The following attributes are currently supported:
 * **`onfidoPrimaryColor`**: Background color of views such as capture confirmation buttons, back navigation button, and play and pause buttons in liveness/video capture intro
 * **`onfidoPrimaryButtonTextColor`**: Text color of labels included in views such as capture confirmation buttons
 * **`onfidoPrimaryButtonColorPressed`**: Defines the background color of capture confirmation buttons when pressed
-* **`onfidoIosSupportDarkMode`**: Defines whether dark mode will be supported (true by default)
+* **`interfaceStyle`**: Defines the supported interface styles ("unspecified" by default, which follows the sytem's interface style)
 * **`secondaryTitleColor`**: Secondary button text and border color
 * **`secondaryBackgroundPressedColor`**: Secondary button pressed state color
 * **`buttonCornerRadius`**: Border corner radius for all buttons (default value is 5.0)
@@ -710,6 +760,9 @@ The following attributes are currently supported:
 * **`fontFamilyBody`**: Name of the font used for body/content texts
 
 You can check out the [iOS SampleApp](https://github.com/onfido/onfido-ios-sdk/tree/master/SampleApp) for example usage. When running on an iOS device, the values will be picked up dynamically at runtime. 
+
+**Note:**
+The usage of `onfidoIosSupportDarkMode` in the `color.json` is now deprecated. Please use `interfaceStyle` instead.
 
 ## Going live
 

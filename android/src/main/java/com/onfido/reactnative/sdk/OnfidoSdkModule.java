@@ -31,6 +31,7 @@ import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.MotionCaptureSt
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
+import com.onfido.android.sdk.capture.OnfidoTheme;
 import com.onfido.workflow.OnfidoWorkflow;
 import com.onfido.workflow.WorkflowConfig;
 
@@ -124,7 +125,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private void workflowSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) {
+    private void workflowSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
         final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
         final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
@@ -138,6 +139,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
         if (isConfigWithMediaCallbacks) {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
+        }
+
+        OnfidoTheme onfidoTheme = getThemeFromConfig(config);
+        if(onfidoTheme != null){
+            onfidoConfigBuilder.withTheme(onfidoTheme);
         }
 
         flow.startActivityForResult(currentActivity,
@@ -170,6 +176,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
         if (getBooleanFromConfig(config, "disableNFC")) {
             onfidoConfigBuilder.disableNFC();
+        }
+
+        OnfidoTheme onfidoTheme = getThemeFromConfig(config);
+        if(onfidoTheme != null){
+            onfidoConfigBuilder.withTheme(onfidoTheme);
         }
 
         client.startActivityForResult(currentActivity,
@@ -219,6 +230,21 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     public static String getWorkflowRunIdFromConfig(final ReadableMap config) {
         final String key = "workflowRunId";
         return config.hasKey(key) ? config.getString(key) : "";
+    }
+
+    public static OnfidoTheme getThemeFromConfig(final ReadableMap config) throws Exception{
+        String themeString = config.getString("theme");
+        if(themeString == null){
+            return null;
+        }
+        OnfidoTheme onfidoTheme;
+        try {
+            onfidoTheme = OnfidoTheme.valueOf(themeString);
+        } catch (Exception e) {
+            System.err.println("Unexpected theme value: [" + themeString + "]");
+            throw new Exception("Unexpected theme value");
+        }
+        return onfidoTheme;
     }
 
     public static FlowStep[] getFlowStepsFromConfig(

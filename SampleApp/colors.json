@@ -2,7 +2,7 @@
   "onfidoPrimaryColor": "#FF0000",
   "onfidoPrimaryButtonTextColor": "#FFFFFF",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
-  "onfidoIosSupportDarkMode": true,
+  "interfaceStyle": "system",
   "secondaryTitleColor": "#FF0000",
   "secondaryBackgroundPressedColor": "#FF0000",
   "bubbleErrorBackgroundColor": "#F53636",
@@ -13,5 +13,9 @@
     "borderColor": "#51D17B",
     "tickViewImageTintColor": "#058731",
     "tickViewBackgroundColor": "#CBF8DA"
-  }
+  },
+  "backgroundColor": {
+    "light": "#FCFCFD",
+    "dark": "#000000"
+  },
 }

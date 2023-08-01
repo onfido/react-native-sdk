@@ -10,7 +10,7 @@ PODS:
     - React-jsi (= 0.64.3)
     - ReactCommon/turbomodule/core (= 0.64.3)
   - glog (0.3.5)
-  - Onfido (29.2.1)
+  - Onfido (29.3.0)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -275,7 +275,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - Onfido (~> 29.2.1)
+  - Onfido (~> 29.3.0)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -370,9 +370,9 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
-  FBReactNativeSpec: a9cb3d6d3530ec762e7b8ceb721819a858d18109
+  FBReactNativeSpec: b10534e748f901952e1173afac0a0c6c2281ae96
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
-  Onfido: 6bab693d5b1dc203052fc21d8f0d54144d5b5a21
+  Onfido: f85c79acd4b162abd9872ddf43565ff5a6164749
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: d34bf57e17cb6e3b2681f4809b13843c021feb6c
   RCTTypeSafety: 8dab4933124ed39bb0c1d88d74d61b1eb950f28f
@@ -398,6 +398,6 @@ SPEC CHECKSUMS:
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
 
-PODFILE CHECKSUM: eac8e34fbb4da5d3963403ce9d12323b6027ff79
+PODFILE CHECKSUM: 9ba7d60c329e9c7e2f6f746720b24c43c6367606
 
 COCOAPODS: 1.12.1

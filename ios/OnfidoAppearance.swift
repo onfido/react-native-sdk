@@ -5,6 +5,7 @@ public class AppearancePublic: NSObject {
     public let primaryTitleColor: UIColor
     public let primaryBackgroundPressedColor: UIColor
     public let supportDarkMode: Bool
+    public let interfaceStyle: OnfidoInterfaceStyle
     public let secondaryTitleColor: UIColor
     public let secondaryBackgroundPressedColor: UIColor
     public let bubbleErrorBackgroundColor: UIColor
@@ -12,6 +13,7 @@ public class AppearancePublic: NSObject {
     public let fontFamilyTitle: String
     public let fontFamilyBody: String
     public let captureSuccessColors: CaptureSuccessColors
+    public let backgroundColor: BackgroundColor
 
     /// public apperance object with shared with RN integrator
     public init(
@@ -25,7 +27,9 @@ public class AppearancePublic: NSObject {
         fontFamilyBody: String,
         fontFamilyTitle: String,
         captureSuccessColors: CaptureSuccessColors,
-        supportDarkMode: Bool = true
+        supportDarkMode: Bool = true,
+        interfaceStyle: OnfidoInterfaceStyle = .unspecified,
+        backgroundColor: BackgroundColor = .init()
     ) {
         self.primaryColor = primaryColor
         self.primaryTitleColor = primaryTitleColor
@@ -38,7 +42,15 @@ public class AppearancePublic: NSObject {
         self.fontFamilyBody = fontFamilyBody
         self.captureSuccessColors = captureSuccessColors
         self.supportDarkMode = supportDarkMode
+        self.interfaceStyle = interfaceStyle
+        self.backgroundColor = backgroundColor
     }
+}
+
+public enum OnfidoInterfaceStyle: Int, Decodable {
+    case unspecified = 0
+    case light = 1
+    case dark = 2
 }
 
 /**
@@ -82,6 +94,27 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                 }
             }
 
+            let interfaceStyle: OnfidoInterfaceStyle
+            if let style = jsonResult["interfaceStyle"] as? String {
+                interfaceStyle = .init(style)
+            } else {
+                interfaceStyle = .unspecified
+            }
+
+            let backgroundColor: BackgroundColor
+            if
+                let color = jsonResult["backgroundColor"] as? [String: String],
+                let lightColor = color["light"],
+                let darkColor = color["dark"]
+            {
+                backgroundColor = .init(
+                    lightColor: .from(hex: lightColor),
+                    darkColor: .from(hex: darkColor)
+                )
+            } else {
+                backgroundColor = .init()
+            }
+
             return AppearancePublic(primaryColor: primaryColor,
                                     primaryTitleColor: primaryTitleColor,
                                     primaryBackgroundPressedColor: primaryBackgroundPressedColor,
@@ -92,7 +125,9 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                                     fontFamilyBody: fontFamilyBody,
                                     fontFamilyTitle: fontFamilyTitle,
                                     captureSuccessColors: captureSuccessColors,
-                                    supportDarkMode: supportDarkMode)
+                                    supportDarkMode: supportDarkMode,
+                                    interfaceStyle: interfaceStyle,
+                                    backgroundColor: backgroundColor)
         } else {
             return nil
         }
@@ -120,6 +155,10 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
         appearance.fontRegular = appearancePublic.fontFamilyBody
         appearance.fontBold = appearancePublic.fontFamilyTitle
         appearance.captureSuccessColors = appearancePublic.captureSuccessColors
+        if #available(iOS 12.0, *) {
+            appearance.setUserInterfaceStyle(.init(appearancePublic.interfaceStyle))
+        }
+        appearance.backgroundColor = appearancePublic.backgroundColor
         return appearance
     } else {
         return Appearance.default
@@ -191,5 +230,34 @@ extension UIColor {
         let blue = CGFloat(blueInt) / 255.0
 
         return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
+    }
+}
+
+// MARK: - Private Helpers
+
+@available(iOS 12.0, *)
+private extension UIUserInterfaceStyle {
+    init(_ onfidoInterfaceStyle: OnfidoInterfaceStyle) {
+        switch onfidoInterfaceStyle {
+        case .dark:
+            self = .dark
+        case .light:
+            self = .light
+        case .unspecified:
+            self = .unspecified
+        }
+    }
+}
+
+private extension OnfidoInterfaceStyle {
+    init(_ stringRepresentation: String) {
+        switch stringRepresentation {
+        case "light":
+            self = .light
+        case "dark":
+            self = .dark
+        default:
+            self = .unspecified
+        }
     }
 }
