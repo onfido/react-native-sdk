@@ -732,6 +732,10 @@ You can customize the SDK by adding a `colors.json` file to your xcode project a
 ```json
 {
   "onfidoPrimaryColor": "#FF0000",
+  "backgroundColor": {
+    "light": "#FCFCFD",
+    "dark": "#000000"
+  },
   "onfidoPrimaryButtonTextColor": "#FFFFFF",
   "onfidoPrimaryButtonColorPressed": "#FFA500",
   "interfaceStyle": <"unspecified" | "light" | "dark">,
@@ -740,16 +744,13 @@ You can customize the SDK by adding a `colors.json` file to your xcode project a
   "buttonCornerRadius": 20,
   "fontFamilyTitle": "FONT_NAME_FOR_TITLES",
   "fontFamilyBody": "FONT_NAME_FOR_CONTENT",
-  "backgroundColor": {
-    "light": "#FCFCFD",
-    "dark": "#000000"
-  },
 }
 ```
 
 The following attributes are currently supported:
 
 * **`onfidoPrimaryColor`**: Background color of views such as capture confirmation buttons, back navigation button, and play and pause buttons in liveness/video capture intro
+* **`backgroundColor`**: Background color used for all non-capture views. Can be defined for both light and dark mode
 * **`onfidoPrimaryButtonTextColor`**: Text color of labels included in views such as capture confirmation buttons
 * **`onfidoPrimaryButtonColorPressed`**: Defines the background color of capture confirmation buttons when pressed
 * **`interfaceStyle`**: Defines the supported interface styles ("unspecified" by default, which follows the sytem's interface style)
@@ -760,6 +761,9 @@ The following attributes are currently supported:
 * **`fontFamilyBody`**: Name of the font used for body/content texts
 
 You can check out the [iOS SampleApp](https://github.com/onfido/onfido-ios-sdk/tree/master/SampleApp) for example usage. When running on an iOS device, the values will be picked up dynamically at runtime. 
+
+**Dark Mode Customization**
+`interfaceStyle` allows you to force light or dark mode via `dark` and `light` respectively, or follow the system's interface style with `unspecified`.
 
 **Note:**
 The usage of `onfidoIosSupportDarkMode` in the `color.json` is now deprecated. Please use `interfaceStyle` instead.
