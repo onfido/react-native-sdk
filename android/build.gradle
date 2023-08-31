@@ -63,6 +63,7 @@ apply plugin: 'jacoco'
 apply from: 'publish.gradle'
 
 android {
+    namespace = 'com.onfido.reactnative.sdk'
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
