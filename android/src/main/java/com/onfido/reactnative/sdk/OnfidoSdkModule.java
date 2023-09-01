@@ -38,11 +38,16 @@ import com.onfido.workflow.WorkflowConfig;
 import java.util.ArrayList;
 import java.util.List;
 
+// Analytics to be re-added once payloads are harmonised across platforms
+enum CallbackType {
+    MEDIA
+}
+
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
-    private boolean isConfigWithMediaCallbacks = false;
+    List<CallbackType> callbackTypeList = new ArrayList<CallbackType>();
     private final OnfidoSdkActivityEventListener activityEventListener;
 
     public OnfidoSdkModule(final ReactApplicationContext reactContext) {
@@ -137,7 +142,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
         }
 
-        if (isConfigWithMediaCallbacks) {
+        if (callbackTypeList.contains(CallbackType.MEDIA)) {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
         }
 
@@ -170,7 +175,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
         }
 
-        if (isConfigWithMediaCallbacks) {
+        if (callbackTypeList.contains(CallbackType.MEDIA)) {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
         }
 
@@ -474,15 +479,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return config.hasKey(key) && config.getBoolean(key);
     }
 
-    //region Media Callbacks
-
-    /**
-     * This is a pre-requisite: make sure you call this method before the start method **if** you want to use custom media callbacks
-     */
-    @ReactMethod
-    public void withMediaCallbacksEnabled() {
-        isConfigWithMediaCallbacks = true;
-    }
+    //region Callbacks
 
     @ReactMethod
     public void addListener(String type) {
@@ -494,12 +491,26 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         // Keep: Required for RN build in the Event Emitter Calls
     }
 
+    private void sendEvent(String name, WritableMap map) {
+        getReactApplicationContext()
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit(name, map);
+    }
+
+    //region Media
+
+    /**
+     * This is a pre-requisite: make sure you call this method before the start method **if** you want to use custom media callbacks
+     */
+    @ReactMethod
+    public void withMediaCallbacksEnabled() {
+        callbackTypeList.add(CallbackType.MEDIA);
+    }
+
     private MediaCallback addMediaCallback() {
         return mediaResult -> {
             WritableMap map = ReactNativeBridgeUtiles.getMediaResultMap(mediaResult);
-            getReactApplicationContext()
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit("onfidoMediaCallback", map);
+            sendEvent("onfidoMediaCallback", map);
         };
     }
 

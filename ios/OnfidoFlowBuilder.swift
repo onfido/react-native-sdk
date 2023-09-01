@@ -7,13 +7,13 @@
 import Foundation
 import Onfido
 
-struct OnfidoFlowBuilder {
+final class OnfidoFlowBuilder {
     private let configBuilder: OnfidoConfigBuilder
-    
+
     init(configBuilder: OnfidoConfigBuilder = OnfidoConfigBuilder()) {
         self.configBuilder = configBuilder
     }
-    
+
     func build(
         with config: OnfidoPluginConfig,
         appearance: Appearance,
@@ -24,15 +24,16 @@ struct OnfidoFlowBuilder {
             appearance: appearance,
             mediaCallBack: customMediaCallback
         )
-        
+
+        let flow: OnfidoFlow
         switch mode {
         case .classic(configBuilder: let configBuilder):
             let config = try configBuilder.build()
-            let flow = OnfidoFlow(withConfiguration: config)
-            return flow
+            flow = OnfidoFlow(withConfiguration: config)
         case .studio(workflowConfig: let workflowConfig):
-            let flow = OnfidoFlow(workflowConfiguration: workflowConfig)
-            return flow
+            flow = OnfidoFlow(workflowConfiguration: workflowConfig)
         }
-    }    
+
+        return flow
+    }
 }

@@ -25,5 +25,6 @@
     "target": "esnext"
   },
   "include": ["./js"],
-  "exclude": ["./SampleApp", "./TestApp"]
+  "exclude": ["./SampleApp", "./TestApp"],
+  "extends": "@tsconfig/react-native/tsconfig.json"
 }

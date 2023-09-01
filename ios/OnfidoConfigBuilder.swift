@@ -82,11 +82,6 @@ struct OnfidoConfigBuilder {
         if let disableNFC = config.disableNFC, disableNFC == true {
             builder.disableNFC()
         }
-
-        // Proof of Address
-        if let isProofOfAddressEnabled = config.flowSteps?.proofOfAddress, isProofOfAddressEnabled {
-            builder.withProofOfAddressStep()
-        }
         
         // Localization
         if let localizationFile = try customLocalization(config: config) {
@@ -107,6 +102,11 @@ struct OnfidoConfigBuilder {
         // Welcome
         if let hasWelcome = steps.welcome, hasWelcome == true {
             builder.withWelcomeStep()
+        }
+
+        // Proof of Address
+        if let isProofOfAddressEnabled = steps.proofOfAddress, isProofOfAddressEnabled {
+            builder.withProofOfAddressStep()
         }
         
         try configureDocumentStep(builder: builder, steps: steps)

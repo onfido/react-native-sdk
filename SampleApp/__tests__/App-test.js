@@ -19,6 +19,9 @@ jest.mock('@onfido/react-native-sdk', () => {
   };
 });
 
+jest.mock("../backend-server-example.js");
+
+
 it('renders correctly', () => {
   renderer.create(<App />);
 });

@@ -20,6 +20,7 @@ protocol ReactDocumentResult {
 
 protocol ReactFaceResult {
     var id: String { get }
+    var variant: FaceResultVariant { get }
 }
 
 extension DocumentSideResult: ReactDocumentSideResult {}
@@ -31,7 +32,7 @@ extension DocumentResult: ReactDocumentResult {
 
 extension FaceResult: ReactFaceResult {}
 
-func createResponse(_ results: [OnfidoResult], faceVariant: String?) -> [String: [String: Any]] {
+func createResponse(_ results: [OnfidoResult]) -> [String: [String: Any]] {
     let document: DocumentResult? = results.compactMap { result in
         guard case let .document(documentResult) = result else { return nil }
         return documentResult
@@ -42,14 +43,13 @@ func createResponse(_ results: [OnfidoResult], faceVariant: String?) -> [String:
         return faceResult
     }.first
 
-    return createResponse(document: document, face: face, faceVariant: faceVariant)
+    return createResponse(document: document, face: face)
 }
 
 // TODO: Refactor to Encodable
 func createResponse(
     document: ReactDocumentResult? = nil,
-    face: ReactFaceResult? = nil,
-    faceVariant: String? = nil
+    face: ReactFaceResult? = nil
 ) -> [String: [String: Any]] {
     var response = [String: [String: Any]]()
 
@@ -68,13 +68,18 @@ func createResponse(
     }
 
     if let faceResponse = face {
-        var faceResponse = ["id": faceResponse.id]
+        let faceVariant: String = {
+            switch faceResponse.variant {
+            case .photo:
+                return "PHOTO"
+            case .video:
+                return "VIDEO"
+            case .motion:
+                return "MOTION"
+            }
+            }()  
 
-        if let faceVariant = faceVariant {
-            faceResponse["variant"] = faceVariant
-        }
-
-        response["face"] = faceResponse
+        response["face"] = ["id": faceResponse.id, "variant": faceVariant]
     }
 
     return response

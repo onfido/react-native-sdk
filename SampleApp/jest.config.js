@@ -10,4 +10,6 @@ module.exports = {
       ')/)',
   ],
   testMatch: ['**/*+(__tests__/**-test.js)'],
+  testEnvironment: 'node',
+  setupFiles: ['<rootDir>/jest.setup.js'],
 };

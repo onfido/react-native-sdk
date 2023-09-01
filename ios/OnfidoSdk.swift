@@ -8,12 +8,18 @@ import Onfido
 import Foundation
 import React
 
+// Analytics to be re-added once payloads are harmonised across platforms
+private enum CallbackType {
+    case media
+}
+
 @objc(OnfidoSdk)
 final class OnfidoSdk: RCTEventEmitter {
 
     private let onfidoFlowBuilder = OnfidoFlowBuilder()
     private let configParser = OnfidoConfigParser()
-
+    private var callbackTypes: [CallbackType] = []
+    
     @objc
     func start(_ config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
@@ -32,16 +38,13 @@ final class OnfidoSdk: RCTEventEmitter {
             let appearanceFilePath = Bundle.main.path(forResource: "colors", ofType: "json")
             let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
 
-            //  Copy the face varient from the config since it is not contained in the response:
-            let faceVariant = onfidoConfig.flowSteps?.captureFace?.type.rawValue
-
             let mediaCallback: CallbackReceiver?
-            if isConfigWithMediaCallbacks {
+            if callbackTypes.contains(.media) {
                 mediaCallback = CallbackReceiver(withCallback: processMediaResult(_:))
             } else {
                 mediaCallback = nil
             }
-
+            
             let onfidoFlow: OnfidoFlow = try onfidoFlowBuilder.build(
                 with: onfidoConfig,
                 appearance: appearance,
@@ -55,7 +58,7 @@ final class OnfidoSdk: RCTEventEmitter {
                         reject("\(error)", "Encountered an error running the flow", error)
                         return;
                     case let .success(results):
-                        resolve(createResponse(results, faceVariant: faceVariant))
+                        resolve(createResponse(results))
                         return;
                     case let .cancel(reason):
                         switch reason {
@@ -87,27 +90,27 @@ final class OnfidoSdk: RCTEventEmitter {
         }
     }
 
-    // MARK: - Media Callbacks
+    // MARK: - Callbacks
 
-    private var isConfigWithMediaCallbacks: Bool = false
+    @objc
+    public override func supportedEvents() -> [String] {
+        return ["onfidoMediaCallback"]
+    }
 
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return false
     }
 
+    // MARK: Media
+
     @objc
     func withMediaCallbacksEnabled() {
-        isConfigWithMediaCallbacks = true
+        callbackTypes.append(.media)
     }
 
     private func processMediaResult(_ dictionary: [String: Any]) {
         sendEvent(withName: "onfidoMediaCallback", body: dictionary)
-    }
-
-    @objc
-    public override func supportedEvents() -> [String] {
-        return ["onfidoMediaCallback"]
     }
 }
 

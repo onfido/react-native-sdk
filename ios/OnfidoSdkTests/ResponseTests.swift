@@ -23,6 +23,7 @@ struct TestDocumentResult: ReactDocumentResult {
 
 struct TestFaceResult: ReactFaceResult {
     let id: String
+    let variant: FaceResultVariant
 }
 
 class ResponseTests: XCTestCase {
@@ -77,9 +78,9 @@ class ResponseTests: XCTestCase {
     }
 
     func testResponseOfFaceCheck() {
-        let faceResult = TestFaceResult(id: "face-test")
+        let faceResult = TestFaceResult(id: "face-test", variant: .photo)
 
-        let response = createResponse(face: faceResult, faceVariant: "PHOTO")
+        let response = createResponse(face: faceResult)
 
         let face = response["face"] as! [String: String]
         XCTAssertEqual(face["id"], "face-test")
