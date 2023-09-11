@@ -1900,7 +1900,7 @@
     fastq "^1.6.0"
 
 "@onfido/react-native-sdk@file:.yalc/@onfido/react-native-sdk":
-  version "10.0.0"
+  version "10.3.0"
 
 "@react-native-community/cli-clean@11.3.3":
   version "11.3.3"

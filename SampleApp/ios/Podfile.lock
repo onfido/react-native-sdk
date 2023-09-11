@@ -15,9 +15,9 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.1)
   - hermes-engine/Pre-built (0.72.1)
   - libevent (2.1.12)
-  - Onfido (29.3.0)
-  - onfido-react-native-sdk (10.0.0):
-    - Onfido (~> 29.3.0)
+  - Onfido (29.4.0)
+  - onfido-react-native-sdk (10.3.0):
+    - Onfido (~> 29.4.0)
     - React
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -574,8 +574,8 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 9df83855a0fd15ef8eb61694652bae636b0c466e
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  Onfido: f85c79acd4b162abd9872ddf43565ff5a6164749
-  onfido-react-native-sdk: 6d0098bdf42b9b74fcfa345aa33a31d2679da8d9
+  Onfido: aa8a948b1d67a89a7261316dfc1b050ead58776d
+  onfido-react-native-sdk: a117e31dc40c7249b3cb4a9e5a25323b7f94597e
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c52ee8fb2b35c1b54031dd8e92d88ad4dba8f2ce
   RCTTypeSafety: 75fa444becadf0ebfa0a456b8c64560c7c89c7df
@@ -613,4 +613,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: fbd3539e4d51f7787fdfcb0fe50d56703ccd7ce8
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

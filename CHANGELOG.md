@@ -5,13 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [10.3.0] - 2023-09-11
+
+### Added:
+
+- Updated underlying Onfido native SDK version:
+  - iOS 29.4.x (up from 29.3.x)
+  - Android 19.2.x (up from 19.1.x)
+
+## [10.2.0] - 2023-09-01
+
+### Changed:
+
+- Changed Face step border success colour in Video Step
+- Updated underlying React Native version to 0.72.1 (up from 0.64.3). Please note that this also updates the minimum Node version required to 16.
+
+## [10.1.0] - 2023-08-01
+
+### Added:
+
+- Updated underlying Onfido native SDK version:
+  - iOS 29.3.x (up from 29.2.1)
+- Changed `primaryColor` description
+- Added theme selection to the SDK configuration
+
+### Changed:
+
+- Adjust colour contrast of brackets in Headturn step in motion
+- Adjust colour contrast of corners in Alignment step in motion
+- Added feedback on UI while video is being recorded on document capture
+- Removed OnfidoExtended framework variant
+
 ## [10.0.0] - 2023-07-12
 
 ### Changed:
 
 - Public: Updated underlying Onfido native SDKs versions:
   - iOS 29.1.x (up from 29.0.x)
-  - Android 19.0.x (up from 18.0.x)
+  - Android 19.1.x (up from 18.0.x)
 - Public: Added Proof of Address configuration
 
 ### Fixed:
