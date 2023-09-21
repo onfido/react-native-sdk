@@ -22,12 +22,12 @@ const REJECTED = 'rejected';
 
 const start = (config: OnfidoConfig) => {
   return Onfido.start(config)
-    .then(() => {
-      return RESOLVED
-    })
-    .catch(() => {
-      return REJECTED
-    });
+      .then(() => {
+        return RESOLVED
+      })
+      .catch(() => {
+        return REJECTED
+      });
 };
 
 const flowSteps = {
@@ -71,7 +71,7 @@ testCases.forEach((platform) => {
     test('resolve a capture document object with explicitly null attributes', () => {
       return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: null, countryCode: null } } } as unknown as OnfidoConfig).then(result => expect(result).toBe(RESOLVED))
     });
-    
+
     test('resolve with a valid workflow runId', () => {
       return start({ ...baseConfig, workflowRunId: workflowRunId }).then(result => expect(result).toBe(RESOLVED))
     });
@@ -115,6 +115,16 @@ testCases.forEach((platform) => {
 
     test('reject with an empty captureDocument and captureFace', () => {
       return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: {}, captureFace: {} } } as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
+    });
+
+    test('base 64 helper function converts data array correctly to base64', () => {
+      // pass nothing, see nothing
+      const base64DataNothing = Onfido.byteArrayStringToBase64("")
+      expect(base64DataNothing).toBe("")
+
+      // intended use case for this method is that it must contain brackets as well
+      const base64DataFilled = Onfido.byteArrayStringToBase64("[104, 101, 108, 108, 111, 32, 76, 117, 107, 97, 115]")
+      expect(base64DataFilled).toBe("aGVsbG8gTHVrYXM=")
     });
   });
 });

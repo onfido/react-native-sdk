@@ -9,6 +9,7 @@ import {
     OnfidoMediaResult,
     OnfidoResult
 } from "./config_constants";
+import { Base64 } from 'js-base64';
 
 const {OnfidoSdk} = NativeModules;
 
@@ -86,6 +87,7 @@ const Onfido = {
             if (config.flowSteps.captureFace && !(config.flowSteps.captureFace.type in OnfidoCaptureType)) {
                 return configError("Capture Face type is invalid");
             }
+            
         }
 
     return OnfidoSdk.start(config).catch((error: any) => {
@@ -101,6 +103,30 @@ const Onfido = {
     eventEmitter.removeAllListeners('onfidoMediaCallback');
     
     return eventEmitter.addListener('onfidoMediaCallback', callback);
+  },
+
+  byteArrayStringToBase64(byteArrayString: String) {
+    let charString = '';
+
+    // Iterate through the string and convert each number to string
+    // Iteration starts from the 1st element to ignore brackets
+    let currentNumber = '';
+    for (let i = 1; i < byteArrayString.length; i++) {
+      const char = byteArrayString.charAt(i);
+      if ((char >= '0' && char <= '9') || char === '-') {
+        currentNumber += char;
+      } else {
+        // Convert the collected number to string
+        if (currentNumber) {
+          const number = parseInt(currentNumber, 10);
+          charString += String.fromCharCode(number & 0xFF);
+          currentNumber = '';
+        }
+      }
+    }
+
+    // Convert to base64
+    return Base64.btoa(charString);
   }
 };
 

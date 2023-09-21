@@ -47,6 +47,7 @@ export interface OnfidoError extends Error {
 }
 
 export interface OnfidoMediaResult {
+  captureType: "DOCUMENT" | "FACE" | "VIDEO";
 }
 
 export interface OnfidoDocumentResult extends OnfidoMediaResult {

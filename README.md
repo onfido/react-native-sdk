@@ -19,7 +19,6 @@
     - [4.4 Update your iOS configuration files](#44-update-your-ios-configuration-files)
       - [Enabling NFC extraction](#enabling-nfc-extraction)
 - [Usage](#usage)
-  - [User data](#user-data)
   - [1. Creating the SDK configuration](#1-creating-the-sdk-configuration)
   - [2. Parameter details](#2-parameter-details)
   - [3. Success Response](#3-success-response)
@@ -27,6 +26,10 @@
   - [5. Localization](#5-localization)
     - [Android](#android)
     - [iOS](#ios)
+- [Media Callbacks](#media-callbacks)
+  - [Introduction](#introduction)
+  - [Implementation](#implementation)
+  - [User data](#user-data)
 - [Creating checks](#creating-checks)
   - [1. Obtaining an API token](#1-obtaining-an-api-token-1)
   - [2. Creating a check](#2-creating-a-check)
@@ -341,73 +344,6 @@ export default class App extends Component {
     );
   }
 }
-
-### Media Callbacks (beta)
-
-### Introduction
-Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
-
-**This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
-
-### Implementation
-To use this feature, use `Onfido.addCustomMediaCallback` and provide the callback.
-
-```javascript
-Onfido.addCustomMediaCallback(
-  mediaResult => {
-    if (mediaResult.captureType === 'DOCUMENT') {
-      // Callback code here
-    } else if (mediaResult.captureType === 'FACE') {
-      // Callback code here
-    } else if (mediaResult.captureType === 'VIDEO') {
-      // Callback code here
-    }
-  }
-);
-```
-
-### User data
-The callbacks return an object including the information that the SDK normally sends directly to Onfido. The callbacks are invoked when the end user confirms submission of their image through the SDK’s user interface.
-
-**Note:** Currently, end user data will still automatically be sent to the Onfido backend, but you are not required to use Onfido to process this data.
-
-The callback returns 3 possible objects. Please note, `captureType` refers to the type of the media capture in each case.
-These can be `DOCUMENT`, `FACE` or `VIDEO`.
-
-1. For documents(`captureType` is `DOCUMENT`), the callback returns:
-```json5
-     {
-         captureType: String
-         side: String
-         type: String
-         issuingCountry: String?
-         fileData: Data
-         fileName: String
-         fileType: String
-     }
-```
-
-**Note:** `issuingCountry` is optional based on end-user selection, and can be `null`.
-**Note:** If a document was scanned using NFC, the callback will return the passport photo in `file` but no additional data.
-
-2. For live photos (`captureType` is `FACE`), the callback returns:
-```json5
-{
-    captureType: String
-    fileData: Data
-    fileName: String
-    fileType: String
-}
-```
-
-3. For videos(`captureType` is `VIDEO`), the callback returns:
-```json5
-{
-    captureType: String
-    fileData: Data
-    fileName: String
-    fileType: String
-}
 ```
 
 ### 1. Creating the SDK configuration
@@ -457,7 +393,9 @@ config = {
     * Valid values in `OnfidoFaceSelfieCapture`: `type`: OnfidoCaptureType.PHOTO
     * Valid values in `OnfidoFaceVideoCapture`: `type`: OnfidoCaptureType.VIDEO
 
-    **Note**: In the scenario that the Motion variant is not supported on the user's device, if you configure the `motionCaptureFallback` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
+    In the scenario that the Motion variant is not supported on the user's device, if you configure the `motionCaptureFallback` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
+    
+    **Note**: Fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
 * **`recordAudio`**: Required if captureFace is specified as MOTION.
   * Valid values: `true`, `false`
 * **`localisation`**: Optional. This object contains localisation configuration. See section [Localization](#localization) for the details.
@@ -583,6 +521,84 @@ localisation: {
 2. Navigate to the iOS folder ```cd ios```, and open your XCode workspace.
 3. Follow the instructions for [iOS Localisation](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881) to add a new custom language or override existing translations.
 4. You can find the keys that need to be translated in the [iOS SDK repo](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
+
+## Media Callbacks
+
+### Introduction
+Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
+
+**This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
+
+### Implementation
+To use this feature, use `Onfido.addCustomMediaCallback` and provide the callback.
+
+```javascript
+Onfido.addCustomMediaCallback(
+  mediaResult => {
+    if (mediaResult.captureType === 'DOCUMENT') {
+      // Callback code here
+    } else if (mediaResult.captureType === 'FACE') {
+      // Callback code here
+    } else if (mediaResult.captureType === 'VIDEO') {
+      // Callback code here
+    }
+  }
+);
+```
+
+### User data
+The callbacks return an object including the information that the SDK normally sends directly to Onfido. The callbacks are invoked when the end user confirms submission of their image through the SDK’s user interface.
+
+**Note:** Currently, end user data will still automatically be sent to the Onfido backend, but you are not required to use Onfido to process this data.
+
+The callback returns 3 possible objects. Please note that `captureType` refers to the type of the media capture in each case.
+These can be `DOCUMENT`, `FACE` or `VIDEO`.
+
+1. For documents (`captureType` is `DOCUMENT`), the callback returns:
+```json5
+{
+    captureType: String
+    side: String
+    type: String
+    issuingCountry: String?
+    fileData: String
+    fileName: String
+    fileType: String
+}
+```
+
+**Notes:**
+- `issuingCountry` is optional based on end-user selection, and can be `null`.
+- `fileData` is a String representation of the byte array data corresponding to the captured photo of the document.
+- If a document was scanned using NFC, the callback will return the passport photo in `fileData` but no additional data.
+
+2. For live photos (`captureType` is `FACE`), the callback returns:
+```json5
+{
+    captureType: String
+    fileData: String
+    fileName: String
+    fileType: String
+}
+```
+**Note:** `fileData` is a String representation of the byte array data corresponding to the captured live photo.
+
+3. For videos(`captureType` is `VIDEO`), the callback returns:
+```json5
+{
+    captureType: String
+    fileData: String
+    fileName: String
+    fileType: String
+}
+```
+**Note:** `fileData` is a String representation of the byte array data corresponding to the captured video.
+
+Please note that, for your convenience, Onfido provides the `byteArrayStringToBase64` helper function to convert the `fileData` from String to a Base64 format. Here is an example of how to use it:
+```javascript
+let byteArrayString = mediaResult.fileData;
+let base64FileData = Onfido.byteArrayStringToBase64(byteArrayString);
+```
 
 ## Creating checks
 

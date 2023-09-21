@@ -1,7 +1,7 @@
 {
   "name": "@onfido/react-native-sdk",
   "title": "React Native Onfido Sdk",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "description": "Onfido React Native SDK",
   "main": "index.ts",
   "scripts": {
@@ -82,7 +82,9 @@
     "react-native": "0.72.1",
     "typescript": "^4.6.4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "js-base64": "3.7.5"
+  },
   "engines": {
     "node": ">=16"
   }

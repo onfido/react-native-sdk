@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [10.3.1] - 2023-09-21
+
+### Added:
+
+- Added a helper function `byteArrayStringToBase64` for converting the `fileData` attribute of a `MediaFile`, from a String representation of byte array data, to a Base64 format - in the custom media callbacks use case.
+
+### Changed:
+
+- Updated the `OnfidoMediaResult` type so that `captureType` is visible. This refers to the type of the media capture in each case, which can be `DOCUMENT`, `FACE` or `VIDEO`.
+- Updated the Media Callbacks documentation.
+
 ## [10.3.0] - 2023-09-11
 
 ### Added:

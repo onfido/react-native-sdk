@@ -40,9 +40,11 @@ extension CallbackReceiver: MediaCallback {
     }
 
     private func send(dictionary: [String: Any], mediaFile file: MediaFile) {
+        let fileData = getArrayOfBytesFromImage(data: file.fileData as NSData).description
+
         var newDict = dictionary
         newDict[Keys.MediaCallback.fileName] = file.fileName
-        newDict[Keys.MediaCallback.fileData] = file.fileData
+        newDict[Keys.MediaCallback.fileData] = fileData
         newDict[Keys.MediaCallback.fileType] = file.fileType
 
         guard let onMediaCallback = onMediaCallback else {
@@ -50,5 +52,19 @@ extension CallbackReceiver: MediaCallback {
             return
         }
         onMediaCallback(newDict)
+    }
+
+    // TODO: Temporary. Removed when introducing breaking change to return Base64 encoded string.
+    // https://stackoverflow.com/a/65265130
+    private func getArrayOfBytesFromImage(data: NSData) -> Array<Int8> {
+        let count = data.length / MemoryLayout<Int8>.size
+        var bytes = [Int8](repeating: 0, count: count)
+        data.getBytes(&bytes, length:count * MemoryLayout<Int8>.size)
+
+        var byteArray:Array = Array<Int8>()
+        for i in 0 ..< count {
+            byteArray.append(bytes[i])
+        }
+        return byteArray
     }
 }
