@@ -813,7 +813,7 @@ Below is a list of known differences in expected behavior between the Onfido And
 
 ### Support
 
-Please open an issue through [GitHub](https://github.com/onfido/onfido-react-native-sdk/issues). Please be as detailed as you can. Remember **not** to submit your token in the issue. Also check the closed issues to check whether it has been previously raised and answered.
+Please open an issue through [GitHub](https://github.com/onfido/react-native-sdk/issues). Please be as detailed as you can. Remember **not** to submit your token in the issue. Also check the closed issues to check whether it has been previously raised and answered.
 
 If you have any issues that contain sensitive information please send us an email with the `ISSUE:` at the start of the subject to [react-native-sdk@onfido.com](mailto:react-native-sdk@onfido.com?Subject=ISSUE%3A)
 
