@@ -11,6 +11,7 @@ import com.onfido.android.sdk.capture.config.MediaResult;
 import com.onfido.android.sdk.capture.config.MediaResult.DocumentResult;
 import com.onfido.android.sdk.capture.config.MediaResult.LivenessResult;
 import com.onfido.android.sdk.capture.config.MediaResult.SelfieResult;
+import com.onfido.android.sdk.capture.ui.CaptureType;
 
 /**
  * Utility methods for the SDK bridge.
@@ -56,6 +57,7 @@ class ReactNativeBridgeUtiles {
     }
 
     // MediaFile attributes (as defined and expected in React)
+    public static final String KEY_CAPTURE_TYPE = "captureType";
     public static final String KEY_FILE_DATA = "fileData";
     public static final String KEY_FILE_NAME = "fileName";
     public static final String KEY_FILE_TYPE = "fileType";
@@ -71,6 +73,7 @@ class ReactNativeBridgeUtiles {
 
         if (mediaResult instanceof DocumentResult) {
             DocumentResult documentResult = (DocumentResult) mediaResult;
+            map.putString(KEY_CAPTURE_TYPE, CaptureType.DOCUMENT.name());
 
             MediaFile mediaFile = documentResult.getFileData();
             map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
@@ -88,6 +91,7 @@ class ReactNativeBridgeUtiles {
             map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
             map.putString(KEY_FILE_TYPE, mediaFile.getFileType());
             map.putString(KEY_FILE_NAME, mediaFile.getFileName());
+            map.putString(KEY_CAPTURE_TYPE, CaptureType.VIDEO.name());
 
         } else if (mediaResult instanceof SelfieResult) {
             SelfieResult selfieResult = (SelfieResult) mediaResult;
@@ -95,6 +99,7 @@ class ReactNativeBridgeUtiles {
             map.putString(KEY_FILE_DATA, Arrays.toString(mediaFile.getFileData()));
             map.putString(KEY_FILE_TYPE, mediaFile.getFileType());
             map.putString(KEY_FILE_NAME, mediaFile.getFileName());
+            map.putString(KEY_CAPTURE_TYPE, CaptureType.FACE.name());
         }
         return map;
     }

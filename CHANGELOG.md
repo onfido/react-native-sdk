@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [10.4.0] - 2023-10-10
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - iOS 29.5.x (up from 29.4.x)
+  - Android 19.3.x (up from 19.2.x)
+
+### Fixed:
+
+- Fixed missing `captureType` for `MediaResult` objects - on Android
+
 ## [10.3.1] - 2023-09-21
 
 ### Added:
