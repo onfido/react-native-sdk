@@ -11,7 +11,7 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.72.1)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Onfido (29.5.0)
+  - Onfido (29.5.2)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -518,12 +518,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
-  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
+  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 55cd4593d570bd9e5e227488d637ce6a9581ce51
   FBReactNativeSpec: 799b0e1a1561699cd0e424e24fe5624da38402f0
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
-  Onfido: 449bd078e8c3f217c4866c239aa9938765fc992f
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  Onfido: 28cd7038bbc2dde7a402e4d859f96fdc71767cb4
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c52ee8fb2b35c1b54031dd8e92d88ad4dba8f2ce
   RCTTypeSafety: 75fa444becadf0ebfa0a456b8c64560c7c89c7df
@@ -561,4 +561,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1057307fbc72b88b916c671f407dddeae2247735
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.12.1

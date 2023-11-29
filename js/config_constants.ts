@@ -34,7 +34,7 @@ export type OnfidoConfig = {
   flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean;
-  enableNFC?: boolean;
+  disableNFC?: boolean;
   disableMobileSdkAnalytics?: boolean;
   localisation?: {
     ios_strings_file_name?: string;

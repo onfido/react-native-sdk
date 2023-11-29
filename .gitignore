@@ -1,3 +1,6 @@
+# As we're using yarn, not npm
+package-lock.json
+
 # OSX
 #
 .DS_Store

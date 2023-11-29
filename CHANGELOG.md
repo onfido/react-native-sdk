@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [10.5.0] - 2023-11-15
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - Android 19.4.x (up from 19.3.x)
+
+### Fixed:
+
+- Fixed OnfidoConfig `disableNFC` definition, as former `enableNFC` was changed.
+  NFC is now opt-out, being enabled by default.
+
 ## [10.4.0] - 2023-10-10
 
 ### Changed:

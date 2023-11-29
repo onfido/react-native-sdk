@@ -1,6 +1,8 @@
 # Onfido SDK Migration Guides
 
-These guides below are provided to ease the transition of existing applications using the Onfido React Native SDK from one version to another that introduces breaking API changes.
+The guides below are provided to ease the transition of existing applications using the Onfido React Native SDK from one version to another that introduces breaking API changes.
+
+If your migration involves upgrading across multiple SDK versions, be sure to read each individual guide in order to account for all relevant breaking changes.
 
 * [Onfido react native SDK 9.0.0 Migration Guide](#onfido-rn-sdk-900-migration-guide)
 
@@ -44,7 +46,7 @@ config = {
 }
 ```
 
-- Infact, `options` key was entirely removed from `captureFace`. `captureFace` can be one of the 3 following types:
+- In fact, `options` key was entirely removed from `captureFace`. `captureFace` can be one of the 3 following types:
 
 ```
 type OnfidoFaceSelfieCapture = {
@@ -65,5 +67,7 @@ type OnfidoFaceMotionCapture = {
     motionCaptureFallback?: OnfidoFaceSelfieCapture | OnfidoFaceVideoCapture;
 };
 ```
+
+- Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://developers.onfido.com/guide/document-report-nfc#react-native-1).
 
 
