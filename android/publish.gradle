@@ -14,7 +14,7 @@ afterEvaluate {
                 groupId = 'com.onfido.reactnative.sdk'
                 version = packageJson.version
 
-                from components.release
+                from components.findByName('release')
 
                 artifact sourceJar
 
