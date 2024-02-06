@@ -30,9 +30,7 @@
   - [Introduction](#introduction)
   - [Implementation](#implementation)
   - [User data](#user-data)
-- [Creating checks](#creating-checks)
-  - [1. Obtaining an API token](#1-obtaining-an-api-token-1)
-  - [2. Creating a check](#2-creating-a-check)
+- [Generating verification reports](#generating-verification-reports)
 - [Theme Customization](#theme-customization)
   - [Android](#android-1)
   - [iOS](#ios-1)
@@ -57,7 +55,7 @@ This SDK provides a drop-in set of screens and tools for react native applicatio
 > 
 > If you are integrating using Onfido Studio please see our [Studio integration guide](ONFIDO_STUDIO.md)
 
-\* **Note**: the SDK is only responsible for capturing and uploading photos/videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to create and manage checks.
+\* **Note**: The SDK is only responsible for capturing and uploading document photos, live selfies, live videos and motion captures. You still need to access the [Onfido API](https://documentation.onfido.com/) to manage applicants and [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product) to build verification workflows.
 
 * Supports iOS 11+
 * Supports Xcode 13+
@@ -600,34 +598,17 @@ let byteArrayString = mediaResult.fileData;
 let base64FileData = Onfido.byteArrayStringToBase64(byteArrayString);
 ```
 
-## Creating checks
+## Generating verification reports
 
-As the SDK is only responsible for capturing and uploading photos/videos, you would need to start a check on your backend server using the [Onfido API](https://documentation.onfido.com/).
+While the SDK is responsible for capturing and uploading document photos, live selfies, live videos and motion captures, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product). 
 
-### 1. Obtaining an API token
+For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://developers.onfido.com/guide/quick-start-guide).
 
-All API requests must be made with an API token included in the request headers. You can find your API token (not to be mistaken with the mobile SDK token) inside your [Onfido Dashboard](https://onfido.com/dashboard/api/tokens).
+Alternatively, you can [create checks](https://documentation.onfido.com/#create-check) and [retrieve report results](https://documentation.onfido.com/#retrieve-report) manually using the Onfido API. You can also configure [webhooks](https://documentation.onfido.com/#webhooks) to be notified asynchronously of report results.
 
-Refer to the [Authentication](https://documentation.onfido.com/#authentication) section in the API documentation for details. For testing, you should be using the sandbox, and not the live, token.
+**Note**: If you're using API v2 for API calls, please check out [API v2 to v3 migration guide](https://developers.onfido.com/guide/v2-to-v3-migration-guide#checks-in-api-v3) to understand which changes need to be applied before starting to use API v3.
 
-### 2. Creating a check
-
-You will need to create a check by making a request to the [create check endpoint](https://documentation.onfido.com/#create-check), using the applicant id. If you are just verifying a document, you only have to include a [document report](https://documentation.onfido.com/#document-report) as part of the check. On the other hand, if you are verifying a document and a face photo/live video, you will also have to include a [facial similarity report](https://documentation.onfido.com/#facial-similarity-report) with the corresponding values: `facial_similarity_photo` for the photo option and `facial_similarity_video` for the video option.
-
-```shell
-$ curl https://api.onfido.com/v3/checks \
-    -H 'Authorization: Token token=YOUR_API_TOKEN' \
-    -d 'applicant_id=YOUR_APPLICANT_ID' \
-    -d 'report_names=[document,facial_similarity_photo]'
-```
-
-**Note**: You can also submit the POST request in JSON format.
-
-You will receive a response containing the check id instantly. As document and facial similarity reports do not always return actual [results](https://documentation.onfido.com/#results) straightaway, you need to set up a webhook to get notified when the results are ready.
-
-Finally, as you are testing with the sandbox token, please be aware that the results are pre-determined. You can learn more about sandbox responses [here](https://documentation.onfido.com/#pre-determined-responses).
-
-**Note**: If you're using API v2, please check out [API v2 to v3 migration guide](https://developers.onfido.com/guide/v2-to-v3-migration-guide#checks-in-api-v3) to understand which changes need to be applied before starting to use API v3.
+**Note**: If you are testing with a sandbox token, please be aware that report results are pre-determined. You can learn more about sandbox responses [here](https://documentation.onfido.com/#pre-determined-responses).
 
 ## Theme Customization
 

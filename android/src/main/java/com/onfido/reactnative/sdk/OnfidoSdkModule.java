@@ -3,14 +3,12 @@ package com.onfido.reactnative.sdk;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
-import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.onfido.android.sdk.capture.DocumentType;
@@ -23,7 +21,6 @@ import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledExceptio
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
-import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantVideo;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.PhotoCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.VideoCaptureStepBuilder;
@@ -147,7 +144,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         }
 
         OnfidoTheme onfidoTheme = getThemeFromConfig(config);
-        if(onfidoTheme != null){
+        if (onfidoTheme != null) {
             onfidoConfigBuilder.withTheme(onfidoTheme);
         }
 
@@ -184,7 +181,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         }
 
         OnfidoTheme onfidoTheme = getThemeFromConfig(config);
-        if(onfidoTheme != null){
+        if (onfidoTheme != null) {
             onfidoConfigBuilder.withTheme(onfidoTheme);
         }
 
@@ -237,9 +234,9 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return config.hasKey(key) ? config.getString(key) : "";
     }
 
-    public static OnfidoTheme getThemeFromConfig(final ReadableMap config) throws Exception{
+    public static OnfidoTheme getThemeFromConfig(final ReadableMap config) throws Exception {
         String themeString = config.getString("theme");
-        if(themeString == null){
+        if (themeString == null) {
             return null;
         }
         OnfidoTheme onfidoTheme;
@@ -252,12 +249,18 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         return onfidoTheme;
     }
 
+    /*
+        (!) Please note that flow steps must be presented in a specific order, one which is also
+        implemented in the native SDKs, as well as in the iOS RN SDK.
+
+        As per the Product indications in https://onfido.atlassian.net/browse/SDK-2390, this order
+        should be: Welcome->Doc->POA->Bio
+     */
     public static FlowStep[] getFlowStepsFromConfig(
             final ReadableMap config,
             OnfidoConfig.Builder configBuilder
     ) throws Exception {
         try {
-
             final ReadableMap flowSteps = config.getMap("flowSteps");
 
             final boolean welcomePageIsIncluded;
@@ -268,11 +271,12 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             }
 
             final boolean proofOfAddress;
-            if(flowSteps.hasKey("proofOfAddress")){
+            if (flowSteps.hasKey("proofOfAddress")) {
                 proofOfAddress = flowSteps.getBoolean("proofOfAddress");
-            }else{
+            } else {
                 proofOfAddress = false;
             }
+
             final List<FlowStep> flowStepList = new ArrayList<>();
 
             if (welcomePageIsIncluded) {
@@ -281,6 +285,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
             if (flowSteps.hasKey("captureDocument")) {
                 extractCaptureDocumentStep(flowSteps, flowStepList, configBuilder);
+            }
+
+            if (proofOfAddress) {
+                flowStepList.add(FlowStep.PROOF_OF_ADDRESS);
             }
 
             final boolean captureFaceEnabled = flowSteps.hasKey("captureFace");
@@ -301,7 +309,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                             flowStepList.add(faceStepFromMotionDefinition(captureFace));
                             break;
                         default:
-                            throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
+                            throw new Exception("Invalid face capture type. \"type\" must be VIDEO or PHOTO.");
                     }
                 } else {
                     // Default face capture type is photo.
@@ -309,12 +317,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 }
             }
 
-            if(proofOfAddress){
-                flowStepList.add(FlowStep.PROOF_OF_ADDRESS);
-            }
-
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
-
             return flowStepsWithOptions;
         } catch (final Exception e) {
             e.printStackTrace();
@@ -328,29 +331,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             List<FlowStep> flowStepList,
             OnfidoConfig.Builder configBuilder
     ) throws Exception {
-        ReadableMap captureDocument = null;
-        Boolean captureDocumentBoolean = null;
-
-        // ReadableMap does not have a way to get multi-typed values without throwing exceptions.
-        try {
-            captureDocumentBoolean = flowSteps.getBoolean("captureDocument");
-        } catch (final NoSuchKeyException |
-                       ClassCastException |
-                       UnexpectedNativeTypeException notFoundException) {
-            captureDocument = flowSteps.getMap("captureDocument");
-        }
-
-        if (captureDocumentBoolean != null) {
-            if (captureDocumentBoolean) {
-                flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
-            }
-            return;
-        }
-
+        ReadableMap captureDocument = flowSteps.getMap("captureDocument");
         if (captureDocument == null) {
             return;
         }
-
         extractDocumentCaptureDetails(captureDocument, flowStepList, configBuilder);
     }
 
@@ -361,35 +345,46 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     ) throws Exception {
         final boolean docTypeExists = captureDocument.hasKey("docType");
         final boolean countryCodeExists = captureDocument.hasKey("alpha2CountryCode");
-        final boolean allowedDocumentTypes = captureDocument.hasKey("allowedDocumentTypes");
+        final boolean withAllowedDocumentTypes = captureDocument.hasKey("allowedDocumentTypes");
 
-        if (allowedDocumentTypes && countryCodeExists && docTypeExists) {
+        // Validation: incorrect config - 2 filtering ways provided
+        if (withAllowedDocumentTypes && countryCodeExists && docTypeExists) {
             throw new IllegalArgumentException("We can either filter the documents on DocumentSelection screen, or skip the selection and go directly to capture");
         }
 
-        if (!docTypeExists && !countryCodeExists && !allowedDocumentTypes) {
+        // Case 1: no filtering provided => showing general Doc Capture
+        if (!docTypeExists && !countryCodeExists && !withAllowedDocumentTypes) {
             flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
             return;
         }
 
+        // Case 2: filtering for one document, one country
         if (docTypeExists && countryCodeExists) {
             extractDocTypeAndCountryForCaptureStep(captureDocument, flowStepList);
             return;
         }
-        if (allowedDocumentTypes) {
+
+        // Case 3: filtering for multiple documents
+        if (withAllowedDocumentTypes) {
             extractAllowedDocumentTypes(captureDocument, configBuilder);
+            flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
             return;
         }
 
         throw new Exception("For countryCode and docType: both must be specified, or both must be omitted.");
     }
 
-    private static void extractAllowedDocumentTypes(ReadableMap captureDocument, OnfidoConfig.Builder configBuilder) {
-        ReadableArray array = captureDocument.getArray("allowedDocumentTypes");
+    private static void extractAllowedDocumentTypes(
+            ReadableMap captureDocument,
+            OnfidoConfig.Builder configBuilder
+    ) {
+        ReadableArray documentTypes = captureDocument.getArray("allowedDocumentTypes");
         ArrayList<DocumentType> types = new ArrayList<>();
 
-        for (int i = 0; i < array.size(); i++) {
-            types.add(DocumentType.valueOf(array.getString(i)));
+        if (documentTypes != null) {
+            for (int i = 0; i < documentTypes.size(); i++) {
+                types.add(DocumentType.valueOf(documentTypes.getString(i)));
+            }
         }
         configBuilder.withAllowedDocumentTypes(types);
     }
@@ -493,8 +488,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
     private void sendEvent(String name, WritableMap map) {
         getReactApplicationContext()
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit(name, map);
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(name, map);
     }
 
     //region Media

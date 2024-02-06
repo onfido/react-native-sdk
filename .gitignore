@@ -161,3 +161,4 @@ coverage
 
 # testing
 /coverage
+TestApp/.env

@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [10.7.0] - 2024-02-01
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - iOS 29.7.x (up from 29.6.x)
+  - Android 19.6.x (up from 19.5.x)
+
+### Fixed:
+
+- Fixed the behaviour when using the configuration option `allowedDocumentTypes`: 
+  - The order of steps (and SDK screens) has now been aligned with the native SDKs, for both Android and iOS. The order to be used is: Welcome - Document capture - Proof of address - Face capture - Final screen.
+  - The Welcome screen now correctly takes into account the `welcome` (boolean) flag in the configuration.
+
 ## [10.6.0] - 2023-12-11
 
 ### Changed:

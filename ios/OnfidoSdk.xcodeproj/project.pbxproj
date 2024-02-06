@@ -65,6 +65,8 @@
 		8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdkTests.swift; sourceTree = "<group>"; };
 		899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OnfidoSdk-OnfidoSdkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8E5FE3BDE0C9C96B5FE8AB /* Pods-OnfidoSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.debug.xcconfig"; sourceTree = "<group>"; };
+		9B55F4FF2B61451700EC4D80 /* PluginMetadata.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PluginMetadata.m; sourceTree = "<group>"; };
+		9B55F5002B61451700EC4D80 /* PluginMetadata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PluginMetadata.h; sourceTree = "<group>"; };
 		9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbackReceiver.swift; sourceTree = "<group>"; };
 		9BF206B22A3C839F00766D77 /* BridgeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeUtils.swift; sourceTree = "<group>"; };
 		9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoAppearance.swift; sourceTree = "<group>"; };
@@ -138,6 +140,8 @@
 				3AFE501B2408521F00E21479 /* OnfidoSdk-Bridging-Header.h */,
 				B3E7B5881CC2AC0600A0062D /* OnfidoSdk.h */,
 				B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */,
+				9B55F5002B61451700EC4D80 /* PluginMetadata.h */,
+				9B55F4FF2B61451700EC4D80 /* PluginMetadata.m */,
 				3A9D42CA2412EEF50087A331 /* OnfidoSdkTests */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				4A3724A27399FEFCC7B1F920 /* Pods */,
