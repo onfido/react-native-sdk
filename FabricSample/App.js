@@ -22,8 +22,8 @@ export default class App extends Component {
     // Your application id may be different on iOS and Android so you'll need to check which platform the code is running on first.
     const applicationId =
       Platform.OS === 'ios'
-        ? 'org.reactjs.native.example.FabricSample'
-        : 'com.fabricsample';
+        ? 'org.reactjs.native.example.SampleApp'
+        : 'com.sampleapp';
     const applicant = {
       first_name: !firstName || firstName.trim() === '' ? 'Jane' : firstName,
       last_name: !lastName || lastName.trim() === '' ? 'Doe' : lastName,
@@ -70,8 +70,12 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{this.state.title}</Text>
-        <Text style={styles.instructions}>{this.state.subtitle}</Text>
+        <Text testID="firstName" style={styles.welcome}>
+          {this.state.title}
+        </Text>
+        <Text testID="lastName" style={styles.instructions}>
+          {this.state.subtitle}
+        </Text>
         <Button title="Launch" onPress={() => this.startSDK()} />
         {this.state.sdkFlowComplete ? (
           <Redirect to={`/finish/${this.state.status}/${this.state.message}`} />
