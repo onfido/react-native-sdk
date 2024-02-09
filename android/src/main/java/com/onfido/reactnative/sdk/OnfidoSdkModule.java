@@ -3,36 +3,43 @@ package com.onfido.reactnative.sdk;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
-import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.onfido.android.sdk.capture.DocumentType;
 import com.onfido.android.sdk.capture.EnterpriseFeatures;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
-import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
-import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
+import com.onfido.android.sdk.capture.config.MediaCallback;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
-import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariant;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
-import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantVideo;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.PhotoCaptureStepBuilder;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.VideoCaptureStepBuilder;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.MotionCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
+import com.onfido.android.sdk.capture.OnfidoTheme;
 import com.onfido.workflow.OnfidoWorkflow;
 import com.onfido.workflow.WorkflowConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// Analytics to be re-added once payloads are harmonised across platforms
+enum CallbackType {
+    MEDIA
+}
 
 @ReactModule(name = OnfidoSdkModule.NAME)
 public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
@@ -41,6 +48,7 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
+    List<CallbackType> callbackTypeList = new ArrayList<CallbackType>();
     private final OnfidoSdkActivityEventListener activityEventListener;
 
     public OnfidoSdkModule(final ReactApplicationContext reactContext) {
@@ -100,7 +108,7 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
                 final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
                 if (!workflowRunId.isEmpty()) {
-                    workflowSDKConfiguration(currentActivity, workflowRunId, sdkToken);
+                    workflowSDKConfiguration(config, currentActivity, sdkToken);
                 } else {
                     defaultSDKConfiguration(config, currentActivity, sdkToken);
                 }
@@ -124,21 +132,73 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private void workflowSDKConfiguration(Activity currentActivity, String workflowRunId, String sdkToken) {
+    private void workflowSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
+        final String workflowRunId = getWorkflowRunIdFromConfig(config);
+
         final OnfidoWorkflow flow = OnfidoWorkflow.create(currentActivity);
-        this.activityEventListener.setWorkflow(flow);
+
+        WorkflowConfig.Builder onfidoConfigBuilder = new WorkflowConfig.Builder(sdkToken, workflowRunId);
+
+        EnterpriseFeatures.Builder enterpriseFeaturesBuilder = getEnterpriseFeatures(config);
+        if (enterpriseFeaturesBuilder != null) {
+            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        }
+
+        if (callbackTypeList.contains(CallbackType.MEDIA)) {
+            onfidoConfigBuilder.withMediaCallback(addMediaCallback());
+        }
+
+        OnfidoTheme onfidoTheme = getThemeFromConfig(config);
+        if (onfidoTheme != null) {
+            onfidoConfigBuilder.withTheme(onfidoTheme);
+        }
 
         flow.startActivityForResult(currentActivity,
                 OnfidoSdkActivityEventListener.workflowActivityCode,
-                new WorkflowConfig.Builder(sdkToken, workflowRunId).build());
+                onfidoConfigBuilder.build()
+        );
     }
 
     private void defaultSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
-        final FlowStep[] flowStepsWithOptions = getFlowStepsFromConfig(config);
                 /* Native SDK seems to have a bug that if an empty EnterpriseFeatures is passed to it,
                  the logo will still be hidden, even if explicitly set to false */
+
+        OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
+                .withSDKToken(sdkToken);
+
+        final FlowStep[] flowStepsWithOptions = getFlowStepsFromConfig(config, onfidoConfigBuilder);
+
+        if (flowStepsWithOptions.length != 0) {
+            onfidoConfigBuilder.withCustomFlow(flowStepsWithOptions);
+        }
+
+        EnterpriseFeatures.Builder enterpriseFeaturesBuilder = getEnterpriseFeatures(config);
+        if (enterpriseFeaturesBuilder != null) {
+            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        }
+
+        if (callbackTypeList.contains(CallbackType.MEDIA)) {
+            onfidoConfigBuilder.withMediaCallback(addMediaCallback());
+        }
+
+        if (getBooleanFromConfig(config, "disableNFC")) {
+            onfidoConfigBuilder.disableNFC();
+        }
+
+        OnfidoTheme onfidoTheme = getThemeFromConfig(config);
+        if (onfidoTheme != null) {
+            onfidoConfigBuilder.withTheme(onfidoTheme);
+        }
+
+        client.startActivityForResult(currentActivity,
+                OnfidoSdkActivityEventListener.checksActivityCode,
+                onfidoConfigBuilder.build());
+    }
+
+    private EnterpriseFeatures.Builder getEnterpriseFeatures(final ReadableMap config) {
         EnterpriseFeatures.Builder enterpriseFeaturesBuilder = EnterpriseFeatures.builder();
         boolean hasSetEnterpriseFeatures = false;
+        Activity currentActivity = getCurrentActivityInParentClass();
 
         if (getBooleanFromConfig(config, "hideLogo")) {
             enterpriseFeaturesBuilder.withHideOnfidoLogo(true);
@@ -157,27 +217,17 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
             if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
                 currentPromise.reject("error", new Exception("Cobrand logos were not found"));
                 currentPromise = null;
-                return;
+                return null;
             }
             enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
             hasSetEnterpriseFeatures = true;
         }
-
-        OnfidoConfig.Builder onfidoConfigBuilder = OnfidoConfig.builder(currentActivity)
-                .withSDKToken(sdkToken)
-                .withCustomFlow(flowStepsWithOptions);
-
-        if (hasSetEnterpriseFeatures) {
-            onfidoConfigBuilder.withEnterpriseFeatures(enterpriseFeaturesBuilder.build());
+        if (getBooleanFromConfig(config, "disableMobileSdkAnalytics")) {
+            enterpriseFeaturesBuilder.disableMobileSdkAnalytics();
+            hasSetEnterpriseFeatures = true;
         }
 
-        if(getBooleanFromConfig(config, "enableNFC")) {
-            onfidoConfigBuilder.withNFCReadFeature();
-        }
-
-        client.startActivityForResult(currentActivity,
-                OnfidoSdkActivityEventListener.checksActivityCode,
-                onfidoConfigBuilder.build());
+        return hasSetEnterpriseFeatures ? enterpriseFeaturesBuilder : null;
     }
 
     public static String getSdkTokenFromConfig(final ReadableMap config) {
@@ -189,30 +239,47 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
         return config.hasKey(key) ? config.getString(key) : "";
     }
 
-    public static FlowStep[] getFlowStepsFromConfig(final ReadableMap config) throws Exception {
+    public static OnfidoTheme getThemeFromConfig(final ReadableMap config) throws Exception {
+        String themeString = config.getString("theme");
+        if (themeString == null) {
+            return null;
+        }
+        OnfidoTheme onfidoTheme;
         try {
+            onfidoTheme = OnfidoTheme.valueOf(themeString);
+        } catch (Exception e) {
+            System.err.println("Unexpected theme value: [" + themeString + "]");
+            throw new Exception("Unexpected theme value");
+        }
+        return onfidoTheme;
+    }
 
+    /*
+        (!) Please note that flow steps must be presented in a specific order, one which is also
+        implemented in the native SDKs, as well as in the iOS RN SDK.
+
+        As per the Product indications in https://onfido.atlassian.net/browse/SDK-2390, this order
+        should be: Welcome->Doc->POA->Bio
+     */
+    public static FlowStep[] getFlowStepsFromConfig(
+            final ReadableMap config,
+            OnfidoConfig.Builder configBuilder
+    ) throws Exception {
+        try {
             final ReadableMap flowSteps = config.getMap("flowSteps");
 
-            final Boolean welcomePageIsIncluded;
+            final boolean welcomePageIsIncluded;
             if (flowSteps.hasKey("welcome")) {
                 welcomePageIsIncluded = flowSteps.getBoolean("welcome");
             } else {
                 welcomePageIsIncluded = false;
             }
 
-            ReadableMap captureDocument = null;
-            Boolean captureDocumentBoolean = null;
-
-            // ReadableMap does not have a way to get multi-typed values without throwing exceptions.
-            try {
-                captureDocumentBoolean = flowSteps.getBoolean("captureDocument");
-            } catch (final NoSuchKeyException | UnexpectedNativeTypeException notFoundException) {
-                try {
-                    captureDocument = flowSteps.getMap("captureDocument");
-                } catch (NoSuchKeyException nske) {
-                    captureDocument = null;
-                }
+            final boolean proofOfAddress;
+            if (flowSteps.hasKey("proofOfAddress")) {
+                proofOfAddress = flowSteps.getBoolean("proofOfAddress");
+            } else {
+                proofOfAddress = false;
             }
 
             final List<FlowStep> flowStepList = new ArrayList<>();
@@ -221,36 +288,12 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
                 flowStepList.add(FlowStep.WELCOME);
             }
 
-            if (captureDocumentBoolean != null && captureDocumentBoolean) {
-                flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
-            } else if (captureDocument != null) {
-                final boolean docTypeExists = captureDocument.hasKey("docType");
-                final boolean countryCodeExists = captureDocument.hasKey("alpha2CountryCode");
-                if (docTypeExists && countryCodeExists) {
-                    String docTypeString = captureDocument.getString("docType");
+            if (flowSteps.hasKey("captureDocument")) {
+                extractCaptureDocumentStep(flowSteps, flowStepList, configBuilder);
+            }
 
-                    DocumentType docTypeEnum;
-                    try {
-                        docTypeEnum = DocumentType.valueOf(docTypeString);
-                    } catch (IllegalArgumentException iae) {
-                        System.err.println("Unexpected docType value: [" + docTypeString + "]");
-                        throw new Exception("Unexpected docType value.");
-                    }
-
-                    String countryCodeString = captureDocument.getString("alpha2CountryCode");
-                    CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
-
-                    if (countryCodeEnum == null) {
-                        System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
-                        throw new Exception("Unexpected countryCode value.");
-                    }
-
-                    flowStepList.add(new CaptureScreenStep(docTypeEnum, countryCodeEnum));
-                } else if (!docTypeExists && !countryCodeExists) {
-                    flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
-                } else {
-                    throw new Exception("For countryCode and docType: both must be specified, or both must be omitted.");
-                }
+            if (proofOfAddress) {
+                flowStepList.add(FlowStep.PROOF_OF_ADDRESS);
             }
 
             final boolean captureFaceEnabled = flowSteps.hasKey("captureFace");
@@ -260,14 +303,18 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
                 final boolean captureFaceTypeExists = captureFace.hasKey("type");
                 if (captureFaceTypeExists) {
                     final String captureFaceType = captureFace.getString("type");
-                    if (captureFaceType.equals("PHOTO")) {
-                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
-                    } else if (captureFaceType.equals("VIDEO")) {
-                        flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantVideo()));
-                    } else if (captureFaceType.equals("MOTION")) {
-                        flowStepList.add(FaceCaptureStepBuilder.forMotion().build());
-                    } else {
-                        throw new Exception("Invalid face capture type.  \"type\" must be VIDEO or PHOTO.");
+                    switch (captureFaceType) {
+                        case "PHOTO":
+                            flowStepList.add(faceStepFromPhotoDefinition(captureFace));
+                            break;
+                        case "VIDEO":
+                            flowStepList.add(faceStepFromVideoDefinition(captureFace));
+                            break;
+                        case "MOTION":
+                            flowStepList.add(faceStepFromMotionDefinition(captureFace));
+                            break;
+                        default:
+                            throw new Exception("Invalid face capture type. \"type\" must be VIDEO or PHOTO.");
                     }
                 } else {
                     // Default face capture type is photo.
@@ -276,13 +323,145 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
             }
 
             final FlowStep[] flowStepsWithOptions = flowStepList.toArray(new FlowStep[0]);
-
             return flowStepsWithOptions;
         } catch (final Exception e) {
             e.printStackTrace();
             // Wrap all unexpected exceptions.
             throw new Exception("Error generating request", e);
         }
+    }
+
+    private static void extractCaptureDocumentStep(
+            ReadableMap flowSteps,
+            List<FlowStep> flowStepList,
+            OnfidoConfig.Builder configBuilder
+    ) throws Exception {
+        ReadableMap captureDocument = flowSteps.getMap("captureDocument");
+        if (captureDocument == null) {
+            return;
+        }
+        extractDocumentCaptureDetails(captureDocument, flowStepList, configBuilder);
+    }
+
+    private static void extractDocumentCaptureDetails(
+            ReadableMap captureDocument,
+            List<FlowStep> flowStepList,
+            OnfidoConfig.Builder configBuilder
+    ) throws Exception {
+        final boolean docTypeExists = captureDocument.hasKey("docType");
+        final boolean countryCodeExists = captureDocument.hasKey("alpha2CountryCode");
+        final boolean withAllowedDocumentTypes = captureDocument.hasKey("allowedDocumentTypes");
+
+        // Validation: incorrect config - 2 filtering ways provided
+        if (withAllowedDocumentTypes && countryCodeExists && docTypeExists) {
+            throw new IllegalArgumentException("We can either filter the documents on DocumentSelection screen, or skip the selection and go directly to capture");
+        }
+
+        // Case 1: no filtering provided => showing general Doc Capture
+        if (!docTypeExists && !countryCodeExists && !withAllowedDocumentTypes) {
+            flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
+            return;
+        }
+
+        // Case 2: filtering for one document, one country
+        if (docTypeExists && countryCodeExists) {
+            extractDocTypeAndCountryForCaptureStep(captureDocument, flowStepList);
+            return;
+        }
+
+        // Case 3: filtering for multiple documents
+        if (withAllowedDocumentTypes) {
+            extractAllowedDocumentTypes(captureDocument, configBuilder);
+            flowStepList.add(FlowStep.CAPTURE_DOCUMENT);
+            return;
+        }
+
+        throw new Exception("For countryCode and docType: both must be specified, or both must be omitted.");
+    }
+
+    private static void extractAllowedDocumentTypes(
+            ReadableMap captureDocument,
+            OnfidoConfig.Builder configBuilder
+    ) {
+        ReadableArray documentTypes = captureDocument.getArray("allowedDocumentTypes");
+        ArrayList<DocumentType> types = new ArrayList<>();
+
+        if (documentTypes != null) {
+            for (int i = 0; i < documentTypes.size(); i++) {
+                types.add(DocumentType.valueOf(documentTypes.getString(i)));
+            }
+        }
+        configBuilder.withAllowedDocumentTypes(types);
+    }
+
+    private static void extractDocTypeAndCountryForCaptureStep(
+            ReadableMap captureDocument,
+            List<FlowStep> flowStepList
+    ) throws Exception {
+        String docTypeString = captureDocument.getString("docType");
+
+        DocumentType docTypeEnum;
+        try {
+            docTypeEnum = DocumentType.valueOf(docTypeString);
+        } catch (IllegalArgumentException iae) {
+            System.err.println("Unexpected docType value: [" + docTypeString + "]");
+            throw new Exception("Unexpected docType value.");
+        }
+
+        String countryCodeString = captureDocument.getString("alpha2CountryCode");
+        CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
+
+        if (countryCodeEnum == null) {
+            System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
+            throw new Exception("Unexpected countryCode value.");
+        }
+
+        flowStepList.add(new CaptureScreenStep(docTypeEnum, countryCodeEnum));
+    }
+
+    private static PhotoCaptureStepBuilder faceStepFromPhotoDefinitionBuilder(ReadableMap definition) {
+        final PhotoCaptureStepBuilder builder = FaceCaptureStepBuilder.forPhoto();
+        if (definition.hasKey("showIntro")) {
+            builder.withIntro(definition.getBoolean("showIntro"));
+        }
+        return builder;
+    }
+
+    private static FlowStep faceStepFromPhotoDefinition(ReadableMap definition) {
+        return faceStepFromPhotoDefinitionBuilder(definition).build();
+    }
+
+    private static VideoCaptureStepBuilder faceStepFromVideoDefinitionBuilder(ReadableMap definition) {
+        final VideoCaptureStepBuilder builder = FaceCaptureStepBuilder.forVideo();
+        if (definition.hasKey("showIntro")) {
+            builder.withIntro(definition.getBoolean("showIntro"));
+        }
+        if (definition.hasKey("showConfirmation")) {
+            builder.withConfirmationVideoPreview(definition.getBoolean("showConfirmation"));
+        }
+        return builder;
+    }
+
+    private static FlowStep faceStepFromVideoDefinition(ReadableMap definition) {
+        return faceStepFromVideoDefinitionBuilder(definition).build();
+    }
+
+    private static FlowStep faceStepFromMotionDefinition(ReadableMap definition) {
+        final MotionCaptureStepBuilder builder = FaceCaptureStepBuilder.forMotion();
+        if (definition.hasKey("recordAudio")) {
+            builder.withAudio(definition.getBoolean("recordAudio"));
+        }
+        if (definition.hasKey("motionCaptureFallback")) {
+            final ReadableMap captureFaceFallbackOptions = definition.getMap("motionCaptureFallback");
+            final String fallbackType = captureFaceFallbackOptions.getString("type");
+            if (fallbackType.equalsIgnoreCase("VIDEO")) {
+                builder.withCaptureFallback(faceStepFromVideoDefinitionBuilder(captureFaceFallbackOptions));
+            } else if (fallbackType.equalsIgnoreCase("PHOTO")) {
+                builder.withCaptureFallback(faceStepFromPhotoDefinitionBuilder(captureFaceFallbackOptions));
+            }
+        }
+
+        return builder.build();
     }
 
     public static CountryCode findCountryCodeByAlpha2(String countryCodeString) {
@@ -299,4 +478,41 @@ public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
     private boolean getBooleanFromConfig(ReadableMap config, String key) {
         return config.hasKey(key) && config.getBoolean(key);
     }
+
+    //region Callbacks
+
+    @ReactMethod
+    public void addListener(String type) {
+        // Keep: Required for RN build in the Event Emitter Calls
+    }
+
+    @ReactMethod
+    public void removeListeners(double type) {
+        // Keep: Required for RN build in the Event Emitter Calls
+    }
+
+    private void sendEvent(String name, WritableMap map) {
+        getReactApplicationContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(name, map);
+    }
+
+    //region Media
+
+    /**
+     * This is a pre-requisite: make sure you call this method before the start method **if** you want to use custom media callbacks
+     */
+    @ReactMethod
+    public void withMediaCallbacksEnabled() {
+        callbackTypeList.add(CallbackType.MEDIA);
+    }
+
+    private MediaCallback addMediaCallback() {
+        return mediaResult -> {
+            WritableMap map = ReactNativeBridgeUtiles.getMediaResultMap(mediaResult);
+            sendEvent("onfidoMediaCallback", map);
+        };
+    }
+
+    //endregion
 }

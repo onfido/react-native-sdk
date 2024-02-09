@@ -13,6 +13,7 @@ class Response {
     public class Document {
         public Identifiable front; 
         public Identifiable back; 
+        public Identifiable nfcMediaId;
     }
     public class Face extends Response.Identifiable {
         public Face(String id, String variant) {
@@ -25,19 +26,22 @@ class Response {
     public Document document;
     public Face face;
 
-    public Response(String frontId, String backId, String faceId, String faceVariant) {
-        initDocument(frontId, backId);
+    public Response(String frontId, String backId, String faceId, String faceVariant, String nfcMediaUUID) {
+        initDocument(frontId, backId, nfcMediaUUID);
         initFace(faceId, faceVariant);
     }
 
-    private void initDocument(String frontId, String backId) {
-        if (frontId != null || backId != null) {
+    private void initDocument(String frontId, String backId, String nfcMediaUUID) {
+        if (frontId != null || backId != null || nfcMediaUUID != null) {
             document = new Document();
             if (frontId != null) {
                 document.front = new Identifiable(frontId);
             }
             if (backId != null) {
                 document.back = new Identifiable(backId);
+            }
+            if (nfcMediaUUID != null) {
+                document.nfcMediaId = new Identifiable(nfcMediaUUID);
             }
         }
     }

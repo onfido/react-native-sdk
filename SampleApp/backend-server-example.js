@@ -92,7 +92,7 @@ const createSdkToken = async (applicant, applicationId) => {
       applicant_id: sdkRequestBody.applicant_id,
     };
     const workflowRunIdResponse = await fetch(
-      'https://api.onfido.com/v4/workflow_runs',
+      'https://api.onfido.com/v3.5/workflow_runs',
       {
         method: 'POST',
         headers: {

@@ -8,7 +8,7 @@
 RCT_EXPORT_MODULE()
 
 + (BOOL)requiresMainQueueSetup {
-    return YES;
+    return NO;
 }
 
 - (instancetype)init
@@ -19,12 +19,33 @@ RCT_EXPORT_MODULE()
     
     _onfidoSdk = [OnfidoSdk alloc];
     
+    // capture weak self reference to prevent retain cycle
+    __weak __typeof__(self) weakSelf = self;
+    
+    _onfidoSdk.mediaCallbackHandler = ^(NSDictionary *data) {
+        __typeof__(self) strongSelf = weakSelf;
+        
+        if (strongSelf != nullptr) {
+            [strongSelf sendEventWithName:@"onfidoMediaCallback" body:data];
+        }
+    };
+    
     return self;
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[@"onfidoMediaCallback"];
 }
 
 RCT_EXPORT_METHOD(start:(NSDictionary *)config resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [_onfidoSdk start:config resolver:resolve rejecter:reject];
+}
+
+RCT_EXPORT_METHOD(withMediaCallbacksEnabled)
+{
+    [_onfidoSdk withMediaCallbacksEnabled];
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED

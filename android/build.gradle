@@ -10,9 +10,10 @@
 //   original location:
 //   - https://github.com/facebook/react-native/blob/0.58-stable/local-cli/templates/HelloWorld/android/app/build.gradle
 
-def DEFAULT_COMPILE_SDK_VERSION = 32
+def DEFAULT_COMPILE_SDK_VERSION = 33
 def DEFAULT_MIN_SDK_VERSION = 21
 def DEFAULT_TARGET_SDK_VERSION = 31
+def NATIVE_ANDROID_SDK_VERSION = "19.6.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -24,43 +25,6 @@ def isNewArchitectureEnabled() {
     // - Invoke gradle with `-newArchEnabled=true`
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
-}
-
-def resolveReactNativeDirectory() {
-    def reactNativeLocation = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
-    if (reactNativeLocation != null) {
-        return file(reactNativeLocation)
-    }
-
-    // monorepo workaround
-    // react-native can be hoisted or in project's own node_modules
-    def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
-    if (reactNativeFromProjectNodeModules.exists()) {
-        return reactNativeFromProjectNodeModules
-    }
-
-    def reactNativeFromNodeModulesWithOnfido = file("${projectDir}/../../react-native")
-    if (reactNativeFromNodeModulesWithOnfido.exists()) {
-        return reactNativeFromNodeModulesWithOnfido
-    }
-
-    throw new Exception(
-            "[react-native-async-storage] Unable to resolve react-native location in " +
-                    "node_modules. You should add project extension property (in app/build.gradle) " +
-                    "`REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
-    )
-}
-
-def getReactNativeMinorVersion() {
-    def REACT_NATIVE_DIR = resolveReactNativeDirectory()
-
-    def reactProperties = new Properties()
-    file("$REACT_NATIVE_DIR/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
-
-    def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME")
-    def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
-
-    return REACT_NATIVE_MINOR_VERSION
 }
 
 def androidExclusion = [
@@ -95,7 +59,7 @@ buildscript {
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:7.0.4'
+            classpath 'com.android.tools.build:gradle:7.4.2'
         }
     }
 }
@@ -175,27 +139,22 @@ repositories {
 }
 
 dependencies {
-    //noinspection GradleDynamicVersion
-    if (isNewArchitectureEnabled() && getReactNativeMinorVersion() < 71) {
-        implementation project(":ReactAndroid")
-    } else {
-        implementation 'com.facebook.react:react-native:+' // from node_modules
-    }
+    implementation 'com.facebook.react:react-native:+' // from node_modules
     
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:15.4.0"
-    implementation "com.onfido.sdk:onfido-workflow:15.1.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
-    implementation "com.squareup.okhttp3:okhttp:3.8.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:$NATIVE_ANDROID_SDK_VERSION"
+    implementation "com.onfido.sdk:onfido-workflow:$NATIVE_ANDROID_SDK_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.14.9"
+    implementation "com.squareup.okhttp3:okhttp:3.14.9"
     // Fix for crash due to 'java.lang.NoClassDefFoundError: Failed resolution of: Landroidx/swiperefreshlayout/widget/SwipeRefreshLayout;''
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-    testCompileOnly 'junit:junit:4.12'
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.10.1'
     testImplementation 'org.mockito:mockito-core:2.+'
-    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.6'
-    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.6'
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
+    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
 }
 
 afterEvaluate { project ->

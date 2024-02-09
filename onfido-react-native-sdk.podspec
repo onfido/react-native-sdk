@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
   s.exclude_files = "ios/OnfidoSdkTests/"
   s.requires_arc = true
 
-  s.dependency "Onfido", "27.4.0"
+  s.dependency "Onfido", "~> 29.7.0"
 
   if defined?(install_modules_dependencies()) != nil
     install_modules_dependencies(s)
   else
-    s.dependency "React-Core"
+    s.dependency "React"
   end
 end

@@ -38,16 +38,6 @@ Before running the sample app you will need to open SampleApp/backend-server-exa
 | :warning: Do not use your API token in your client code.  This server code is only included here as an example. |
 | --- |
 
-### Set up custom colors
-You can change the colors in SampleApp/colors.json if you wish to customize the sample app but, this is not required.
-
-After changing the colors, run the following to apply your changes to your Android build:
-```shell
-cd SampleApp
-yarn
-npm --prefix node_modules/@onfido/react-native-sdk/ run updateColors
-```
-
 ## Step 2: Build and run the sample app
 All commands should start in the `SampleApp/` directory:
 ```shell
@@ -92,3 +82,14 @@ In one terminal window compile the code for end-to-end testing:
 In another boot the Android emulator & automated tests:
 
     yarn test-e2e-android-debug-sampleapp
+
+
+## Set up custom colors
+You can change the colors in SampleApp/colors.json if you wish to customize the sample app but, this is not required.
+
+After changing the colors, run the following to apply your changes to your Android build:
+```shell
+cd SampleApp
+yarn
+npm --prefix node_modules/@onfido/react-native-sdk/ run updateColors
+```

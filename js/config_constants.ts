@@ -4,10 +4,10 @@ export type OnfidoFlowSteps = {
     countryCode?: OnfidoCountryCode;
     alpha2CountryCode?: OnfidoAlpha2CountryCode;
     docType?: OnfidoDocumentType;
+    allowedDocumentTypes?: [OnfidoDocumentType]
   };
-  captureFace?: {
-    type: OnfidoCaptureType;
-  };
+  captureFace?: OnfidoFaceCapture;
+  proofOfAddress?: boolean;
 };
 
 export type OnfidoResult = {
@@ -16,6 +16,9 @@ export type OnfidoResult = {
       id: string;
     };
     back?: {
+      id: string;
+    };
+    nfcMediaId?: {
       id: string;
     };
   };
@@ -31,16 +34,46 @@ export type OnfidoConfig = {
   flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean;
-  enableNFC?: boolean;
+  disableNFC?: boolean;
+  disableMobileSdkAnalytics?: boolean;
   localisation?: {
     ios_strings_file_name?: string;
   };
+  theme: OnfidoTheme;
 };
 
 export interface OnfidoError extends Error {
   code?: string;
 }
 
+export interface OnfidoMediaResult {
+  captureType: "DOCUMENT" | "FACE" | "VIDEO";
+}
+
+export interface OnfidoDocumentResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+  documentMetadata: OnfidoDocumentMetadata;
+}
+
+export interface OnfidoLivenessResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+}
+
+export interface OnfidoSelfieResult extends OnfidoMediaResult {
+  fileData: OnfidoMediaFile;
+}
+
+export type OnfidoDocumentMetadata = {
+  side: string;
+  type: string;
+  issuingCountry?: string;
+}
+
+export type OnfidoMediaFile = {
+  fileData: string;
+  fileType: string;
+  fileName: string;
+}
 
 export enum OnfidoDocumentType {
   PASSPORT = "PASSPORT",
@@ -57,6 +90,35 @@ export enum OnfidoCaptureType {
   VIDEO = "VIDEO",
   MOTION = "MOTION"
 }
+
+export enum OnfidoTheme {
+  LIGHT = "LIGHT",
+  DARK = "DARK",
+  AUTOMATIC = "AUTOMATIC"
+}
+
+export type OnfidoFaceCapture =
+  | OnfidoFaceSelfieCapture
+  | OnfidoFaceVideoCapture
+  | OnfidoFaceMotionCapture
+
+export type OnfidoFaceSelfieCapture = {
+  type: OnfidoCaptureType.PHOTO;
+  showIntro?: boolean
+};
+
+export type OnfidoFaceVideoCapture = {
+  type: OnfidoCaptureType.VIDEO;
+  showIntro?: boolean;
+  showConfirmation?: boolean;
+  manualVideoCapture?: boolean;
+};
+
+export type OnfidoFaceMotionCapture = {
+    type: OnfidoCaptureType.MOTION;
+    recordAudio?: boolean;
+    motionCaptureFallback?: OnfidoFaceSelfieCapture | OnfidoFaceVideoCapture;
+};
 
 export enum OnfidoCountryCode {
   ABW = "ABW",

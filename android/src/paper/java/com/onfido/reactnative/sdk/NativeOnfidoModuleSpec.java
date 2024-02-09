@@ -20,13 +20,33 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
+import javax.annotation.Nonnull;
 
 public abstract class NativeOnfidoModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
+  public static final String NAME = "RNOnfidoSdk";
+
   public NativeOnfidoModuleSpec(ReactApplicationContext reactContext) {
     super(reactContext);
+  }
+
+  @Override
+  public @Nonnull String getName() {
+    return NAME;
   }
 
   @ReactMethod
   @DoNotStrip
   public abstract void start(ReadableMap config, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void withMediaCallbacksEnabled();
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void addListener(String eventName);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void removeListeners(double count);
 }

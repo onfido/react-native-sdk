@@ -10,11 +10,18 @@
 		34BABF197D944467478602E3 /* libPods-OnfidoSdk-OnfidoSdkTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */; };
 		3A9D42CC2412EEF50087A331 /* ResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42CB2412EEF50087A331 /* ResponseTests.swift */; };
 		3A9D42CE2412EEF50087A331 /* libOnfidoSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 134814201AA4EA6300B7C361 /* libOnfidoSdk.a */; };
-		3A9D42D52412F0110087A331 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* Response.swift */; };
-		3A9D42D62412F0110087A331 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* Response.swift */; };
-		3AFE501D2408522000E21479 /* OnfidoSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFE501C2408521F00E21479 /* OnfidoSdk.swift */; };
+		3A9D42D52412F0110087A331 /* OnfidoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* OnfidoResponse.swift */; };
+		3A9D42D62412F0110087A331 /* OnfidoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D42D42412F0110087A331 /* OnfidoResponse.swift */; };
+		3F87B3722A1BEC7800100A48 /* OnfidoFlowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B36F2A1BEC7800100A48 /* OnfidoFlowBuilder.swift */; };
+		3F87B3732A1BEC7800100A48 /* OnfidoConfigBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B3702A1BEC7800100A48 /* OnfidoConfigBuilder.swift */; };
+		3F87B3742A1BEC7800100A48 /* OnfidoPluginConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B3712A1BEC7800100A48 /* OnfidoPluginConfig.swift */; };
+		3F87B3762A1C06D000100A48 /* OnfidoSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B3752A1C06D000100A48 /* OnfidoSdk.swift */; };
+		3F87B3782A1C122A00100A48 /* OnfidoConfigParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B3772A1C122A00100A48 /* OnfidoConfigParser.swift */; };
 		5D2F5DC95516209E65E56280 /* libPods-OnfidoSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BAC76485E97F0FD9C7A9FB /* libPods-OnfidoSdk.a */; };
 		8517ACCE244290D10077E909 /* OnfidoSdkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */; };
+		9B62C6E22A40A7FF007DF5DE /* BridgeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF206B22A3C839F00766D77 /* BridgeUtils.swift */; };
+		9B62C6E32A40A7FF007DF5DE /* CallbackReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */; };
+		9B62C6E42A40A7FF007DF5DE /* OnfidoAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */; };
 		B3E7B58A1CC2AC0600A0062D /* OnfidoSdk.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */; };
 /* End PBXBuildFile section */
 
@@ -46,14 +53,23 @@
 		3A9D42C92412EEF50087A331 /* OnfidoSdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnfidoSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A9D42CB2412EEF50087A331 /* ResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseTests.swift; sourceTree = "<group>"; };
 		3A9D42CD2412EEF50087A331 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3A9D42D42412F0110087A331 /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		3A9D42D42412F0110087A331 /* OnfidoResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoResponse.swift; sourceTree = "<group>"; };
 		3AFE501B2408521F00E21479 /* OnfidoSdk-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OnfidoSdk-Bridging-Header.h"; sourceTree = "<group>"; };
-		3AFE501C2408521F00E21479 /* OnfidoSdk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdk.swift; sourceTree = "<group>"; };
+		3F87B36F2A1BEC7800100A48 /* OnfidoFlowBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoFlowBuilder.swift; sourceTree = "<group>"; };
+		3F87B3702A1BEC7800100A48 /* OnfidoConfigBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoConfigBuilder.swift; sourceTree = "<group>"; };
+		3F87B3712A1BEC7800100A48 /* OnfidoPluginConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoPluginConfig.swift; sourceTree = "<group>"; };
+		3F87B3752A1C06D000100A48 /* OnfidoSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoSdk.swift; sourceTree = "<group>"; };
+		3F87B3772A1C122A00100A48 /* OnfidoConfigParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoConfigParser.swift; sourceTree = "<group>"; };
 		6DD905136FC7557A95EFF1C4 /* Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		731FAC5B375A699FA470D705 /* Pods-OnfidoSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.release.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.release.xcconfig"; sourceTree = "<group>"; };
 		8517ACCD244290D10077E909 /* OnfidoSdkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnfidoSdkTests.swift; sourceTree = "<group>"; };
 		899A7F1B3979E0BB4044B867 /* libPods-OnfidoSdk-OnfidoSdkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OnfidoSdk-OnfidoSdkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8E5FE3BDE0C9C96B5FE8AB /* Pods-OnfidoSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk/Pods-OnfidoSdk.debug.xcconfig"; sourceTree = "<group>"; };
+		9B55F4FF2B61451700EC4D80 /* PluginMetadata.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PluginMetadata.m; sourceTree = "<group>"; };
+		9B55F5002B61451700EC4D80 /* PluginMetadata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PluginMetadata.h; sourceTree = "<group>"; };
+		9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbackReceiver.swift; sourceTree = "<group>"; };
+		9BF206B22A3C839F00766D77 /* BridgeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeUtils.swift; sourceTree = "<group>"; };
+		9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnfidoAppearance.swift; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* OnfidoSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnfidoSdk.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnfidoSdk.m; sourceTree = "<group>"; };
 		B78EF811082AE0A0FC0314D6 /* Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -112,11 +128,20 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				3A9D42D42412F0110087A331 /* Response.swift */,
+				9BF206B22A3C839F00766D77 /* BridgeUtils.swift */,
+				9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */,
+				9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */,
+				3F87B3752A1C06D000100A48 /* OnfidoSdk.swift */,
+				3F87B3772A1C122A00100A48 /* OnfidoConfigParser.swift */,
+				3F87B36F2A1BEC7800100A48 /* OnfidoFlowBuilder.swift */,
+				3F87B3702A1BEC7800100A48 /* OnfidoConfigBuilder.swift */,
+				3F87B3712A1BEC7800100A48 /* OnfidoPluginConfig.swift */,
+				3A9D42D42412F0110087A331 /* OnfidoResponse.swift */,
 				3AFE501B2408521F00E21479 /* OnfidoSdk-Bridging-Header.h */,
-				3AFE501C2408521F00E21479 /* OnfidoSdk.swift */,
 				B3E7B5881CC2AC0600A0062D /* OnfidoSdk.h */,
 				B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */,
+				9B55F5002B61451700EC4D80 /* PluginMetadata.h */,
+				9B55F4FF2B61451700EC4D80 /* PluginMetadata.m */,
 				3A9D42CA2412EEF50087A331 /* OnfidoSdkTests */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				4A3724A27399FEFCC7B1F920 /* Pods */,
@@ -313,7 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A9D42D62412F0110087A331 /* Response.swift in Sources */,
+				3A9D42D62412F0110087A331 /* OnfidoResponse.swift in Sources */,
 				3A9D42CC2412EEF50087A331 /* ResponseTests.swift in Sources */,
 				8517ACCE244290D10077E909 /* OnfidoSdkTests.swift in Sources */,
 			);
@@ -323,9 +348,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B62C6E22A40A7FF007DF5DE /* BridgeUtils.swift in Sources */,
+				9B62C6E32A40A7FF007DF5DE /* CallbackReceiver.swift in Sources */,
+				9B62C6E42A40A7FF007DF5DE /* OnfidoAppearance.swift in Sources */,
+				3F87B3732A1BEC7800100A48 /* OnfidoConfigBuilder.swift in Sources */,
+				3F87B3742A1BEC7800100A48 /* OnfidoPluginConfig.swift in Sources */,
+				3F87B3722A1BEC7800100A48 /* OnfidoFlowBuilder.swift in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* OnfidoSdk.m in Sources */,
-				3A9D42D52412F0110087A331 /* Response.swift in Sources */,
-				3AFE501D2408522000E21479 /* OnfidoSdk.swift in Sources */,
+				3F87B3762A1C06D000100A48 /* OnfidoSdk.swift in Sources */,
+				3F87B3782A1C122A00100A48 /* OnfidoConfigParser.swift in Sources */,
+				3A9D42D52412F0110087A331 /* OnfidoResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,7 +474,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -485,7 +517,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

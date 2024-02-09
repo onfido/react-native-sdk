@@ -1,3 +1,6 @@
+# As we're using yarn, not npm
+package-lock.json
+
 # OSX
 #
 .DS_Store
@@ -49,12 +52,7 @@ node_modules/
 SampleApp/.yalc/
 TestApp/.yalc/
 
-# BUCK
-#
-buck-out/
-\.buckd/
 *.keystore
-!debug.keystore
 
 # Built application files
 #
@@ -157,3 +155,10 @@ gitignored/
 # Jest
 #
 coverage
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# testing
+/coverage
+TestApp/.env

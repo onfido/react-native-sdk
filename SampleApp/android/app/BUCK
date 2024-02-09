@@ -8,7 +8,7 @@
 # - `buck install -r android/app` - compile, install and run application
 #
 
-load(":build_defs.bzl", "create_aar_targets", "create_jar_targets")
+load("create_aar_targets", "create_jar_targets")
 
 lib_deps = []
 

@@ -1,14 +1,15 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import <rnonfidosdk/rnonfidosdk.h>
-@interface RNOnfidoSdk : NSObject <NativeOnfidoModuleSpec>
+@interface RNOnfidoSdk : RCTEventEmitter <NativeOnfidoModuleSpec>
 
 #else
 
-@interface RNOnfidoSdk : NSObject <RCTBridgeModule>
+@interface RNOnfidoSdk : RCTEventEmitter <RCTBridgeModule>
 
 #endif
 

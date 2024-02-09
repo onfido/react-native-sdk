@@ -13,6 +13,7 @@
 -keep class org.jmrtd.** { *; }
 -keep class net.sf.scuba.** {*;}
 -keep class org.bouncycastle.** {*;}
+-keep class org.spongycastle.** {*;}
 -keep class org.ejbca.** {*;}
 
 # Needed for NFC
@@ -22,3 +23,4 @@
 -dontwarn module-info
 -dontwarn org.jmrtd.**
 -dontwarn net.sf.scuba.**
+-dontwarn org.spongycastle.**
