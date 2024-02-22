@@ -30,8 +30,6 @@ export type OnfidoResult = {
 
 export type OnfidoConfig = {
   sdkToken: string;
-  workflowRunId?: string;
-  flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean;
   disableNFC?: boolean;
@@ -40,7 +38,10 @@ export type OnfidoConfig = {
     ios_strings_file_name?: string;
   };
   theme: OnfidoTheme;
-};
+} & (
+  | { workflowRunId: undefined; flowSteps: OnfidoFlowSteps }
+  | { workflowRunId: string; flowSteps?: OnfidoFlowSteps }
+);
 
 export interface OnfidoError extends Error {
   code?: string;
