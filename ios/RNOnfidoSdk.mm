@@ -17,7 +17,7 @@ RCT_EXPORT_MODULE()
         return nil;
     }
     
-    _onfidoSdk = [OnfidoSdk alloc];
+    _onfidoSdk = [[OnfidoSdk alloc] init];
     
     // capture weak self reference to prevent retain cycle
     __weak __typeof__(self) weakSelf = self;
