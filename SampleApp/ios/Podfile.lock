@@ -16,9 +16,10 @@ PODS:
   - hermes-engine/Pre-built (0.72.6)
   - libevent (2.1.12)
   - Onfido (29.7.0)
-  - onfido-react-native-sdk (10.6.0):
+  - onfido-react-native-sdk (10.7.0):
     - Onfido (~> 29.7.0)
-    - React
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -576,7 +577,7 @@ SPEC CHECKSUMS:
   hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Onfido: f51a30838087a71bfeb6a96b063aae9b42b7c93f
-  onfido-react-native-sdk: 12972f9ccb1f41013e0c1aff6f02d9a6c669c38e
+  onfido-react-native-sdk: 4057bac9d9a395c344fa1994ff2ac59b9bcb02cb
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
   RCTTypeSafety: e9c6c409fca2cc584e5b086862d562540cb38d29

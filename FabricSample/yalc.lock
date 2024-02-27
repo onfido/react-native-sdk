@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@onfido/react-native-sdk": {
+      "signature": "c9ead8f8f65ef2e34444b52cccc26568",
+      "file": true
+    }
+  }
+}

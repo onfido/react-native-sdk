@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.onfido.android.sdk.capture.DocumentType;
@@ -40,7 +41,10 @@ enum CallbackType {
     MEDIA
 }
 
-public class OnfidoSdkModule extends ReactContextBaseJavaModule {
+@ReactModule(name = OnfidoSdkModule.NAME)
+public class OnfidoSdkModule extends NativeOnfidoModuleSpec {
+
+    public static final String NAME = "RNOnfidoSdk";
 
     /* package */ final Onfido client;
     private Promise currentPromise = null;
@@ -67,7 +71,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "OnfidoSdk";
+        return NAME;
     }
 
     /**
@@ -78,6 +82,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    @Override
     public void start(final ReadableMap config, final Promise promise) {
 
         setPromise(promise);
@@ -482,7 +487,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void removeListeners(int type) {
+    public void removeListeners(double type) {
         // Keep: Required for RN build in the Event Emitter Calls
     }
 

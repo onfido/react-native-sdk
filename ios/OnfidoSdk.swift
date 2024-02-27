@@ -14,24 +14,31 @@ private enum CallbackType {
 }
 
 @objc(OnfidoSdk)
-final class OnfidoSdk: RCTEventEmitter {
+public final class OnfidoSdk: NSObject {
 
     private let onfidoFlowBuilder = OnfidoFlowBuilder()
     private let configParser = OnfidoConfigParser()
     private var callbackTypes: [CallbackType] = []
     
     @objc
-    func start(_ config: NSDictionary,
-                     resolver resolve: @escaping RCTPromiseResolveBlock,
-                     rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public var mediaCallbackHandler: (([String: Any]) -> Void)?
+
+    // TODO: Using React types here (RCTPromiseResolveBlock and RCTPromiseRejectBlock) causes the project to fail to build.
+    // For some reason marking them as @escaping causes the XCode to add an import to non-existent header file in onfido_react_native_sdk-Swift.h.
+    @objc
+    public func start(_ config: NSDictionary,
+                     resolver resolve: @escaping (Any) -> Void,
+                     rejecter reject: @escaping (String, String, Error?) -> Void) -> Void {
         DispatchQueue.main.async { [weak self] in
             self?.run(withConfig: config, resolver: resolve, rejecter: reject)
         }
     }
 
+    // TODO: Same as above
     private func run(withConfig config: NSDictionary,
-                     resolver resolve: @escaping RCTPromiseResolveBlock,
-                     rejecter reject: @escaping RCTPromiseRejectBlock) {
+                     resolver resolve: @escaping (Any) -> Void,
+                     rejecter reject: @escaping (String, String, Error?) -> Void) {
+
         do {
             let onfidoConfig: OnfidoPluginConfig = try configParser.parse(config)
 
@@ -90,27 +97,17 @@ final class OnfidoSdk: RCTEventEmitter {
         }
     }
 
-    // MARK: - Callbacks
-
-    @objc
-    public override func supportedEvents() -> [String] {
-        return ["onfidoMediaCallback"]
-    }
-
-    @objc
-    override static func requiresMainQueueSetup() -> Bool {
-        return false
-    }
-
     // MARK: Media
 
     @objc
-    func withMediaCallbacksEnabled() {
+    public func withMediaCallbacksEnabled() {
         callbackTypes.append(.media)
     }
 
     private func processMediaResult(_ dictionary: [String: Any]) {
-        sendEvent(withName: "onfidoMediaCallback", body: dictionary)
+        if let handler = mediaCallbackHandler {
+            handler(dictionary)
+        }
     }
 }
 

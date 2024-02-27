@@ -20,7 +20,6 @@
 		3A207E9426EABFB400EEDE01 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A207E9326EABFB400EEDE01 /* Localizable.strings */; };
 		3A9D456A24180E9E0087A331 /* SampleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D456924180E9E0087A331 /* SampleSwift.swift */; };
 		A1CB8D05689CCFBBFCEF0B85 /* libPods-SampleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD400479F643816851F69F23 /* libPods-SampleApp.a */; };
-		A27D5C5624FFA363000BDD48 /* colors.json in Resources */ = {isa = PBXBuildFile; fileRef = A27D5C5524FFA363000BDD48 /* colors.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +57,6 @@
 		3A207E9326EABFB400EEDE01 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = SampleApp/Localizable.strings; sourceTree = "<group>"; };
 		3A9D456924180E9E0087A331 /* SampleSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleSwift.swift; sourceTree = "<group>"; };
 		61E8DC892771334177166408 /* Pods-SampleApp-SampleAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-SampleAppTests.release.xcconfig"; path = "Target Support Files/Pods-SampleApp-SampleAppTests/Pods-SampleApp-SampleAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		A27D5C5524FFA363000BDD48 /* colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = colors.json; path = SampleApp/colors.json; sourceTree = "<group>"; };
 		AB19A80633CD2F50700FEB84 /* Pods-SampleApp-SampleAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp-SampleAppTests.debug.xcconfig"; path = "Target Support Files/Pods-SampleApp-SampleAppTests/Pods-SampleApp-SampleAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BD400479F643816851F69F23 /* libPods-SampleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SampleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C615A631218566D4E03C1699 /* Pods-SampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp.release.xcconfig"; path = "Target Support Files/Pods-SampleApp/Pods-SampleApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				3A207E9326EABFB400EEDE01 /* Localizable.strings */,
-				A27D5C5524FFA363000BDD48 /* colors.json */,
 				13B07FAE1A68108700A75B9A /* SampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SampleAppTests */,
@@ -334,7 +331,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A207E9426EABFB400EEDE01 /* Localizable.strings in Resources */,
-				A27D5C5624FFA363000BDD48 /* colors.json in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

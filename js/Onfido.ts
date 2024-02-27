@@ -1,4 +1,4 @@
-import {NativeModules, Platform, NativeEventEmitter} from 'react-native';
+import {Platform, NativeEventEmitter} from 'react-native';
 import {
     OnfidoAlpha2CountryCode,
     OnfidoCaptureType,
@@ -11,11 +11,9 @@ import {
 } from "./config_constants";
 import { Base64 } from 'js-base64';
 
-const {OnfidoSdk} = NativeModules;
+import OnfidoSdk from "./NativeOnfidoModule";
 
-const OndifoSdkModule = NativeModules.OnfidoSdk
-const eventEmitter = new NativeEventEmitter(OndifoSdkModule)
-
+const eventEmitter = new NativeEventEmitter(OnfidoSdk)
 
 const Onfido = {
     start(config: OnfidoConfig): Promise<OnfidoResult> {
@@ -93,7 +91,7 @@ const Onfido = {
     return OnfidoSdk.start(config).catch((error: any) => {
       console.log(error);
       throw error;
-    });
+    }) as Promise<OnfidoResult | OnfidoError>;
   },
 
   addCustomMediaCallback(callback: (result: OnfidoMediaResult) => OnfidoMediaResult) {

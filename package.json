@@ -24,7 +24,8 @@
     ],
     "testPathIgnorePatterns": [
       "/TestApp",
-      "/SampleApp"
+      "/SampleApp",
+      "/FabricSample"
     ],
     "globals": {
       "__DEV__": true
@@ -81,6 +82,14 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "typescript": "^4.6.4"
+  },
+  "codegenConfig": {
+    "name": "rnonfidosdk",
+    "type": "modules",
+    "jsSrcsDir": "./js",
+    "android": {
+      "javaPackageName": "com.onfido.reactnative.sdk"
+    }
   },
   "dependencies": {
     "js-base64": "3.7.5"
