@@ -792,6 +792,16 @@ Below is a list of known differences in expected behavior between the Onfido And
 
 * Documents with the type `passport` uploaded through the iOS SDK will have the `side` attribute set to `null`, while those uploaded via Android will have `side` as `front`.
 
+**Proguard / Dexguard**
+
+If you have enabled either of these then disable them for the Onfido module to prevent a crash in Android when starting the camera:
+
+`proguard-rules.pro`
+Add `-keep class com.onfido.reactnative.sdk.** { *; }`
+
+`dexguard-project.txt`
+Add `-keep class com.onfido.reactnative.sdk.** { *; }`
+
 ### Support
 
 Should you encounter any technical issues during integration, please contact Onfido's Customer Support team via [email](mailto:support@onfido.com), including the word ISSUE: at the start of the subject line. 
