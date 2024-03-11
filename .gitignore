@@ -2,12 +2,13 @@
 package-lock.json
 
 # OSX
-#
 .DS_Store
+
+# Android and XCode
+build/
 
 # Xcode
 #
-build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -29,7 +30,6 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -50,9 +50,9 @@ android/bin/
 #
 node_modules/
 SampleApp/.yalc/
+SampleApp/.yalc.lock
 TestApp/.yalc/
-
-*.keystore
+TestApp/.yalc.lock
 
 # Built application files
 #

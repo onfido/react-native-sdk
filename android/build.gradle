@@ -13,7 +13,7 @@
 def DEFAULT_COMPILE_SDK_VERSION = 33
 def DEFAULT_MIN_SDK_VERSION = 21
 def DEFAULT_TARGET_SDK_VERSION = 31
-def NATIVE_ANDROID_SDK_VERSION = "19.6.+"
+def NATIVE_ANDROID_SDK_VERSION = "20.0.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -48,22 +48,33 @@ buildscript {
         repositories {
             mavenCentral()
             google()
-            jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:7.4.2'
+            classpath 'com.android.tools.build:gradle:8.2.2'
+            // Following line is added for future conversion of our Java code to Kotlin, uncomment when needed
+            // also decide about Kotlin version (and potential version compatibility with customers)
+            // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7"
         }
     }
 }
 
+def isNewArchitectureEnabled() {
+    return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
 apply plugin: 'com.android.library'
+// apply plugin: "kotlin-android" // uncomment when we start converting our Java code to Kotlin
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+if (isNewArchitectureEnabled()) { // currently we don't use the new architecture, but this ensures future compatibility
+    apply plugin: "com.facebook.react"
+}
 
 apply from: 'publish.gradle'
 
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+    namespace "com.onfido.reactnative.sdk"
+    compileSdk safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
         targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
@@ -75,11 +86,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    buildFeatures {
-        buildConfig = false
-    }
-  
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -99,12 +105,16 @@ repositories {
         url "$rootDir/../node_modules/jsc-android/dist"
     }
     google()
-    jcenter()
 }
 
 dependencies {
     //noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+'  // From node_modules
+    // replaces the previous react-native dependency with a wildcard version regex
+    implementation("com.facebook.react:react-android:0.72.10")
+    // Following documentation is taken from a sample project created by create-react-native-library
+    // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+    // implementation 'com.facebook.react:react-native:+'  // From node_modules
+
     implementation "com.onfido.sdk.capture:onfido-capture-sdk:$NATIVE_ANDROID_SDK_VERSION"
     implementation "com.onfido.sdk:onfido-workflow:$NATIVE_ANDROID_SDK_VERSION"
     implementation "com.squareup.okhttp3:logging-interceptor:3.14.9"
@@ -116,22 +126,43 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
     testCompileOnly 'junit:junit:4.13.2'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.10.1'
-    testImplementation 'org.mockito:mockito-core:2.+'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
 }
 
+// Required for our tests to pass after upgrading to Gradle 8
+// Before Gradle 8.0, Gradle workers on JDK9+ automatically opened JDK modules java.base/java.util
+// and java.base/java.lang by passing --add-opens CLI arguments.
+// This enabled code executed in a Gradle worker to perform deep reflection on JDK internals
+// without warning or failing. Workers no longer use these implicit arguments.
+// See https://docs.gradle.org/current/userguide/upgrading_version_7.html#remove_implicit_add_opens_for_gradle_workers
+// and https://docs.gradle.org/current/userguide/upgrading_version_7.html#remove_test_add_opens
+// TODO: check if we can remove usage of reflection APIs in tests
+// From gradle docs:
+// These errors can be resolved by updating the violating code or dependency. Updates may include:
+//    - code-quality tools
+//    - annotation processors
+//    - any Gradle plugins which use the worker API
+tasks.withType(Test).configureEach {
+    jvmArgs(
+            ["--add-opens=java.base/java.lang=ALL-UNNAMED",
+             "--add-opens=java.base/java.util=ALL-UNNAMED"]
+    )
+}
+
 afterEvaluate { project ->
-    android.libraryVariants.all { variant ->
+    android.libraryVariants.configureEach { variant ->
         def name = variant.name.capitalize()
         def javaCompileTask = variant.javaCompileProvider.get()
 
         task "jar${name}"(type: Jar, dependsOn: javaCompileTask) {
-            from javaCompileTask.destinationDir
+            from javaCompileTask.destinationDirectory
         }
     }
 
-    task codeCoverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    tasks.register('codeCoverageReport', JacocoReport) {
+        dependsOn 'testDebugUnitTest'
         group = "Reporting"
         description = "Generate Jacoco coverage reports after running tests."
         reports {

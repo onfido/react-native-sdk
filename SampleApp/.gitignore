@@ -2,9 +2,11 @@
 #
 .DS_Store
 
+# Android and Xcode
+build/
+
 # Xcode
 #
-build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -24,7 +26,6 @@ ios/.xcode.env.local
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -35,6 +36,8 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+.yalc/
+yalc.lock
 
 # BUCK
 #

@@ -1,11 +1,13 @@
+import groovy.json.JsonSlurper
+
 afterEvaluate {
-    task sourceJar(type: Jar) {
+    tasks.register('sourceJar', Jar) {
         from android.sourceSets.main.java.srcDirs
         archiveClassifier = "sources"
     }
 
     publishing {
-        def packageJson = new groovy.json.JsonSlurper().parseText(file('../package.json').text)
+        def packageJson = new JsonSlurper().parseText(file('../package.json').text)
 
         publications {
             mavenJava(MavenPublication) {
@@ -14,7 +16,7 @@ afterEvaluate {
                 groupId = 'com.onfido.reactnative.sdk'
                 version = packageJson.version
 
-                from components.release
+                from components.findByName('release')
 
                 artifact sourceJar
 
