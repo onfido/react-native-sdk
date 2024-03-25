@@ -1,5 +1,5 @@
 import { TurboModuleRegistry, TurboModule } from "react-native";
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface Spec extends TurboModule {
   start(config: Object): Promise<Object>;
@@ -7,7 +7,7 @@ export interface Spec extends TurboModule {
 
   // those two are here for event emitter methods
   addListener(eventName: string): void;
-  removeListeners(count: Int32): void;
+  removeListeners(type: Double): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("RNOnfidoSdk");

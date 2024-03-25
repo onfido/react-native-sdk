@@ -17,12 +17,11 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
-public abstract class NativeOnfidoModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
+public abstract class NativeOnfidoModuleSpec extends ReactContextBaseJavaModule implements TurboModule {
   public static final String NAME = "RNOnfidoSdk";
 
   public NativeOnfidoModuleSpec(ReactApplicationContext reactContext) {
@@ -48,5 +47,5 @@ public abstract class NativeOnfidoModuleSpec extends ReactContextBaseJavaModule 
 
   @ReactMethod
   @DoNotStrip
-  public abstract void removeListeners(double count);
+  public abstract void removeListeners(double type);
 }
