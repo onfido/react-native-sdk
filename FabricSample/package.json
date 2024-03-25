@@ -13,17 +13,17 @@
   "dependencies": {
     "@onfido/react-native-sdk": "file:.yalc/@onfido/react-native-sdk",
     "react": "18.2.0",
-    "react-native": "0.73.4",
+    "react-native": "0.74.0-rc.4",
     "react-router-native": "^5.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "0.73.21",
-    "@react-native/eslint-config": "0.73.2",
-    "@react-native/metro-config": "0.73.5",
-    "@react-native/typescript-config": "0.73.1",
+    "@react-native/babel-preset": "0.74.75",
+    "@react-native/eslint-config": "0.74.75",
+    "@react-native/metro-config": "0.74.75",
+    "@react-native/typescript-config": "0.74.75",
     "@types/react": "^18.2.6",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",
