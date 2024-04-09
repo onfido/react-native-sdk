@@ -11,9 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.72.6)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Onfido (29.8.0)
+  - Onfido (29.9.1)
   - onfido-react-native-sdk (11.0.0):
-    - Onfido (~> 29.8.0)
+    - Onfido (~> 29.9.1)
     - React
   - RCT-Folly (2021.07.22.00):
     - boost

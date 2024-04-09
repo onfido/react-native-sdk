@@ -232,7 +232,7 @@ struct OnfidoConfigBuilder {
     private func enterpriseFeatures(for config: OnfidoPluginConfig) throws -> EnterpriseFeatures {
         let enterpriseFeatures = EnterpriseFeatures.builder()
         
-        if let hideLogo = config.hideLogo {
+        if let hideLogo = config.hideLogo, hideLogo {
             enterpriseFeatures.withHideOnfidoLogo(hideLogo)
         }
         
@@ -245,7 +245,7 @@ struct OnfidoConfigBuilder {
             enterpriseFeatures.withCobrandingLogo(cobrandLogo, cobrandingLogoDarkMode: cobrandLogoDark)
         }
         
-        if let disableMobileSdkAnalytics = config.disableMobileSdkAnalytics {
+        if let disableMobileSdkAnalytics = config.disableMobileSdkAnalytics, disableMobileSdkAnalytics {
             enterpriseFeatures.withDisableMobileSdkAnalytics(disableMobileSdkAnalytics)
         }
         

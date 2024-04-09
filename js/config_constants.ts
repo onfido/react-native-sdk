@@ -117,6 +117,9 @@ export type OnfidoFaceVideoCapture = {
 export type OnfidoFaceMotionCapture = {
     type: OnfidoCaptureType.MOTION;
     recordAudio?: boolean;
+/**
+ *  @deprecated Motion is now supported on all devices. There is no need to provide a capture fallback as it will not be applied.
+ */
     motionCaptureFallback?: OnfidoFaceSelfieCapture | OnfidoFaceVideoCapture;
 };
 
