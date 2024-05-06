@@ -75,12 +75,14 @@ final class OnfidoSdk: RCTEventEmitter {
                         return
                     }
                 })
-
-            let onfidoViewController = try onfidoFlow.run()
-            onfidoViewController.modalPresentationStyle = .fullScreen
-            UIApplication.shared.windows.first?.rootViewController?
-                .findTopMostController()?
-                .present(onfidoViewController, animated: true)
+            guard 
+                let window = UIApplication.shared.windows.first,
+                let topMostViewController = window.rootViewController?.findTopMostController() 
+            else {
+                reject("error", "Unable to locate presenting view controller", nil)
+                return
+            }
+            try onfidoFlow.run(from: topMostViewController, presentationStyle: .fullScreen, animated: true)
         } catch let error as NSError {
             reject("\(error)", error.domain, error)
             return

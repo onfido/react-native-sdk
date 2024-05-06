@@ -4,11 +4,9 @@ public class AppearancePublic: NSObject {
     public let primaryColor: UIColor
     public let primaryTitleColor: UIColor
     public let primaryBackgroundPressedColor: UIColor
-    public let supportDarkMode: Bool
     public let interfaceStyle: OnfidoInterfaceStyle
     public let secondaryTitleColor: UIColor
     public let secondaryBackgroundPressedColor: UIColor
-    public let bubbleErrorBackgroundColor: UIColor
     public let buttonCornerRadius: CGFloat
     public let fontFamilyTitle: String
     public let fontFamilyBody: String
@@ -22,12 +20,10 @@ public class AppearancePublic: NSObject {
         primaryBackgroundPressedColor: UIColor,
         secondaryTitleColor: UIColor,
         secondaryBackgroundPressedColor: UIColor,
-        bubbleErrorBackgroundColor: UIColor,
         buttonCornerRadius: CGFloat,
         fontFamilyBody: String,
         fontFamilyTitle: String,
         captureSuccessColors: CaptureSuccessColors,
-        supportDarkMode: Bool = true,
         interfaceStyle: OnfidoInterfaceStyle = .unspecified,
         backgroundColor: BackgroundColor = .init()
     ) {
@@ -36,12 +32,10 @@ public class AppearancePublic: NSObject {
         self.secondaryTitleColor = secondaryTitleColor
         self.primaryBackgroundPressedColor = primaryBackgroundPressedColor
         self.secondaryBackgroundPressedColor = secondaryBackgroundPressedColor
-        self.bubbleErrorBackgroundColor = bubbleErrorBackgroundColor
         self.buttonCornerRadius = buttonCornerRadius
         self.fontFamilyTitle = fontFamilyTitle
         self.fontFamilyBody = fontFamilyBody
         self.captureSuccessColors = captureSuccessColors
-        self.supportDarkMode = supportDarkMode
         self.interfaceStyle = interfaceStyle
         self.backgroundColor = backgroundColor
     }
@@ -74,9 +68,7 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
             let primaryTitleColor = jsonResult.getColor(withName: "onfidoPrimaryButtonTextColor", fallback: .white)
             let primaryBackgroundPressedColor = jsonResult.getColor(withName: "onfidoPrimaryButtonColorPressed", fallback: .primaryButtonColorPressed)
             let secondaryTitleColor = jsonResult.getColor(withName: "secondaryTitleColor", fallback: .secondaryTitleColor)
-            let bubbleErrorBackgroundColor = jsonResult.getColor(withName: "bubbleErrorBackgroundColor", fallback: .bubbleErrorBackgroundColor)
             let secondaryBackgroundPressedColor = jsonResult.getColor(withName: "secondaryBackgroundPressedColor", fallback: .secondaryBackgroundPressedColor)
-            let supportDarkMode: Bool = jsonResult["onfidoIosSupportDarkMode"] as? Bool ?? true
             let buttonCornerRadius: CGFloat = jsonResult["buttonCornerRadius"] as? CGFloat ?? 12
             let fontFamilyTitle = jsonResult["fontFamilyTitle"] as? String ?? ""
             let fontFamilyBody = jsonResult["fontFamilyBody"] as? String ?? ""
@@ -120,12 +112,10 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                                     primaryBackgroundPressedColor: primaryBackgroundPressedColor,
                                     secondaryTitleColor: secondaryTitleColor,
                                     secondaryBackgroundPressedColor: secondaryBackgroundPressedColor,
-                                    bubbleErrorBackgroundColor: bubbleErrorBackgroundColor,
                                     buttonCornerRadius: buttonCornerRadius,
                                     fontFamilyBody: fontFamilyBody,
                                     fontFamilyTitle: fontFamilyTitle,
                                     captureSuccessColors: captureSuccessColors,
-                                    supportDarkMode: supportDarkMode,
                                     interfaceStyle: interfaceStyle,
                                     backgroundColor: backgroundColor)
         } else {
@@ -147,17 +137,13 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
         appearance.primaryColor = appearancePublic.primaryColor
         appearance.primaryTitleColor = appearancePublic.primaryTitleColor
         appearance.primaryBackgroundPressedColor = appearancePublic.primaryBackgroundPressedColor
-        appearance.supportDarkMode = appearancePublic.supportDarkMode
         appearance.secondaryTitleColor = appearancePublic.secondaryTitleColor
         appearance.secondaryBackgroundPressedColor = appearancePublic.secondaryBackgroundPressedColor
-        appearance.bubbleErrorBackgroundColor = appearancePublic.bubbleErrorBackgroundColor
         appearance.buttonCornerRadius = appearancePublic.buttonCornerRadius
         appearance.fontRegular = appearancePublic.fontFamilyBody
         appearance.fontBold = appearancePublic.fontFamilyTitle
         appearance.captureSuccessColors = appearancePublic.captureSuccessColors
-        if #available(iOS 12.0, *) {
-            appearance.setUserInterfaceStyle(.init(appearancePublic.interfaceStyle))
-        }
+        appearance.setUserInterfaceStyle(.init(appearancePublic.interfaceStyle))
         appearance.backgroundColor = appearancePublic.backgroundColor
         return appearance
     } else {

@@ -182,6 +182,7 @@ struct OnfidoConfigBuilder {
 
         let shouldShowIntro = captureFace?.showIntro ?? true
         let shouldUseManualVideoCapture = captureFace?.manualVideoCapture ?? false
+        let shouldRecordAudio = captureFace?.recordAudio ?? false
 
         switch faceVariant {
         case .photo:
@@ -192,38 +193,7 @@ struct OnfidoConfigBuilder {
                 manualLivenessCapture: shouldUseManualVideoCapture
             )))
         case .motion:
-            let shouldRecordAudio = captureFace?.recordAudio ?? false
-            guard let motionCaptureFallback = captureFace?.motionCaptureFallback else {
-               builder.withFaceStep(ofVariant: .motion(withConfiguration: .init(recordAudio: shouldRecordAudio)))
-               return
-            }
-            let fallbackOption = motionCaptureFallback.type 
-            let shouldShowIntro = motionCaptureFallback.showIntro ?? true
-            let shouldUseManualVideoCapture = motionCaptureFallback.manualVideoCapture ?? false
-
-            switch fallbackOption {
-            case .photo:
-                builder.withFaceStep(ofVariant: .motion(withConfiguration:
-                    .init(
-                        captureFallback: .init(
-                            photoFallbackWithConfiguration: .init(showSelfieIntroScreen: shouldShowIntro)
-                        ),
-                        recordAudio: shouldRecordAudio
-                    )
-                ))
-            case .video:
-                builder.withFaceStep(ofVariant: .motion(withConfiguration:
-                    .init(
-                        captureFallback: .init(videoFallbackWithConfiguration: .init(
-                            showIntroVideo: shouldShowIntro,
-                            manualLivenessCapture: shouldUseManualVideoCapture
-                        )),
-                        recordAudio: shouldRecordAudio
-                    )
-                ))
-            default:
-                builder.withFaceStep(ofVariant: .motion(withConfiguration: .init(recordAudio: shouldRecordAudio)))
-            }
+            builder.withFaceStep(ofVariant: .motion(withConfiguration: .init(recordAudio: shouldRecordAudio)))
         }
     }
     

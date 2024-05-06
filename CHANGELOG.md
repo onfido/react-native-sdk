@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [12.0.0] - 2024-04-24
+
+### Changed:
+
+- Updated the underlying Onfido iOS SDK to version 30.0.x (up from 29.9.x).
+  NOTE: This version increased the minimum deployment target to iOS 13
+  For more information visit the [Onfido iOS SDK releases on Github](https://github.com/onfido/onfido-ios-sdk/releases)
+- Updated the underlying Onfido Android SDK to version 20.2.x (up from 20.1.x).
+  For more information visit the [Onfido Android SDK releases on Github](https://github.com/onfido/onfido-android-sdk/releases)
+- Motion capture fallback configuration has been removed: Motion is supported on all devices as of 11.0.0
+  - If you currently set a `motionCaptureFallback` for `captureFace`, then you should be aware that this configuration is no longer available, so you can safely remove it from your integration code
+- The option to set the `bubbleErrorBackgroundColor` as part of the appearance configuration has been removed, as this configuration option is not longer available.
+- The flag `supportDarkMode` on the appearance configuration has been removed. Use `interfaceStyle` instead to configure the same behaviour.
+
 ## [11.1.0] - 2024-03-06
 
 ### Changed:

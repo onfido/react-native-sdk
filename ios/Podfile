@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '13.0'
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -27,7 +27,7 @@ flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : Flip
 # end
 
 target 'OnfidoSdk' do
-  pod 'Onfido', '~> 29.9.1'
+  pod 'Onfido', '~> 30.0.0'
 
   config = use_native_modules!
   use_react_native!(

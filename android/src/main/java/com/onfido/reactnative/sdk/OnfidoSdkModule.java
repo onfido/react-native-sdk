@@ -446,16 +446,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         if (definition.hasKey("recordAudio")) {
             builder.withAudio(definition.getBoolean("recordAudio"));
         }
-        if (definition.hasKey("motionCaptureFallback")) {
-            final ReadableMap captureFaceFallbackOptions = definition.getMap("motionCaptureFallback");
-            final String fallbackType = captureFaceFallbackOptions.getString("type");
-            if (fallbackType.equalsIgnoreCase("VIDEO")) {
-                builder.withCaptureFallback(faceStepFromVideoDefinitionBuilder(captureFaceFallbackOptions));
-            } else if (fallbackType.equalsIgnoreCase("PHOTO")) {
-                builder.withCaptureFallback(faceStepFromPhotoDefinitionBuilder(captureFaceFallbackOptions));
-            }
-        }
-
         return builder.build();
     }
 

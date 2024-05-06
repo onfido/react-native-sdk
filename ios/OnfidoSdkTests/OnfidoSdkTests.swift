@@ -31,7 +31,6 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssertEqual(appearance.secondaryBackgroundPressedColor, UIColor(red: 1, green: 0, blue: 0, alpha: 1.0))
         XCTAssertEqual(appearance.fontFamilyBody, "")
         XCTAssertEqual(appearance.buttonCornerRadius, 12)
-        XCTAssertEqual(appearance.supportDarkMode, true)
     }
 
     func testBuildOnfidoConfigMinimal() throws {
@@ -85,7 +84,6 @@ class OnfidoSdkTests : XCTestCase {
                     captureFace: .init(
                         type: .photo,
                         recordAudio: false,
-                        motionCaptureFallback: nil,
                         showIntro: nil,
                         manualVideoCapture: nil
                     )
@@ -114,63 +112,6 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssert(configString.contains(appearanceRefString))
     }
 
-    func testBuildOnfidoConfigMotionWithCaptureFallback() throws {
-        let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
-        let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
-
-        let builder = OnfidoConfigBuilder()
-        let onfidoMode = try builder.build(
-            config: .init(
-                sdkToken: "demo",
-                workflowRunId: nil,
-                flowSteps: .init(
-                    welcome: true,
-                    captureDocument: .init(
-                        .init(
-                            countryCode: "USA",
-                            alpha2CountryCode: "US",
-                            docType: .drivingLicence,
-                            allowedDocumentTypes: nil
-                        )
-                    ),
-                    captureFace: .init(
-                        type: .motion,
-                        recordAudio: nil,
-                        motionCaptureFallback: .init(
-                          type: .photo,
-                          showIntro: nil,
-                          manualVideoCapture: nil
-                        ),
-                        showIntro: nil,
-                        manualVideoCapture: nil
-                    )
-                ),
-                localisation: nil,
-                hideLogo: nil,
-                logoCoBrand: nil,
-                disableNFC: nil,
-                disableMobileSdkAnalytics: nil
-            ),
-            appearance: appearance,
-            mediaCallBack: nil
-        )
-
-        guard case .classic(let configBuilder) = onfidoMode else {
-            fatalError("Expected to receive classic mode")
-        }
-
-        let appearanceRefString = String(describing: appearance)
-        let onfidoConfig = try configBuilder.build()
-        let configString = String(describing: onfidoConfig)
-        XCTAssert(configString.contains("intro"))
-        XCTAssert(configString.contains("drivingLicence"))
-        XCTAssert(!configString.contains("photo"))
-        XCTAssert(!configString.contains("video"))
-        XCTAssert(configString.contains("motion"))
-        XCTAssert(configString.contains("MotionStepConfiguration")) //this is for fallback option as per implemented iOS SDK if we only have MotionStepConfiguration for fallback and audio.
-        XCTAssert(configString.contains(appearanceRefString))
-    }
-
     func testBuildOnfidoConfigMotionWithAudio() throws {
         let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
         let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
@@ -193,7 +134,6 @@ class OnfidoSdkTests : XCTestCase {
                     captureFace: .init(
                         type: .motion,
                         recordAudio: true,
-                        motionCaptureFallback: nil,
                         showIntro: nil,
                         manualVideoCapture: nil
                     )
@@ -220,64 +160,6 @@ class OnfidoSdkTests : XCTestCase {
         XCTAssert(!configString.contains("photo"))
         XCTAssert(!configString.contains("video"))
         XCTAssert(configString.contains("motion"))
-        XCTAssert(configString.contains("MotionStepConfiguration")) //this is for fallback option as per implemented iOS SDK if we only have MotionStepConfiguration for fallback and audio.
-        XCTAssert(configString.contains(appearanceRefString))
-    }
-
-    func testBuildOnfidoConfigMotionWithAudioAndWithFallBack() throws {
-        let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
-        let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
-
-        let builder = OnfidoConfigBuilder()
-        let onfidoMode = try builder.build(
-            config: .init(
-                sdkToken: "demo",
-                workflowRunId: nil,
-                flowSteps: .init(
-                    welcome: true,
-                    captureDocument: .init(
-                        .init(
-                            countryCode: "USA",
-                            alpha2CountryCode: "US",
-                            docType: .drivingLicence,
-                            allowedDocumentTypes: nil
-                        )
-                    ),
-                    captureFace: .init(
-                        type: .motion,
-                        recordAudio: false,
-                        motionCaptureFallback: .init(
-                          type: .photo,
-                          showIntro: nil,
-                          manualVideoCapture: nil
-                        ),
-                        showIntro: false,
-                        manualVideoCapture: nil
-                    )
-                ),
-                localisation: nil,
-                hideLogo: nil,
-                logoCoBrand: nil,
-                disableNFC: nil,
-                disableMobileSdkAnalytics: false
-            ),
-            appearance: appearance,
-            mediaCallBack: nil
-        )
-
-        guard case .classic(let configBuilder) = onfidoMode else {
-            fatalError("Expected to receive classic mode")
-        }
-
-        let appearanceRefString = String(describing: appearance)
-        let onfidoConfig = try configBuilder.build()
-        let configString = String(describing: onfidoConfig)
-        XCTAssert(configString.contains("intro"))
-        XCTAssert(configString.contains("drivingLicence"))
-        XCTAssert(!configString.contains("photo"))
-        XCTAssert(!configString.contains("video"))
-        XCTAssert(configString.contains("motion"))
-        XCTAssert(configString.contains("MotionStepConfiguration")) //this is for fallback option as per implemented iOS SDK if we only have MotionStepConfiguration for fallback and audio.
         XCTAssert(configString.contains(appearanceRefString))
     }
 

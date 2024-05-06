@@ -604,16 +604,6 @@ export default class App extends Component {
 
 * **`manualVideoCapture`**: **Optional**. A boolean parameter that enables manual video capture (iOS only). The default value is `false`.
 
-* **`motionCaptureFallback`**: **Required** if the `captureFace` type is specified as `MOTION`.
-  * Valid values in `OnfidoFaceCapture`: `OnfidoFaceSelfieCapture`, `OnfidoFaceVideoCapture`, `OnfidoFaceMotionCapture`.
-    * Valid values in `OnfidoFaceSelfieCapture`: `type`: `OnfidoCaptureType.PHOTO`
-    * Valid values in `OnfidoFaceVideoCapture`: `type`: `OnfidoCaptureType.VIDEO`
-    * Valid values in `OnfidoFaceMotionCapture`: `type`: `OnfidoCaptureType.MOTION`
-
-    In the scenario that the Motion variant is not supported on the user's device, if you configure the `motionCaptureFallback` appropriately it will allow the user to capture a Selfie or a Video as a fallback.
-    
-    **Note**: From version 10.4.0 of the React Native SDK, the fallback configuration is no longer used in Android as Motion is supported by all devices and operating system versions specified by the SDK.
-
 * **`recordAudio`**: **Required** if the `captureFace` type is specified as `MOTION`. Valid values are `true` or `false`.
 
 * **`localisation`**: **Optional**. This object contains custom localization configurations. See the [Localization](#language-localization) section above for more details.

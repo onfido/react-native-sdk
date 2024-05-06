@@ -34,13 +34,6 @@ struct OnfidoCaptureDocument: Codable {
 struct OnfidoCaptureFace: Codable {
     let type: OnfidoCaptureType
     let recordAudio: Bool?
-    let motionCaptureFallback: OnfidoCaptureFaceFallback?
-    let showIntro: Bool?
-    let manualVideoCapture: Bool?
-}
-
-struct OnfidoCaptureFaceFallback: Codable {
-    let type: OnfidoCaptureFaceFallbackType
     let showIntro: Bool?
     let manualVideoCapture: Bool?
 }
@@ -69,21 +62,14 @@ enum OnfidoCaptureType: String, Codable {
     case motion = "MOTION"
 }
 
-enum OnfidoCaptureFaceFallbackType: String, Codable {
-    case photo = "PHOTO"
-    case video = "VIDEO"
-}
-
 struct OnfidoAppearanceConfig: Codable {
     let primaryColorHex: String?
     let primaryButtonTextColorHex: String?
     let primaryButtonColorPressedHex: String?
-    let supportsDarkMode: Bool?
-    
+
     enum CodingKeys: String, CodingKey {
         case primaryColorHex = "onfidoPrimaryColor"
         case primaryButtonTextColorHex = "onfidoPrimaryButtonTextColor"
         case primaryButtonColorPressedHex = "onfidoPrimaryButtonColorPressed"
-        case supportsDarkMode = "onfidoIosSupportDarkMode"
     }
 }

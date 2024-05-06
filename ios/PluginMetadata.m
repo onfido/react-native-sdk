@@ -7,7 +7,7 @@
     self = [super init];
     if (self) {
         _pluginPlatform = @"react-native";
-        _pluginVersion = @"11.1.0";
+        _pluginVersion = @"12.0.0";
     }
     return self;
 }
