@@ -11,9 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.72.6)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Onfido (30.0.0)
+  - Onfido (30.1.0)
   - onfido-react-native-sdk (11.1.0):
-    - Onfido (~> 30.0.0)
+    - Onfido (~> 30.1.0)
     - React
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -529,8 +529,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 966f29e4e697de53a3b366355e8f57375c856ad9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  Onfido: c6f161967f23fdbfcc00abe8c9a5553ef682064a
-  onfido-react-native-sdk: 51810ead9339edf7b139d3686fe55d865021302d
+  Onfido: 5ae21e77484df08d64778fd676a12d1285054a20
+  onfido-react-native-sdk: 39d216b8bf2e99061454c8d578e9e086e02c540d
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
   RCTTypeSafety: e9c6c409fca2cc584e5b086862d562540cb38d29

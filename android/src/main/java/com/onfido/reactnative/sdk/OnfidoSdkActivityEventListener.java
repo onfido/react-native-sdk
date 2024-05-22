@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 
 import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
@@ -55,7 +56,10 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
             @Override
             public void onUserCompleted() {
                 if (currentPromise != null) {
-                    currentPromise.resolve("");
+                    // According to OnfidoResult type definition; Return empty object.
+                    // There are no results to return.
+                    WritableMap map = Arguments.createMap();
+                    currentPromise.resolve(map);
                 }
             }
 
