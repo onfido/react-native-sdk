@@ -1,13 +1,13 @@
 //
 //  OnfidoFlowBuilder.swift
 //
-//  Copyright © 2016-2023 Onfido. All rights reserved.
+//  Copyright © 2016-2024 Onfido. All rights reserved.
 //
 
 import Foundation
 import Onfido
 
-final class OnfidoFlowBuilder {
+struct OnfidoFlowBuilder {
     private let configBuilder: OnfidoConfigBuilder
 
     init(configBuilder: OnfidoConfigBuilder = OnfidoConfigBuilder()) {

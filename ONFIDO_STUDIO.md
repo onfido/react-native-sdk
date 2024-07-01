@@ -17,8 +17,8 @@ The SDK communicates directly and dynamically with active workflows to show the 
 The SDK supports:
 
 * React Native 0.68+
-* iOS 11+
-* Supports Xcode 13+
+* iOS 13+
+* Supports Xcode 15+
 * Supports Android API level 21+
 
 
@@ -39,10 +39,10 @@ npm --prefix node_modules/@onfido/react-native-sdk/ run updateBuildGradle
 ```
 
 ### 3. Update your iOS configuration files
-Change ios/Podfile to use version 11:
+Change ios/Podfile to use version 13:
 
 ```ruby
-platform :ios, '11.0'
+platform :ios, '13.0'
 ```
 
 Add descriptions for camera and microphone permissions to `ios/YourProjectName/Info.plist`:

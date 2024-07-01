@@ -1,3 +1,9 @@
+//
+//  OnfidoSdk.m
+//
+//  Copyright © 2016-2024 Onfido. All rights reserved.
+//
+
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>

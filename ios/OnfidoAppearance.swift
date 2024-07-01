@@ -1,4 +1,11 @@
+//
+//  OnfidoAppearance.swift
+//
+//  Copyright © 2016-2024 Onfido. All rights reserved.
+//
+
 import Onfido
+import Foundation
 
 public class AppearancePublic: NSObject {
     public let primaryColor: UIColor
@@ -221,7 +228,6 @@ extension UIColor {
 
 // MARK: - Private Helpers
 
-@available(iOS 12.0, *)
 private extension UIUserInterfaceStyle {
     init(_ onfidoInterfaceStyle: OnfidoInterfaceStyle) {
         switch onfidoInterfaceStyle {

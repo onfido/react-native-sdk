@@ -1,7 +1,15 @@
+//
+//  BridgeUtils.swift
+//
+//  Copyright © 2016-2024 Onfido. All rights reserved.
+//
+
 /*
  NOTE: These are used in junction with RN + Android, to communicate the
  information received to the MediaCallback added in TestApp/App.js
 */
+
+import Foundation
 
 enum Keys {
     enum MediaCallback {
