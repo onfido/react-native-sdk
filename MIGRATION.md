@@ -141,4 +141,4 @@ type OnfidoFaceMotionCapture = {
 };
 ```
 
-- Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://developers.onfido.com/guide/document-report-nfc#react-native-1).
+- Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://documentation.onfido.com/guide/document-report-nfc#react-native-1).

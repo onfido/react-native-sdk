@@ -24,7 +24,7 @@ The Onfido Smart Capture SDKs provide a set of screens and functionalities that 
 - Direct image upload to the Onfido service, to simplify integration
 - A suite of advanced fraud detection signals to protect against malicious users
 
-All Onfido Smart Capture SDKs are orchestrated using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product) workflows, with only minor customization differences between the available platforms.
+All Onfido Smart Capture SDKs are orchestrated using [Onfido Studio](https://documentation.onfido.com/getting-started/onfido-studio-product) workflows, with only minor customization differences between the available platforms.
 
 ### Environments and testing with the SDK
 
@@ -37,7 +37,7 @@ The environment being used is determined by the API token that is used to genera
 
 ### Going Live
 
-Once you are satisfied with your integration and are ready to go live, please contact [client-support@onfido.com](mailto:client-support@onfido.com) to obtain a live API token. You will have to replace the sandbox token in your code with the live token.
+Once you are satisfied with your integration and are ready to go live, please contact [Customer Support](mailto:client-support@onfido.com) to obtain a live API token. You will have to replace the sandbox token in your code with the live token.
 
 Check that you have entered correct billing details inside your [Onfido Dashboard](https://onfido.com/dashboard/), before going live.
 
@@ -181,7 +181,7 @@ Recent passports, national identity cards and residence permits contain a chip t
 
 From version 10.0.0 onwards, NFC is enabled by default in the Onfido React Native SDK for Android and iOS and offered to customers when both the document and the device support NFC.
 
-For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://documentation.onfido.com/guide/document-report-nfc) guide.
 
 ##### Enabling NFC extraction for iOS
 
@@ -256,11 +256,11 @@ The Reach Native SDK has multiple initialization and customization options that 
 
 ### Defining a workflow
 
-Onfido Studio is the platform used to create highly reusable identity verification workflows for use with the Onfido SDKs. For an introduction to working with workflows, please refer to our [Getting Started guide](https://developers.onfido.com/guide/general-introduction), or the Onfido Studio [product guide](https://developers.onfido.com/guide/onfido-studio-product).
+Onfido Studio is the platform used to create highly reusable identity verification workflows for use with the Onfido SDKs. For an introduction to working with workflows, please refer to our [Getting Started guide](https://documentation.onfido.com/getting-started/general-introduction), or the Onfido Studio [product guide](https://documentation.onfido.com/getting-started/onfido-studio-product).
 
 SDK sessions are orchestrated by a session-specific `workflow_run_id`, itself derived from a `workflow_id`, the unique identifier of a given workflow.
 
-For details on how to generate a `workflow_run_id`, please refer to the `POST /workflow_runs/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#workflow-runs).
+For details on how to generate a `workflow_run_id`, please refer to the `POST /workflow_runs/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#workflow-runs).
 
 <Callout type="warning">
 
@@ -290,7 +290,7 @@ The SDK is authenticated using SDK tokens. As each SDK token must be specific to
 
 It's important to note that SDK tokens expire after **90 minutes**.
 
-For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#generate-sdk-token).
+For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#generate-sdk-token).
 
 **Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
@@ -356,7 +356,7 @@ For both iOS and Android, the React Native SDK supports the customization of col
 
 The customization of colors and other appearance attributes for Android is implemented according to the same methodology as the native Android SDK. You can find detailed documentation [here](https://documentation.onfido.com/sdk/android/#ui-customization).
 
-For a complete list and visualizations of the customizable attributes, refer to our [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#ui-customization).
+For a complete list and visualizations of the customizable attributes, refer to our [SDK customization guide](https://documentation.onfido.com/sdk/sdk-customization#ui-customization).
 
 ##### Customizing Dimensions
 
@@ -396,7 +396,7 @@ For iOS, you can customize colors and other appearance attributes by adding a `c
 }
 ```
 
-For a complete list and visualizations of the customizable attributes, refer to our [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#ui-customization).
+For a complete list and visualizations of the customizable attributes, refer to our [SDK customization guide](https://documentation.onfido.com/sdk/sdk-customization#ui-customization).
 
 ### Dark theme
 
@@ -416,7 +416,7 @@ The React Native SDK supports and maintains translations for over 40 languages, 
 
 The SDK will detect and use the end user's device language setting. If the device's language is not supported by Onfido, the SDK will default to English (`en_US`).
 
-For a complete list of the languages Onfido supports, refer to our [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#language-customization).
+For a complete list of the languages Onfido supports, refer to our [SDK customization guide](https://documentation.onfido.com/sdk/sdk-customization#language-customization).
 
 #### Custom languages for Android
 
@@ -521,12 +521,12 @@ let base64FileData = Onfido.byteArrayStringToBase64(byteArrayString);
 
 ### Generating verification reports
 
-While the SDK is responsible for capturing and uploading the user's media and data, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product).
+While the SDK is responsible for capturing and uploading the user's media and data, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://documentation.onfido.com/getting-started/onfido-studio-product).
 
-For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://developers.onfido.com/guide/quick-start-guide).
+For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://documentation.onfido.com/getting-started/quick-start-guide).
 
-If your application initializes the Onfido React Native SDK using the options defined in the [Advanced customization](#advanced-flow-customization) section of this document, you may [create checks](https://documentation.onfido.com/#create-check) and [retrieve report results](https://documentation.onfido.com/#retrieve-report) manually using the Onfido API.
-You may also configure [webhooks](https://documentation.onfido.com/#webhooks) to be notified asynchronously when the report results have been generated.
+If your application initializes the Onfido React Native SDK using the options defined in the [Advanced customization](#advanced-flow-customization) section of this document, you may [create checks](https://documentation.onfido.com/api/latest#create-check) and [retrieve report results](https://documentation.onfido.com/api/latest#retrieve-report) manually using the Onfido API.
+You may also configure [webhooks](https://documentation.onfido.com/api/latest#webhooks) to be notified asynchronously when the report results have been generated.
 
 ## Advanced flow customization
 
@@ -588,12 +588,11 @@ export default class App extends Component {
   * **`proofOfAddress`**: **Optional**. This toggles the proof of address screen on or off. If omitted, this screen does not appear in the flow. Valid values are `true` or `false`
   * **`captureDocument`**: **Optional**. This object contains configurations for the document capture screen. If `docType` and `countryCode` are not specified, a screen will appear allowing the user to choose the document type and issuing country. If all parameters are not specified or the step is omitted, this screen will not appear in the flow.
     * **`docType`**: **Required** if `countryCode` is specified.
-      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`. <br>
-      **Note**: the `GENERIC` document type doesn't offer an optimized capture experience for a desired document type.
+      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`. <br>
     * **`countryCode`**: **Required** if `docType` is specified.
       * Valid values in `OnfidoCountryCode`: Any ISO 3166-1 alpha-3 code. For example: `OnfidoCountryCode.USA`.
     * **`allowedDocumentTypes`**: **Optional**. If specified, `docType` and `countryCode` must not be specified. This parameter allows you to specify a list of document types that can be selected for all available issuing countries.
-      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`.
+      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`.
   * **`captureFace`**: **Optional**. This object contains configuration options for the face capture screen. If omitted, this screen does not appear in the flow.
     * **`type`**: **Required** if `captureFace` is specified.
       * Valid values in `OnfidoCaptureType`: `PHOTO`, `VIDEO`, `MOTION`.
@@ -696,7 +695,7 @@ Alternatively, you can search the support documentation available via the custom
 
 We recommend you update your SDK to the latest version release as frequently as possible. Customers on newer versions of the Onfido SDK consistently see better performance across user onboarding and fraud mitigation, so we strongly advise keeping your SDK integration up-to-date.
 
-You can review our full SDK versioning policy [here](https://developers.onfido.com/guide/sdk-version-releases).
+You can review our full SDK versioning policy [here](https://documentation.onfido.com/sdk/sdk-version-releases).
 
 ## How is the Onfido React Native SDK licensed?
 

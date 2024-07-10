@@ -27,7 +27,7 @@ flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : Flip
 # end
 
 target 'OnfidoSdk' do
-  pod 'Onfido', '~> 30.2.0'
+  pod 'Onfido', '~> 30.3.0'
 
   config = use_native_modules!
   use_react_native!(
