@@ -80,13 +80,15 @@ struct OnfidoConfigBuilder {
         
         // NFC
         if let disableNFC = config.disableNFC, disableNFC == true {
-            builder.disableNFC()
+            builder.withNFC(.off)
         }
         
         // Localization
         if let localizationFile = try customLocalization(config: config) {
             builder.withCustomLocalization(andTableName: localizationFile)
         }
+
+        builder.withNFC(nfcConfiguration(config: config))
         
         // Media Callback
         if let mediaCallBack {
@@ -226,6 +228,17 @@ struct OnfidoConfigBuilder {
     
     private func customLocalization(config: OnfidoPluginConfig) throws -> String? {
         return config.localisation?.stringsFileName
+    }
+    
+    // MARK: - NFC Configurations
+
+    private func nfcConfiguration(config: OnfidoPluginConfig) -> NFCConfiguration {
+        let nfcConfigurationMap: [OnfidoNFCOptions?: NFCConfiguration] = [
+            OnfidoNFCOptions.disabled: .off,
+            OnfidoNFCOptions.optional: .optional,
+            OnfidoNFCOptions.required: .required
+        ]
+        return nfcConfigurationMap[config.nfcOption, default: .optional]
     }
     
     // MARK: - Helpers

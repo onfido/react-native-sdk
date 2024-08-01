@@ -47,6 +47,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
@@ -92,6 +93,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
@@ -142,6 +144,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
@@ -188,6 +191,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
@@ -230,6 +234,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
@@ -262,6 +267,7 @@ class OnfidoSdkTests : XCTestCase {
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
+                nfcOption: nil,
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,

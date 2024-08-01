@@ -129,6 +129,8 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    packagingOptions.resources.excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
 }
 
 dependencies {

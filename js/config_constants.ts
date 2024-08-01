@@ -34,7 +34,11 @@ export type OnfidoConfig = {
   flowSteps: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean;
+   /**
+   * @deprecated Deprecated. Use `nfcOption` parameter to manage NFC settings"
+   */
   disableNFC?: boolean;
+  nfcOption?: OnfidoNFCOptions;
   disableMobileSdkAnalytics?: boolean;
   localisation?: {
     ios_strings_file_name?: string;
@@ -95,6 +99,12 @@ export enum OnfidoTheme {
   LIGHT = "LIGHT",
   DARK = "DARK",
   AUTOMATIC = "AUTOMATIC"
+}
+
+export enum OnfidoNFCOptions {
+  DISABLED = "DISABLED",
+  OPTIONAL = "OPTIONAL",
+  REQUIRED = "REQUIRED"
 }
 
 export type OnfidoFaceCapture =

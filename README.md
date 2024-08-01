@@ -210,19 +210,19 @@ You have to include the entries below in your app target's `Info.plist` file to 
 </array>
 ```
 
-##### Disabling NFC
+##### Disabling NFC and excluding dependencies
 
-NFC is enabled by default. To disable NFC, include the `disableNFC` parameter while configuring the `Onfido.start` function:
+NFC is enabled by default. To disable NFC, include the `nfcOption` parameter with `OnfidoNFCOptions.DISABLED` while configuring the `Onfido.start` function:
 
 ```javascript
 config = {
   sdkToken: "<YOUR_SDK_TOKEN>",
   workflowRunId: "<YOUR_WORKFLOW_RUN_ID>",
-  disableNFC: "true"
+  nfcOption: OnfidoNFCOptions.DISABLED
 }
 ```
 
-For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `disableNFC` parameter, you must remove any libraries from the build process.
+For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `nfcOption` parameter, you must remove any libraries from the build process.
 
 Exclude dependencies required for NFC from your build:
 
@@ -250,6 +250,13 @@ implementation ("com.onfido.sdk:onfido-<variant>:19.1.0"){
  implementation "org.bouncycastle:bcutil-jdk15to18:1.69"
 ```
 
+#### NFC Options
+
+To configure NFC, include the `nfcOption` parameter with the three options below while configuring the `Onfido.start` function:
+* DISABLED: NFC reading will not be asked of end-users
+* OPTIONAL (Default): NFC reading will be attempted, if possible
+* REQUIRED: NFC reading will be enforced, preventing end-users from completing the flow without a successful reading
+
 ## Initializing the SDK
 
 The Reach Native SDK has multiple initialization and customization options that provide flexibility to your integration, while remaining easy to integrate.
@@ -274,23 +281,9 @@ When defining workflows and creating identity verifications, we highly recommend
 
 ### SDK authentication
 
-The SDK is authenticated using SDK tokens. As each SDK token must be specific to a given applicant and session, and a new token must be generated each time you initialize the Onfido React Native SDK.
+The SDK is authenticated using SDK tokens. Onfido Studio generates and exposes SDK tokens in the workflow run payload returned by the API when a workflow run is [created](https://documentation.onfido.com/#create-workflow-run).
 
-| Parameter | Notes |
-|------|------|
-| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
-| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. |
-
-* For iOS, the `application_id` is usually in the form of `com.your-company.app-name`.
-  * To get this value manually, open Xcode `ios/YourProjectName`, click on the project root, click the General tab, under Targets click your project name, and check the Bundle Identifier field.
-  * To get this value programmatically in native iOS code, refer to this [Stack Overflow Page](https://stackoverflow.com/questions/8873203/how-to-get-bundle-id).
-* For Android, the `application_id` is usually in the form of `com.example.yourapp`.
-  * To get this file manually, you can find it in your app's `build.config`. For example, in `android/app/build.gradle`, it is the value of `applicationId`.
-  * To get this value programmatically in native Java code, refer to this [Stack Overflow Page](https://stackoverflow.com/questions/14705874/bundle-id-in-android).
-
-It's important to note that SDK tokens expire after **90 minutes**.
-
-For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#generate-sdk-token).
+SDK tokens for Studio can only be used together with the specific workflow run they are generated for, and remain valid for a period of five weeks.
 
 **Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
@@ -535,6 +528,28 @@ This section on 'Advanced customization' refers to the process of initializing t
 The flow step parameters described below are mutually exclusive with `workflowRunId`, requiring an alternative method of instantiating the client and starting the flow.
 
 **Note** that this initialization process is **not recommended** as the majority of new features are exclusively released for Studio workflows.
+
+### Manual SDK authentication
+
+The SDK is authenticated using SDK tokens. As each SDK token must be specific to a given applicant and session, and a new token must be generated each time you initialize the Onfido React Native SDK.
+
+| Parameter | Notes |
+|------|------|
+| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
+| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. For iOS, this is usually in the form `com.your-company.app-name`, or `com.example.yourapp` for Android. Make sure to use a valid `application_id` or you'll receive a 401 error. |
+
+* For iOS, the `application_id` is usually in the form of `com.your-company.app-name`.
+  * To get this value manually, open Xcode `ios/YourProjectName`, click on the project root, click the General tab, under Targets click your project name, and check the Bundle Identifier field.
+  * To get this value programmatically in native iOS code, refer to this [Stack Overflow Page](https://stackoverflow.com/questions/8873203/how-to-get-bundle-id).
+* For Android, the `application_id` is usually in the form of `com.example.yourapp`.
+  * To get this file manually, you can find it in your app's `build.config`. For example, in `android/app/build.gradle`, it is the value of `applicationId`.
+  * To get this value programmatically in native Java code, refer to this [Stack Overflow Page](https://stackoverflow.com/questions/14705874/bundle-id-in-android).
+
+It's important to note that manually generated SDK tokens in React Native expire after **90 minutes** and cannot be renewed. SDK tokens generated in Onfido Studio when creating workflow runs are **not** affected by this limit.
+
+For details on how to manually generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#generate-sdk-token).
+
+**Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
 ### Manually building the configuration object
 

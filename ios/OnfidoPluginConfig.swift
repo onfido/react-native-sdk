@@ -14,6 +14,7 @@ struct OnfidoPluginConfig: Codable {
     let hideLogo: Bool?
     let logoCoBrand: Bool?
     let disableNFC: Bool?
+    let nfcOption: OnfidoNFCOptions?
     let disableMobileSdkAnalytics: Bool?
 }
 
@@ -60,6 +61,12 @@ enum OnfidoCaptureType: String, Codable {
     case photo = "PHOTO"
     case video = "VIDEO"
     case motion = "MOTION"
+}
+
+enum OnfidoNFCOptions: String, Codable {
+    case disabled = "DISABLED"
+    case optional = "OPTIONAL"
+    case required = "REQUIRED"
 }
 
 struct OnfidoAppearanceConfig: Codable {

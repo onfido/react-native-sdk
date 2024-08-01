@@ -16,21 +16,23 @@ import com.onfido.android.sdk.capture.EnterpriseFeatures;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.OnfidoTheme;
 import com.onfido.android.sdk.capture.config.MediaCallback;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
+import com.onfido.android.sdk.capture.model.NFCOptions;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
 import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
+import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.MotionCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.PhotoCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.VideoCaptureStepBuilder;
-import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.MotionCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
 import com.onfido.android.sdk.capture.utils.CountryCode;
-import com.onfido.android.sdk.capture.OnfidoTheme;
 import com.onfido.workflow.OnfidoWorkflow;
 import com.onfido.workflow.WorkflowConfig;
+import com.onfido.android.sdk.capture.model.NFCOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,8 +179,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         }
 
         if (getBooleanFromConfig(config, "disableNFC")) {
-            onfidoConfigBuilder.disableNFC();
+            onfidoConfigBuilder.withNFC(NFCOptions.Disabled.INSTANCE);
         }
+
+        NFCOptions nfcOption = getNFCOptionFromConfig(config);
+        onfidoConfigBuilder.withNFC(nfcOption);
 
         OnfidoTheme onfidoTheme = getThemeFromConfig(config);
         if (onfidoTheme != null) {
@@ -247,6 +252,21 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             throw new Exception("Unexpected theme value");
         }
         return onfidoTheme;
+    }
+
+    public static NFCOptions getNFCOptionFromConfig(final ReadableMap config) {
+        String nfcOptionString = config.getString("nfcOption");
+        if (nfcOptionString == null) {
+            return NFCOptions.Enabled.Optional.INSTANCE;
+        }
+        switch (nfcOptionString) {
+            case "DISABLED":
+                return NFCOptions.Disabled.INSTANCE;
+            case "REQUIRED":
+                return NFCOptions.Enabled.Required.INSTANCE;
+            default:
+                return NFCOptions.Enabled.Optional.INSTANCE;
+        }
     }
 
     /*
