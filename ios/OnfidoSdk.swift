@@ -19,7 +19,7 @@ final class OnfidoSdk: RCTEventEmitter {
     private let onfidoFlowBuilder = OnfidoFlowBuilder()
     private let configParser = OnfidoConfigParser()
     private var callbackTypes: [CallbackType] = []
-    
+
     @objc
     func start(_ config: NSDictionary,
                      resolver resolve: @escaping RCTPromiseResolveBlock,
@@ -38,13 +38,26 @@ final class OnfidoSdk: RCTEventEmitter {
             let appearanceFilePath = Bundle.main.path(forResource: "colors", ofType: "json")
             let appearance = try loadAppearanceFromFile(filePath: appearanceFilePath)
 
+            if
+                #available(iOS 12.0, *),
+                let theme = onfidoConfig.theme
+            {
+                switch theme {
+                case .dark:
+                    appearance.setUserInterfaceStyle(.dark)
+                case .light:
+                    appearance.setUserInterfaceStyle(.light)
+                default:
+                    appearance.setUserInterfaceStyle(.unspecified)
+                }
+            }
             let mediaCallback: CallbackReceiver?
             if callbackTypes.contains(.media) {
                 mediaCallback = CallbackReceiver(withCallback: processMediaResult(_:))
             } else {
                 mediaCallback = nil
             }
-            
+
             let onfidoFlow: OnfidoFlow = try onfidoFlowBuilder.build(
                 with: onfidoConfig,
                 appearance: appearance,
@@ -75,9 +88,9 @@ final class OnfidoSdk: RCTEventEmitter {
                         return
                     }
                 })
-            guard 
+            guard
                 let window = UIApplication.shared.windows.first,
-                let topMostViewController = window.rootViewController?.findTopMostController() 
+                let topMostViewController = window.rootViewController?.findTopMostController()
             else {
                 reject("error", "Unable to locate presenting view controller", nil)
                 return

@@ -19,7 +19,7 @@ class OnfidoSdkTests : XCTestCase {
 
         XCTAssertEqual( appearancePublic.primaryColor, expectedPrimaryColor )
     }
-    
+
     func testLoadColorFile() throws {
         let appearanceFilePath = String(#file[...#file.lastIndex(of: "/")!] + "colors.json")
         let appearance = try loadAppearancePublicFromFile(filePath: appearanceFilePath)!
@@ -44,6 +44,7 @@ class OnfidoSdkTests : XCTestCase {
                     .init(countryCode: nil, alpha2CountryCode: nil, docType: nil, allowedDocumentTypes: nil))
                 ),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
@@ -90,6 +91,7 @@ class OnfidoSdkTests : XCTestCase {
                     )
                 ),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
@@ -141,6 +143,7 @@ class OnfidoSdkTests : XCTestCase {
                     )
                 ),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
@@ -188,6 +191,7 @@ class OnfidoSdkTests : XCTestCase {
                     )
                 )),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
@@ -231,6 +235,7 @@ class OnfidoSdkTests : XCTestCase {
                     )
                 )),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,
@@ -264,6 +269,7 @@ class OnfidoSdkTests : XCTestCase {
                 workflowRunId: nil,
                 flowSteps: .init(proofOfAddress: true),
                 localisation: nil,
+                theme: nil,
                 hideLogo: nil,
                 logoCoBrand: nil,
                 disableNFC: nil,

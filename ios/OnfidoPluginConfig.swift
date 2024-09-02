@@ -11,6 +11,7 @@ struct OnfidoPluginConfig: Codable {
     let workflowRunId: String?
     let flowSteps: OnfidoFlowSteps?
     let localisation: OnfidoLocalisation?
+    let theme: Theme?
     let hideLogo: Bool?
     let logoCoBrand: Bool?
     let disableNFC: Bool?
@@ -41,10 +42,15 @@ struct OnfidoCaptureFace: Codable {
 
 struct OnfidoLocalisation: Codable {
     let stringsFileName: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case stringsFileName = "ios_strings_file_name"
     }
+}
+
+enum Theme: String, Codable {
+    case dark = "DARK"
+    case light = "LIGHT"
 }
 
 enum OnfidoDocumentType: String, Codable {

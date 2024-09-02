@@ -403,6 +403,48 @@ Dark theme customization for Android is implemented according to the same method
 
 Dark theme customization for iOS is implemented according to the same methodology as the native Android SDK. You can find detailed documentation [here](https://documentation.onfido.com/sdk/ios/#dark-theme).
 
+### Co-branding
+
+The Onfido React Native SDK allows for a number of co-branding options that affect the display of the Onfido logo at the bottom of the Onfido screens.
+
+#### Logo co-branding
+
+- **`logoCobrand {Boolean}` - optional**
+
+  You may specify a set of images to be defined in the `logoCobrand` property. You must provide the path to an image for use in 'dark' mode and a separate image for 'light' mode.
+
+##### Android
+
+The two logo images must be placed in the `drawables` resource folder of your application (`/res/drawables`), named as follows:
+
+- `cobrand_logo_light.xml` (accessible in code by `R.drawable.cobrand_logo_light`)
+- `cobrand_logo_dark.xml` (accessible in code by `R.drawable.cobrand_logo_dark`)
+
+##### iOS
+
+The two logo images must be placed in the `assets` folder of your application.
+
+The `logoCobrand` property itself takes a boolean as a value, which by default is set to `false`.
+
+#### Hide Onfido logo
+
+- **`hideLogo {Boolean}` - optional**
+
+  In addition to `logoCobrand`, you can also choose to hide the Onfido logo from the footer watermark. The `hideLogo` property takes a boolean as a value, which by default is set to `false`.
+
+To apply the `logoCobrand` and `hideLogo` options for both Android and iOS, define their values in the `Onfido.start` function:
+
+```javascript
+    Onfido.start({
+      sdkToken: "<TOKEN_HERE>",
+      workflowRunId: "<YOUR_WORKFLOW_RUN_ID>",
+      hideLogo: "<TRUE/FALSE>",
+      logoCobrand: "<TRUE/FALSE>"
+    })
+```
+
+**Please note**: Logo co-branding options must be enabled by Onfido. Please [contact](mailto:client-support@onfido.com) your Solutions Engineer or Customer Success Manager to activate the feature.
+
 ### Language localization
 
 The React Native SDK supports and maintains translations for over 40 languages, available for use with both Android and iOS.
