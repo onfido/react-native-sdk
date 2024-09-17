@@ -13,7 +13,7 @@
     self = [super init];
     if (self) {
         _pluginPlatform = @"react-native";
-        _pluginVersion = @"13.1.0";
+        _pluginVersion = @"13.2.0";
     }
     return self;
 }

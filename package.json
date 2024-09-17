@@ -1,7 +1,7 @@
 {
   "name": "@onfido/react-native-sdk",
   "title": "React Native Onfido Sdk",
-  "version": "13.1.0",
+  "version": "13.2.0",
   "description": "Onfido React Native SDK",
   "main": "index.ts",
   "scripts": {

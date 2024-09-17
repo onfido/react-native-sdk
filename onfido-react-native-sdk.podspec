@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
-  s.dependency "Onfido", "~> 30.5.0"
+  s.dependency "Onfido", "~> 30.6.0"
 end
