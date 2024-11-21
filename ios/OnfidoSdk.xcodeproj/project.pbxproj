@@ -23,6 +23,7 @@
 		9B62C6E32A40A7FF007DF5DE /* CallbackReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */; };
 		9B62C6E42A40A7FF007DF5DE /* OnfidoAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */; };
 		B3E7B58A1CC2AC0600A0062D /* OnfidoSdk.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */; };
+		FBF753172CE38F4E005F4D51 /* EncryptedBiometricTokenHandlerReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF753162CE38F4E005F4D51 /* EncryptedBiometricTokenHandlerReceiver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		B3E7B5881CC2AC0600A0062D /* OnfidoSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnfidoSdk.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* OnfidoSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnfidoSdk.m; sourceTree = "<group>"; };
 		B78EF811082AE0A0FC0314D6 /* Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FBF753162CE38F4E005F4D51 /* EncryptedBiometricTokenHandlerReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedBiometricTokenHandlerReceiver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			children = (
 				9BF206B22A3C839F00766D77 /* BridgeUtils.swift */,
 				9BF206B12A3C839F00766D77 /* CallbackReceiver.swift */,
+				FBF753162CE38F4E005F4D51 /* EncryptedBiometricTokenHandlerReceiver.swift */,
 				9BF206B32A3C839F00766D77 /* OnfidoAppearance.swift */,
 				3F87B3752A1C06D000100A48 /* OnfidoSdk.swift */,
 				3F87B3772A1C122A00100A48 /* OnfidoConfigParser.swift */,
@@ -257,12 +260,9 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -275,12 +275,9 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OnfidoSdk-OnfidoSdkTests/Pods-OnfidoSdk-OnfidoSdkTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Onfido/Onfido.framework/Onfido",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Onfido.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -350,6 +347,7 @@
 			files = (
 				9B62C6E22A40A7FF007DF5DE /* BridgeUtils.swift in Sources */,
 				9B62C6E32A40A7FF007DF5DE /* CallbackReceiver.swift in Sources */,
+				FBF753172CE38F4E005F4D51 /* EncryptedBiometricTokenHandlerReceiver.swift in Sources */,
 				9B62C6E42A40A7FF007DF5DE /* OnfidoAppearance.swift in Sources */,
 				3F87B3732A1BEC7800100A48 /* OnfidoConfigBuilder.swift in Sources */,
 				3F87B3742A1BEC7800100A48 /* OnfidoPluginConfig.swift in Sources */,

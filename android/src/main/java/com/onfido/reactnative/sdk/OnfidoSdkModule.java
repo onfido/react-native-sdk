@@ -17,29 +17,28 @@ import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.OnfidoTheme;
+import com.onfido.android.sdk.capture.config.BiometricTokenCallback;
 import com.onfido.android.sdk.capture.config.MediaCallback;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.model.NFCOptions;
-import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureStep;
-import com.onfido.android.sdk.capture.ui.camera.face.FaceCaptureVariantPhoto;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.MotionCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.PhotoCaptureStepBuilder;
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.VideoCaptureStepBuilder;
-import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep;
 import com.onfido.android.sdk.capture.ui.options.FlowStep;
+import com.onfido.android.sdk.capture.ui.options.stepbuilder.DocumentCaptureStepBuilder;
 import com.onfido.android.sdk.capture.utils.CountryCode;
 import com.onfido.workflow.OnfidoWorkflow;
 import com.onfido.workflow.WorkflowConfig;
-import com.onfido.android.sdk.capture.model.NFCOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // Analytics to be re-added once payloads are harmonised across platforms
 enum CallbackType {
-    MEDIA
+    MEDIA,
+    BIOMETRIC_TOKEN
 }
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
@@ -48,6 +47,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     private Promise currentPromise = null;
     List<CallbackType> callbackTypeList = new ArrayList<CallbackType>();
     private final OnfidoSdkActivityEventListener activityEventListener;
+    private BiometricTokenCallbackBridge biometricTokenCallback;
 
     public OnfidoSdkModule(final ReactApplicationContext reactContext) {
         super(reactContext);
@@ -145,6 +145,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
         }
 
+        if (callbackTypeList.contains(CallbackType.BIOMETRIC_TOKEN)) {
+            onfidoConfigBuilder.withBiometricTokenCallback(addBiometricTokenCallback());
+        }
+
         OnfidoTheme onfidoTheme = getThemeFromConfig(config);
         if (onfidoTheme != null) {
             onfidoConfigBuilder.withTheme(onfidoTheme);
@@ -176,10 +180,6 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
         if (callbackTypeList.contains(CallbackType.MEDIA)) {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
-        }
-
-        if (getBooleanFromConfig(config, "disableNFC")) {
-            onfidoConfigBuilder.withNFC(NFCOptions.Disabled.INSTANCE);
         }
 
         NFCOptions nfcOption = getNFCOptionFromConfig(config);
@@ -333,7 +333,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     }
                 } else {
                     // Default face capture type is photo.
-                    flowStepList.add(new FaceCaptureStep(new FaceCaptureVariantPhoto()));
+                  flowStepList.add(FaceCaptureStepBuilder.forPhoto().build());
                 }
             }
 
@@ -426,13 +426,38 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         String countryCodeString = captureDocument.getString("alpha2CountryCode");
         CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
-        if (countryCodeEnum == null) {
-            System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
-            throw new Exception("Unexpected countryCode value.");
-        }
-
-        flowStepList.add(new CaptureScreenStep(docTypeEnum, countryCodeEnum));
+    if (countryCodeEnum == null) {
+      System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
+      throw new Exception("Unexpected countryCode value.");
     }
+    flowStepList.add(getFlowStep(docTypeEnum, countryCodeEnum));
+  }
+
+  private static FlowStep getFlowStep(
+      DocumentType docTypeEnum,
+      CountryCode countryCodeEnum
+  ) throws Exception {
+    switch (docTypeEnum) {
+      case PASSPORT:
+        return DocumentCaptureStepBuilder.forPassport().build();
+      case DRIVING_LICENCE:
+        return DocumentCaptureStepBuilder.forDrivingLicence().withCountry(countryCodeEnum).build();
+      case NATIONAL_IDENTITY_CARD:
+        DocumentCaptureStepBuilder.forNationalIdentity().withCountry(countryCodeEnum).build();
+      case RESIDENCE_PERMIT:
+        return DocumentCaptureStepBuilder.forResidencePermit().withCountry(countryCodeEnum)
+            .build();
+      case VISA:
+        return DocumentCaptureStepBuilder.forVisa().withCountry(countryCodeEnum).build();
+      case WORK_PERMIT:
+        return DocumentCaptureStepBuilder.forWorkPermit().withCountry(countryCodeEnum).build();
+      case GENERIC:
+        return DocumentCaptureStepBuilder.forGenericDocument().withCountry(countryCodeEnum).build();
+      case UNKNOWN:
+        throw new Exception("Unexpected docType value.");
+    }
+    return null;
+  }
 
     private static PhotoCaptureStepBuilder faceStepFromPhotoDefinitionBuilder(ReadableMap definition) {
         final PhotoCaptureStepBuilder builder = FaceCaptureStepBuilder.forPhoto();
@@ -500,6 +525,21 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         getReactApplicationContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(name, map);
+    }
+
+    @ReactMethod
+    public void withBiometricTokenCallback() {
+        callbackTypeList.add(CallbackType.BIOMETRIC_TOKEN);
+    }
+
+    @ReactMethod
+    public void provideBiometricToken(String biometricToken) {
+        biometricTokenCallback.provideToken(biometricToken);
+    }
+
+    private BiometricTokenCallback addBiometricTokenCallback() {
+        biometricTokenCallback = new BiometricTokenCallbackBridge(getReactApplicationContext());
+        return biometricTokenCallback;
     }
 
     //region Media

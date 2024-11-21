@@ -11,10 +11,11 @@ import Onfido
 protocol ReactDocumentSideResult {
     var id: String { get }
 }
-
 protocol ReactDocumentResult {
     var reactFront: ReactDocumentSideResult { get }
     var reactBack: ReactDocumentSideResult? { get }
+    var reactTypeSelected: String { get }
+    var reactCountrySelected: String? { get }
     var reactNfcMediaId: String? { get }
 }
 
@@ -23,14 +24,34 @@ protocol ReactFaceResult {
     var variant: FaceResultVariant { get }
 }
 
+protocol ReactProofOfAddressResult {
+    var reactFront: ReactProofOfAddressSideResult { get }
+    var reactBack: ReactProofOfAddressSideResult? { get }
+    var reactType: String { get }
+}
+
+protocol ReactProofOfAddressSideResult {
+    var id: String { get }
+    var type: String? { get }
+}
+
 extension DocumentSideResult: ReactDocumentSideResult {}
 extension DocumentResult: ReactDocumentResult {
     var reactFront: ReactDocumentSideResult { front }
     var reactBack: ReactDocumentSideResult? { back }
+    var reactTypeSelected: String { typeSelected }
+    var reactCountrySelected: String? { countrySelected }
     var reactNfcMediaId: String? { nfcMediaId }
 }
 
 extension FaceResult: ReactFaceResult {}
+
+extension ProofOfAddressSideResult: ReactProofOfAddressSideResult {}
+extension ProofOfAddressResult: ReactProofOfAddressResult {
+    var reactFront: ReactProofOfAddressSideResult { front }
+    var reactBack: ReactProofOfAddressSideResult? { back }
+    var reactType: String { type }
+}
 
 func createResponse(_ results: [OnfidoResult]) -> [String: [String: Any]] {
     let document: DocumentResult? = results.compactMap { result in
@@ -43,13 +64,19 @@ func createResponse(_ results: [OnfidoResult]) -> [String: [String: Any]] {
         return faceResult
     }.first
 
+    let poa: ProofOfAddressResult? = results.compactMap { result in
+        guard case let .proofOfAddress(proofOfAddressResult) = result else { return nil }
+        return proofOfAddressResult
+    }.first
+
     return createResponse(document: document, face: face)
 }
 
 // TODO: Refactor to Encodable
 func createResponse(
     document: ReactDocumentResult? = nil,
-    face: ReactFaceResult? = nil
+    face: ReactFaceResult? = nil,
+    proofOfAddress: ReactProofOfAddressResult? = nil
 ) -> [String: [String: Any]] {
     var response = [String: [String: Any]]()
 
@@ -77,9 +104,19 @@ func createResponse(
             case .motion:
                 return "MOTION"
             }
-            }()  
-
+            }()
         response["face"] = ["id": faceResponse.id, "variant": faceVariant]
+    }
+
+    if let poaResponse = proofOfAddress {
+        response["proofOfAddress"] = ["front": ["id": poaResponse.reactFront.id]]
+
+        if let backId = poaResponse.reactBack?.id,
+           backId != poaResponse.reactFront.id
+        {
+            response["proofOfAddress"]?["back"] = ["id": backId]
+        }
+        response["proofOfAddress"]?["type"] = poaResponse.reactType
     }
 
     return response

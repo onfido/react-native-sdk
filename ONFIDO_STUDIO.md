@@ -42,7 +42,7 @@ npm --prefix node_modules/@onfido/react-native-sdk/ run updateBuildGradle
 Change ios/Podfile to use version 13:
 
 ```ruby
-platform :ios, '13.0'
+platform :ios, '13.4'
 ```
 
 Add descriptions for camera and microphone permissions to `ios/YourProjectName/Info.plist`:

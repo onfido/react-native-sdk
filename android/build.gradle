@@ -13,7 +13,7 @@
 def DEFAULT_COMPILE_SDK_VERSION = 34
 def DEFAULT_MIN_SDK_VERSION = 21
 def DEFAULT_TARGET_SDK_VERSION = 34
-def NATIVE_ANDROID_SDK_VERSION = "21.2.+"
+def NATIVE_ANDROID_SDK_VERSION = "22.0.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -50,7 +50,7 @@ buildscript {
             google()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:8.2.2'
+            classpath 'com.android.tools.build:gradle:8.5.0'
             // Following line is added for future conversion of our Java code to Kotlin, uncomment when needed
             // also decide about Kotlin version (and potential version compatibility with customers)
             // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7"
@@ -87,8 +87,8 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 

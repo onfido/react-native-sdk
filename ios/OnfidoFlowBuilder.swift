@@ -17,12 +17,14 @@ struct OnfidoFlowBuilder {
     func build(
         with config: OnfidoPluginConfig,
         appearance: Appearance,
-        customMediaCallback: CallbackReceiver?
+        customMediaCallback: CallbackReceiver?,
+        customEncryptedBiometricTokenHandler: EncryptedBiometricTokenHandlerReceiver?
     ) throws -> OnfidoFlow {
         let mode = try configBuilder.build(
             config: config,
             appearance: appearance,
-            mediaCallBack: customMediaCallback
+            mediaCallBack: customMediaCallback,
+            encryptedBiometricTokenHandler: customEncryptedBiometricTokenHandler
         )
 
         let flow: OnfidoFlow

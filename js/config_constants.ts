@@ -26,6 +26,17 @@ export type OnfidoResult = {
     id: string;
     variant: OnfidoCaptureType;
   };
+  proofOfAddress?:{
+    front: {
+      id: string;
+    };
+    back?: {
+      id: string;
+    };
+    type: {
+      id: string;
+    };
+  };
 };
 
 export type OnfidoConfig = {

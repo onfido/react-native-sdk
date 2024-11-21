@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, '13.0'
+platform :ios, '13.4'
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -21,12 +21,6 @@ prepare_react_native_project!
 install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
-
-# linkage = ENV['USE_FRAMEWORKS']
-# if linkage != nil
-#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-#   use_frameworks! :linkage => linkage.to_sym
-# end
 
 target 'SampleApp' do
   config = use_native_modules!
@@ -51,12 +45,20 @@ target 'SampleApp' do
   end
 
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    # React Native's post-install setup
     react_native_post_install(
-            installer,
-            config[:reactNativePath],
-            :mac_catalyst_enabled => false
-            )
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false
+    )
+
+    # Workaround for FOLLY_HAS_COROUTINES issue
+    # https://github.com/facebook/folly/issues/2297#issuecomment-2442923702
+    system("chmod -R u+w Pods/RCT-Folly")
+    Dir.glob("Pods/RCT-Folly/folly/Portability.h").each do |file|
+      text = File.read(file)
+      new_contents = text.gsub('#define FOLLY_HAS_COROUTINES 1', '#define FOLLY_HAS_COROUTINES 0')
+      File.open(file, "w") { |file| file.puts new_contents }
+    end
   end
 end

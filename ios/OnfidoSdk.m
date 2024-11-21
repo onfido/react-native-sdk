@@ -16,5 +16,7 @@ RCT_EXTERN_METHOD(
 )
 RCT_EXTERN_METHOD(supportedEvents)
 RCT_EXTERN_METHOD(withMediaCallbacksEnabled)
+RCT_EXTERN_METHOD(withBiometricTokenCallback)
+RCT_EXTERN_METHOD(provideBiometricToken:(NSString *)biometricToken)
 
 @end

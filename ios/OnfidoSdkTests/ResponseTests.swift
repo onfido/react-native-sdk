@@ -19,6 +19,8 @@ struct TestDocumentResult: ReactDocumentResult {
     let reactFront: ReactDocumentSideResult
     let reactBack: ReactDocumentSideResult?
     var reactNfcMediaId: String?
+    var reactTypeSelected: String
+    var reactCountrySelected: String?
 }
 
 struct TestFaceResult: ReactFaceResult {
@@ -30,7 +32,8 @@ class ResponseTests: XCTestCase {
     func testResponseOfSingleSidedDocumentCheck() {
         let documentResult = TestDocumentResult(
             reactFront: TestDocumentSideResult(id: "single-side-test"),
-            reactBack: nil
+            reactBack: nil,
+            reactTypeSelected: "passport"
         )
 
         let response = createResponse(document: documentResult)
@@ -45,7 +48,8 @@ class ResponseTests: XCTestCase {
     func testResponseOfDoubleSidedDocumentCheck() {
         let documentResult = TestDocumentResult(
             reactFront: TestDocumentSideResult(id: "double-side-test-1"),
-            reactBack: TestDocumentSideResult(id: "double-side-test-2")
+            reactBack: TestDocumentSideResult(id: "double-side-test-2"),
+            reactTypeSelected: "type"
         )
 
         let response = createResponse(document: documentResult)
@@ -62,7 +66,8 @@ class ResponseTests: XCTestCase {
         let documentResult = TestDocumentResult(
             reactFront: TestDocumentSideResult(id: "double-side-test-1"),
             reactBack: TestDocumentSideResult(id: "double-side-test-2"),
-            reactNfcMediaId: "nfcMediaId"
+            reactNfcMediaId: "nfcMediaId",
+            reactTypeSelected: "type"
         )
 
         let response = createResponse(document: documentResult)

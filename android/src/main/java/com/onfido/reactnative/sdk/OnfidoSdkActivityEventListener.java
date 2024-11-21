@@ -14,6 +14,7 @@ import com.onfido.android.sdk.capture.ExitCode;
 import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.upload.Captures;
 import com.onfido.android.sdk.capture.errors.OnfidoException;
+import com.onfido.reactnative.sdk.Response.ProofOfAddress;
 import com.onfido.workflow.OnfidoWorkflow;
 
 class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
@@ -91,6 +92,7 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                     String nfcMediaUUID = null;
                     String faceId = null;
                     String faceVarient = null;
+                    ProofOfAddress proofOfAddress  = null;
                     if (captures.getDocument() != null) {
                         if (captures.getDocument().getFront() != null) {
                             docFrontId = captures.getDocument().getFront().getId();
@@ -107,8 +109,15 @@ class OnfidoSdkActivityEventListener extends BaseActivityEventListener {
                         captures.getFace().getVariant();
                         faceVarient = captures.getFace().getVariant().toString();
                     }
-
-                    final Response response = new Response(docFrontId, docBackId, faceId, faceVarient, nfcMediaUUID);
+                    if (captures.getPoa() != null) {
+                        ProofOfAddress.ProofOfAddressSide front = new ProofOfAddress.ProofOfAddressSide(captures.getPoa().getFront().getId(), captures.getPoa().getFront().getType());
+                        ProofOfAddress.ProofOfAddressSide back = null;
+                        if(captures.getPoa().getBack() !=null){
+                            back = new ProofOfAddress.ProofOfAddressSide(captures.getPoa().getBack().getId(), captures.getPoa().getBack().getType());
+                        }
+                        proofOfAddress = new ProofOfAddress(captures.getPoa().getType(), front, back);
+                    }
+                    final Response response = new Response(docFrontId, docBackId, faceId, faceVarient, nfcMediaUUID, proofOfAddress);
                     try {
                         final WritableMap responseMap = ReactNativeBridgeUtiles.convertPublicFieldsToWritableMap(response);
                         currentPromise.resolve(responseMap);

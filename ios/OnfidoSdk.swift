@@ -11,6 +11,7 @@ import React
 // Analytics to be re-added once payloads are harmonised across platforms
 private enum CallbackType {
     case media
+    case encryptedBiometricToken
 }
 
 @objc(OnfidoSdk)
@@ -18,6 +19,10 @@ final class OnfidoSdk: RCTEventEmitter {
 
     private let onfidoFlowBuilder = OnfidoFlowBuilder()
     private let configParser = OnfidoConfigParser()
+    private lazy var encryptedBiometricTokenHandlerReceiver = EncryptedBiometricTokenHandlerReceiver(
+        withTokenRequestedCallback: processEncryptedBiometricTokenRequestedResult(_:),
+        andTokenGeneratedCallback: processEncryptedBiometricTokenGeneratedResult(_:)
+    )
     private var callbackTypes: [CallbackType] = []
 
     @objc
@@ -51,6 +56,7 @@ final class OnfidoSdk: RCTEventEmitter {
                     appearance.setUserInterfaceStyle(.unspecified)
                 }
             }
+
             let mediaCallback: CallbackReceiver?
             if callbackTypes.contains(.media) {
                 mediaCallback = CallbackReceiver(withCallback: processMediaResult(_:))
@@ -58,10 +64,14 @@ final class OnfidoSdk: RCTEventEmitter {
                 mediaCallback = nil
             }
 
+            let encryptedBiometricTokenHandler = callbackTypes
+                .contains(.encryptedBiometricToken) ? encryptedBiometricTokenHandlerReceiver : nil
+
             let onfidoFlow: OnfidoFlow = try onfidoFlowBuilder.build(
                 with: onfidoConfig,
                 appearance: appearance,
-                customMediaCallback: mediaCallback
+                customMediaCallback: mediaCallback,
+                customEncryptedBiometricTokenHandler: encryptedBiometricTokenHandler
             )
 
             onfidoFlow
@@ -109,7 +119,7 @@ final class OnfidoSdk: RCTEventEmitter {
 
     @objc
     public override func supportedEvents() -> [String] {
-        return ["onfidoMediaCallback"]
+        return ["onfidoMediaCallback", "onTokenRequested", "onTokenGenerated"]
     }
 
     @objc
@@ -126,6 +136,26 @@ final class OnfidoSdk: RCTEventEmitter {
 
     private func processMediaResult(_ dictionary: [String: Any]) {
         sendEvent(withName: "onfidoMediaCallback", body: dictionary)
+    }
+
+    // MARK: Encrypted biometric token
+
+    @objc
+    func withBiometricTokenCallback() {
+        callbackTypes.append(.encryptedBiometricToken)
+    }
+
+    @objc
+    func provideBiometricToken(_ biometricToken: String) {
+        encryptedBiometricTokenHandlerReceiver.provide(encryptedBiometricToken: biometricToken)
+    }
+
+    private func processEncryptedBiometricTokenRequestedResult(_ dictionary: [String: String]) {
+        sendEvent(withName: "onTokenRequested", body: dictionary)
+    }
+
+    private func processEncryptedBiometricTokenGeneratedResult(_ dictionary: [String: String]) {
+        sendEvent(withName: "onTokenGenerated", body: dictionary)
     }
 }
 

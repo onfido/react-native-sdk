@@ -16,6 +16,11 @@ const {OnfidoSdk} = NativeModules;
 const OndifoSdkModule = NativeModules.OnfidoSdk
 const eventEmitter = new NativeEventEmitter(OndifoSdkModule)
 
+type BiometricTokenCallback = {
+    onTokenGenerated: (customerUserHash: string, biometricToken: string) => void;
+    onTokenRequested: (customerUserHash: string, provideToken: (biometricToken: string) => void) => void;
+};
+
 
 const Onfido = {
     start(config: OnfidoConfig): Promise<OnfidoResult> {
@@ -103,6 +108,22 @@ const Onfido = {
     eventEmitter.removeAllListeners('onfidoMediaCallback');
     
     return eventEmitter.addListener('onfidoMediaCallback', callback);
+  },
+
+addBiometricTokenCallback(callback: BiometricTokenCallback): void {
+    OnfidoSdk.withBiometricTokenCallback();
+
+    eventEmitter.removeAllListeners('onTokenGenerated');
+    eventEmitter.removeAllListeners('onTokenRequested');
+
+    eventEmitter.addListener('onTokenGenerated', (event) => {
+        callback.onTokenGenerated(event.customerUserHash, event.biometricToken)
+    });
+    eventEmitter.addListener('onTokenRequested', (event) => {
+        callback.onTokenRequested(event.customerUserHash, (biometricToken) => {
+            OnfidoSdk.provideBiometricToken(biometricToken)
+        })
+    });
   },
 
   byteArrayStringToBase64(byteArrayString: String) {

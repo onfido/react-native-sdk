@@ -16,7 +16,8 @@ struct OnfidoConfigBuilder {
     func build(
         config: OnfidoPluginConfig,
         appearance: Appearance,
-        mediaCallBack: CallbackReceiver?
+        mediaCallBack: CallbackReceiver?,
+        encryptedBiometricTokenHandler: EncryptedBiometricTokenHandlerReceiver?
     ) throws -> OnfidoMode {
         guard let workflowId = config.workflowRunId else {
             return try buildClassic(config: config, appearance: appearance, mediaCallBack: mediaCallBack)
@@ -26,7 +27,8 @@ struct OnfidoConfigBuilder {
             workflowId: workflowId,
             config: config,
             appearance: appearance,
-            mediaCallBack: mediaCallBack
+            mediaCallBack: mediaCallBack,
+            encryptedBiometricTokenHandler: encryptedBiometricTokenHandler
         )
     }
     
@@ -36,7 +38,8 @@ struct OnfidoConfigBuilder {
         workflowId: String,
         config: OnfidoPluginConfig,
         appearance: Appearance,
-        mediaCallBack: CallbackReceiver?
+        mediaCallBack: CallbackReceiver?,
+        encryptedBiometricTokenHandler: EncryptedBiometricTokenHandlerReceiver?
     ) throws -> OnfidoMode {
         var workflowConfig = WorkflowConfiguration(workflowRunId: workflowId, sdkToken: config.sdkToken)
         
@@ -56,7 +59,12 @@ struct OnfidoConfigBuilder {
         if let mediaCallBack {
             workflowConfig = workflowConfig.withMediaCallback(mediaCallback: mediaCallBack)
          }
-        
+
+        // Encrypted biometric token handler
+        if let encryptedBiometricTokenHandler {
+            workflowConfig = workflowConfig.withEncryptedBiometricTokenHandler(handler: encryptedBiometricTokenHandler)
+        }
+
         return .studio(workflowConfig: workflowConfig)
     }
     

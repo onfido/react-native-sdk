@@ -52,7 +52,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
@@ -99,7 +100,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
@@ -151,7 +153,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
@@ -199,7 +202,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
@@ -243,7 +247,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
@@ -277,7 +282,8 @@ class OnfidoSdkTests : XCTestCase {
                 disableMobileSdkAnalytics: nil
             ),
             appearance: appearance,
-            mediaCallBack: nil
+            mediaCallBack: nil,
+            encryptedBiometricTokenHandler: nil
         )
 
         guard case .classic(let configBuilder) = onfidoMode else {
