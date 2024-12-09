@@ -51,6 +51,7 @@ struct OnfidoLocalisation: Codable {
 enum Theme: String, Codable {
     case dark = "DARK"
     case light = "LIGHT"
+    case automatic = "AUTOMATIC"
 }
 
 enum OnfidoDocumentType: String, Codable {

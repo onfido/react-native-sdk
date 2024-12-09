@@ -52,7 +52,7 @@ final class OnfidoSdk: RCTEventEmitter {
                     appearance.setUserInterfaceStyle(.dark)
                 case .light:
                     appearance.setUserInterfaceStyle(.light)
-                default:
+                case .automatic:
                     appearance.setUserInterfaceStyle(.unspecified)
                 }
             }
