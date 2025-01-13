@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [14.2.0] - 2025-01-14
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - iOS 32.2.x (up from 32.1.x)
+  - Android 22.2.x (up from 22.1.x)
+
+## [14.1.0] - 2024-12-05
+
 ### Changed:
 
 - Updated underlying Onfido native SDK version:

@@ -801,5 +801,5 @@ You can review our full SDK versioning policy [here](https://documentation.onfid
 
 The Onfido React Native SDK is available under the [MIT license](https://opensource.org/license/mit/).
 
-Copyright 2024 Onfido, Ltd. All rights reserved.
+Copyright 2025 Onfido, Ltd. All rights reserved.
 
