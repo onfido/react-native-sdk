@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [14.3.0] - 2025-02-04
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - Android 22.3.x (up from 22.2.x)
+
 ## [14.2.0] - 2025-01-14
 
 ### Changed:
