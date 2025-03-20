@@ -46,7 +46,7 @@ Check that you have entered correct billing details inside your [Onfido Dashboar
 
 The React Native SDK supports:
 
-* React Native 0.72
+* React Native (up to and including version 0.72)
 * iOS 12+
 * Xcode 15+
 * Android API level 21+
@@ -54,7 +54,7 @@ The React Native SDK supports:
 
 ### Adding the Onfido React Native SDK to your project
 
-**This SDK supports React Native versions 0.72**
+**This SDK supports React Native versions up to and including 0.72**
 
 If you are starting from scratch, you can follow the [React Native CLI Quickstart](https://reactnative.dev/docs/getting-started). Once you have installed the React Native tools, you can run:
 

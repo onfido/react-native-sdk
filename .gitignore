@@ -162,3 +162,4 @@ coverage
 # testing
 /coverage
 TestApp/.env
+TestApp/ios/Podfile.lock

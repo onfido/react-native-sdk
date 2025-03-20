@@ -27,7 +27,7 @@ install! 'cocoapods',
          disable_input_output_paths: true
 
 target 'OnfidoSdk' do
-  pod 'Onfido', '~> 32.2.0'
+  pod 'Onfido', '~> 32.4.0'
 
   config = use_native_modules!
   use_react_native!(
