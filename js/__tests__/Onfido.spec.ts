@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { OnfidoCountryCode, OnfidoCaptureType, OnfidoDocumentType, OnfidoConfig } from "../config_constants";
+import { OnfidoCountryCode, OnfidoCaptureType, OnfidoDocumentType, OnfidoConfig, OnfidoFlowSteps } from "../config_constants";
 import Onfido from "../Onfido";
 
 // add mock
@@ -30,7 +30,7 @@ const start = (config: OnfidoConfig) => {
       });
 };
 
-const flowSteps = {
+const flowSteps : OnfidoFlowSteps = {
   welcome: true,
   captureDocument: {
     docType: OnfidoDocumentType.DRIVING_LICENCE,
@@ -77,10 +77,36 @@ testCases.forEach((platform) => {
     });
 
     test('resolve with a valid workflow runId without flow steps', () => {
-      return start({ ...baseConfig, flowSteps: null, workflowRunId: workflowRunId }).then(result => expect(result).toBe(RESOLVED))
+      return start({ ...baseConfig, flowSteps: undefined, workflowRunId: workflowRunId }).then(result => expect(result).toBe(RESOLVED))
+    });
+
+    test('resolve with a classic workflow with allowedDocumentTypes', () => {
+      return start(
+        {
+          ...baseConfig,
+          flowSteps: {
+            captureDocument: {
+              allowedDocumentTypes: [OnfidoDocumentType.DRIVING_LICENCE, OnfidoDocumentType.PASSPORT]
+            }
+          }
+        }).then(result => expect(result).toBe(RESOLVED))
     });
 
     // Invalid Configuration Tests
+    test('reject when using allowedDocumentTypes together with docType/docCountry', () => {
+      return start(
+        {
+          ...baseConfig,
+          flowSteps: {
+            captureDocument: {
+              docType: OnfidoDocumentType.DRIVING_LICENCE,
+              countryCode: OnfidoCountryCode.GBR,
+              allowedDocumentTypes: [OnfidoDocumentType.DRIVING_LICENCE, OnfidoDocumentType.PASSPORT]
+            }
+          }
+        }).then(result => expect(result).toBe(REJECTED))
+    });
+
     test('reject a null config object', () => {
       return start(null as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
     });

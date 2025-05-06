@@ -113,7 +113,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                 currentPromise.reject("error", new EnterpriseFeaturesInvalidLogoCobrandingException());
                 currentPromise = null;
             } catch (final EnterpriseFeatureNotEnabledException e) {
-                currentPromise.reject("error", new EnterpriseFeatureNotEnabledException("logoCobrand"));
+                currentPromise.reject("error", e);
                 currentPromise = null;
             } catch (final Exception e) {
                 currentPromise.reject("error", new Exception(e.getMessage(), e));
@@ -443,7 +443,7 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
       case DRIVING_LICENCE:
         return DocumentCaptureStepBuilder.forDrivingLicence().withCountry(countryCodeEnum).build();
       case NATIONAL_IDENTITY_CARD:
-        DocumentCaptureStepBuilder.forNationalIdentity().withCountry(countryCodeEnum).build();
+        return DocumentCaptureStepBuilder.forNationalIdentity().withCountry(countryCodeEnum).build();
       case RESIDENCE_PERMIT:
         return DocumentCaptureStepBuilder.forResidencePermit().withCountry(countryCodeEnum)
             .build();

@@ -4,7 +4,7 @@ export type OnfidoFlowSteps = {
     countryCode?: OnfidoCountryCode;
     alpha2CountryCode?: OnfidoAlpha2CountryCode;
     docType?: OnfidoDocumentType;
-    allowedDocumentTypes?: [OnfidoDocumentType]
+    allowedDocumentTypes?: OnfidoDocumentType[];
   };
   captureFace?: OnfidoFaceCapture;
   proofOfAddress?: boolean;
@@ -42,7 +42,7 @@ export type OnfidoResult = {
 export type OnfidoConfig = {
   sdkToken: string;
   workflowRunId?: string;
-  flowSteps: OnfidoFlowSteps;
+  flowSteps?: OnfidoFlowSteps;
   hideLogo?: boolean;
   logoCoBrand?: boolean;
    /**
@@ -54,7 +54,7 @@ export type OnfidoConfig = {
   localisation?: {
     ios_strings_file_name?: string;
   };
-  theme: OnfidoTheme;
+  theme?: OnfidoTheme;
 };
 
 export interface OnfidoError extends Error {
