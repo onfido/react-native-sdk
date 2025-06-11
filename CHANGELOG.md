@@ -12,11 +12,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated underlying Onfido native SDK version:
   - Android 22.9.x (up from 22.7.x)
 
-### Fixed:
-
-- Allowed `captureDocument.allowedDocumentTypes` typing to have multiple document types
-- Changed `flowSteps` and `Theme` to optional to be consistent with documentation
-
 ## [14.6.0] - 2025-04-24
 
 ### Changed:
