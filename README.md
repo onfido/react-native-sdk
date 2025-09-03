@@ -667,6 +667,27 @@ For example:
 }
 ```
 
+### User analytics
+
+#### Implementation
+1. Provide a custom callback using `Onfido.addAnalyticsCallback`
+
+```typescript
+
+type Event = {
+  type: string
+  properties: Record<string, string>
+} |  {
+  name: string
+  properties: Record<string, string>
+}
+
+Onfido.addAnalyticsCallback((event:Event) => {});
+```
+
+Please see the documentation for the [ios](https://documentation.onfido.com/sdk/ios/#user-analytics) and
+[android](https://documentation.onfido.com/sdk/android/#kotlin-15) event structure.
+
 ### Custom biometric token storage
 
 When using the authentication with local storage solution, by default the SDK manages biometric token storage. The SDK also allows the clients to take control of the token lifecycle and exposes an API to override the default implementation to read and write the token, so it can be stored on device, in cloud, in a keystore or on your premises.

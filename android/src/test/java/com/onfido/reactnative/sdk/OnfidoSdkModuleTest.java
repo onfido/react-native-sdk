@@ -1,37 +1,9 @@
 package com.onfido.reactnative.sdk;
 
-import android.app.Activity;
-
-import com.facebook.react.bridge.JavaOnlyArray;
-import com.facebook.react.bridge.JavaOnlyMap;
-import com.onfido.android.sdk.capture.DocumentType;
-import com.onfido.android.sdk.capture.Onfido;
-import com.onfido.android.sdk.capture.OnfidoConfig;
-import com.onfido.android.sdk.capture.OnfidoFactory;
-import com.onfido.android.sdk.capture.ui.options.FlowAction;
-import com.onfido.android.sdk.capture.ui.options.FlowStep;
-import com.onfido.android.sdk.capture.ui.options.MotionCaptureVariantOptions;
-import com.onfido.android.sdk.capture.ui.options.PhotoCaptureVariantOptions;
-import com.onfido.android.sdk.capture.ui.options.VideoCaptureVariantOptions;
-import com.onfido.android.sdk.capture.utils.CountryCode;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReadableMap;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.api.mockito.PowerMockito;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -40,24 +12,69 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.app.Activity;
+import android.os.Looper;
+import android.os.SystemClock;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.JavaOnlyArray;
+import com.facebook.react.bridge.JavaOnlyMap;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.onfido.android.sdk.capture.DocumentType;
+import com.onfido.android.sdk.capture.Onfido;
+import com.onfido.android.sdk.capture.OnfidoConfig;
+import com.onfido.android.sdk.capture.OnfidoFactory;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEvent;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEventResultReceiver;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEventType;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsPropertyKey;
+import com.onfido.android.sdk.capture.ui.options.FlowAction;
+import com.onfido.android.sdk.capture.ui.options.FlowStep;
+import com.onfido.android.sdk.capture.ui.options.MotionCaptureVariantOptions;
+import com.onfido.android.sdk.capture.utils.CountryCode;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(OnfidoFactory.class)
+@PrepareForTest({OnfidoFactory.class, Looper.class, SystemClock.class, Arguments.class})
 public class OnfidoSdkModuleTest {
 
     private OnfidoSdkModule onfidoSdkModule;
     private Promise promiseMock;
     private final Onfido onfidoClientMock = mock(Onfido.class);
+    private ReactApplicationContext reactApplicationContextMock;
 
     @Before
     public void init() {
+
+        PowerMockito.mockStatic(SystemClock.class);
+        PowerMockito.when(SystemClock.uptimeMillis()).thenReturn(123456L);
+
+
+        PowerMockito.mockStatic(Looper.class);
+        Looper looper = PowerMockito.mock(Looper.class);
+        PowerMockito.when(Looper.getMainLooper()).thenReturn(looper);
+
         promiseMock = mock(Promise.class);
         OnfidoFactory onfidoFactoryMock = PowerMockito.mock(OnfidoFactory.class);
-        ReactApplicationContext reactApplicationContextMock = mock(ReactApplicationContext.class);
+        reactApplicationContextMock = mock(ReactApplicationContext.class);
         PowerMockito.mockStatic(OnfidoFactory.class);
         given(OnfidoFactory.create(any(ReactApplicationContext.class))).willReturn(onfidoFactoryMock);
         given(onfidoFactoryMock.getClient()).willReturn(onfidoClientMock);
@@ -141,6 +158,107 @@ public class OnfidoSdkModuleTest {
     }
 
     //region Flow Steps
+
+    @Test
+    public void shouldInvokeUserAnalyticsCallbackWhenRegistered() {
+
+        PowerMockito.mockStatic(Arguments.class);
+        PowerMockito.when(Arguments.createMap()).thenAnswer(invocation -> new WritableMapImpl());
+
+        DeviceEventManagerModule.RCTDeviceEventEmitter emitterMock = mock(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+        when(reactApplicationContextMock.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class))
+            .thenReturn(emitterMock);
+
+        onfidoSdkModule.withAnalyticsCallback();
+
+        final ReadableMap flowStepsMock = mock(ReadableMap.class);
+        when(flowStepsMock.hasKey("welcome")).thenReturn(false);
+        when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
+        when(flowStepsMock.hasKey("captureFace")).thenReturn(false);
+
+        ReadableMap configMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(configMock.getString("sdkToken")).thenReturn(sdkToken);
+        when(configMock.getMap("flowSteps")).thenAnswer(
+            (Answer<ReadableMap>) invocation -> flowStepsMock
+        );
+
+        // Use a spy to mock the internal call to getCurrentActivity
+        Activity currentActivityMock = mock(Activity.class);
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        onfidoSdkModuleSpy.start(configMock, promiseMock);
+
+        ArgumentCaptor<OnfidoConfig> captor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(
+            eq(currentActivityMock),
+            eq(OnfidoSdkActivityEventListener.checksActivityCode),
+            captor.capture()
+        );
+
+        OnfidoConfig config = captor.getValue();
+
+        var onfidoAnalyticsEventListener = config.getOnfidoAnalyticsEventListener();
+        assertNotNull(onfidoAnalyticsEventListener);
+
+        assert onfidoAnalyticsEventListener instanceof OnfidoAnalyticsEventResultReceiver;
+        var listener = ((OnfidoAnalyticsEventResultReceiver) onfidoAnalyticsEventListener).getOnfidoAnalyticsEventListener();
+
+        var properties = new HashMap<OnfidoAnalyticsPropertyKey, String>();
+        properties.put(OnfidoAnalyticsPropertyKey.SCREEN_NAME, "Welcome");
+        properties.put(OnfidoAnalyticsPropertyKey.COUNTRY_CODE, "foo");
+        listener.onEvent(new OnfidoAnalyticsEvent(OnfidoAnalyticsEventType.SCREEN, properties));
+
+        ArgumentCaptor<WritableMap> eventCaptor = ArgumentCaptor.forClass(WritableMap.class);
+        verify(emitterMock).emit(eq("onfidoAnalyticsCallback"), eventCaptor.capture());
+
+        WritableMap event = eventCaptor.getValue();
+        assertEquals("SCREEN", event.getString("type"));
+        assertEquals("Welcome", Objects.requireNonNull(event.getMap("properties")).getString("SCREEN_NAME"));
+        assertEquals("foo", Objects.requireNonNull(event.getMap("properties")).getString("COUNTRY_CODE"));
+
+    }
+
+    @Test
+    public void shouldNotAddAnalyticsCallbackIfNotRegistered() {
+
+        final ReadableMap flowStepsMock = mock(ReadableMap.class);
+        when(flowStepsMock.hasKey("welcome")).thenReturn(false);
+        when(flowStepsMock.getBoolean("captureDocument")).thenReturn(false);
+        when(flowStepsMock.hasKey("captureFace")).thenReturn(false);
+
+        ReadableMap configMock = mock(ReadableMap.class);
+        String sdkToken = "mockSdkToken123";
+        when(configMock.getString("sdkToken")).thenReturn(sdkToken);
+        when(configMock.getMap("flowSteps")).thenAnswer(
+            (Answer<ReadableMap>) invocation -> flowStepsMock
+        );
+
+        // Use a spy to mock the internal call to getCurrentActivity
+        Activity currentActivityMock = mock(Activity.class);
+        OnfidoSdkModule onfidoSdkModuleSpy = spy(onfidoSdkModule);
+        when(onfidoSdkModuleSpy.getCurrentActivityInParentClass()).thenReturn(currentActivityMock);
+
+        onfidoSdkModuleSpy.start(configMock, promiseMock);
+
+        ArgumentCaptor<OnfidoConfig> captor = ArgumentCaptor.forClass(OnfidoConfig.class);
+
+        verify(onfidoClientMock).startActivityForResult(
+            eq(currentActivityMock),
+            eq(OnfidoSdkActivityEventListener.checksActivityCode),
+            captor.capture()
+        );
+
+        OnfidoConfig config = captor.getValue();
+
+        var onfidoAnalyticsEventListener = config.getOnfidoAnalyticsEventListener();
+        assertNull(onfidoAnalyticsEventListener);
+
+    }
+
+
 
     //region Liveness
 

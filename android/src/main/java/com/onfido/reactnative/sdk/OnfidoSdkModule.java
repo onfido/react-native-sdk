@@ -3,6 +3,8 @@ package com.onfido.reactnative.sdk;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -17,6 +19,8 @@ import com.onfido.android.sdk.capture.Onfido;
 import com.onfido.android.sdk.capture.OnfidoConfig;
 import com.onfido.android.sdk.capture.OnfidoFactory;
 import com.onfido.android.sdk.capture.OnfidoTheme;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEvent;
+import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEventListener;
 import com.onfido.android.sdk.capture.config.BiometricTokenCallback;
 import com.onfido.android.sdk.capture.config.MediaCallback;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
@@ -38,7 +42,8 @@ import java.util.List;
 // Analytics to be re-added once payloads are harmonised across platforms
 enum CallbackType {
     MEDIA,
-    BIOMETRIC_TOKEN
+    BIOMETRIC_TOKEN,
+    ANALYTICS
 }
 
 public class OnfidoSdkModule extends ReactContextBaseJavaModule {
@@ -89,16 +94,14 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             try {
                 sdkToken = getSdkTokenFromConfig(config);
             } catch (Exception e) {
-                currentPromise.reject("config_error", e);
-                currentPromise = null;
-                return;
+              reject("config_error", e);
+              return;
             }
 
             Activity currentActivity = getCurrentActivityInParentClass();
             if (currentActivity == null) {
-                currentPromise.reject("error", new Exception("Android activity does not exist"));
-                currentPromise = null;
-                return;
+              reject("error", new Exception("Android activity does not exist"));
+              return;
             }
 
             try {
@@ -110,25 +113,26 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     defaultSDKConfiguration(config, currentActivity, sdkToken);
                 }
             } catch (final EnterpriseFeaturesInvalidLogoCobrandingException e) {
-                currentPromise.reject("error", new EnterpriseFeaturesInvalidLogoCobrandingException());
-                currentPromise = null;
+              reject("error", new EnterpriseFeaturesInvalidLogoCobrandingException());
             } catch (final EnterpriseFeatureNotEnabledException e) {
-                currentPromise.reject("error", e);
-                currentPromise = null;
+              reject("error", e);
             } catch (final Exception e) {
-                currentPromise.reject("error", new Exception(e.getMessage(), e));
-                currentPromise = null;
+              reject("error", new Exception(e.getMessage(), e));
             }
 
         } catch (final Exception e) {
             e.printStackTrace();
             // Wrap all unexpected exceptions.
-            currentPromise.reject("error", new Exception("Unexpected error starting Onfido page", e));
-            currentPromise = null;
+          reject("error", new Exception("Unexpected error starting Onfido page", e));
         }
     }
 
-    @SuppressLint("UnsafeOptInUsageError")
+  private void reject(String config_error, Exception e) {
+    currentPromise.reject(config_error, e);
+    currentPromise = null;
+  }
+
+  @SuppressLint("UnsafeOptInUsageError")
     private void workflowSDKConfiguration(final ReadableMap config, Activity currentActivity, String sdkToken) throws Exception {
         final String workflowRunId = getWorkflowRunIdFromConfig(config);
 
@@ -147,6 +151,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
 
         if (callbackTypeList.contains(CallbackType.BIOMETRIC_TOKEN)) {
             onfidoConfigBuilder.withBiometricTokenCallback(addBiometricTokenCallback());
+        }
+
+        if (callbackTypeList.contains(CallbackType.ANALYTICS)) {
+            onfidoConfigBuilder.withAnalyticsEventListener(new AnalyticsCallbackBridge(getReactApplicationContext()));
         }
 
         OnfidoTheme onfidoTheme = getThemeFromConfig(config);
@@ -182,6 +190,10 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
             onfidoConfigBuilder.withMediaCallback(addMediaCallback());
         }
 
+        if (callbackTypeList.contains(CallbackType.ANALYTICS)) {
+            onfidoConfigBuilder.withAnalyticsEventListener(new AnalyticsCallbackBridge(getReactApplicationContext()));
+        }
+
         NFCOptions nfcOption = getNFCOptionFromConfig(config);
         onfidoConfigBuilder.withNFC(nfcOption);
 
@@ -215,9 +227,8 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
                     currentActivity.getApplicationContext().getPackageName()
             );
             if (cobrandLogoLight == 0 || cobrandLogoDark == 0) {
-                currentPromise.reject("error", new Exception("Cobrand logos were not found"));
-                currentPromise = null;
-                return null;
+              reject("error", new Exception("Cobrand logos were not found"));
+              return null;
             }
             enterpriseFeaturesBuilder.withCobrandingLogo(cobrandLogoLight, cobrandLogoDark);
             hasSetEnterpriseFeatures = true;
@@ -530,6 +541,11 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void withBiometricTokenCallback() {
         callbackTypeList.add(CallbackType.BIOMETRIC_TOKEN);
+    }
+
+    @ReactMethod
+    public void withAnalyticsCallback() {
+        callbackTypeList.add(CallbackType.ANALYTICS);
     }
 
     @ReactMethod

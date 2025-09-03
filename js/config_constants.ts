@@ -386,7 +386,7 @@ export enum OnfidoCountryCode {
   VUT = "VUT",
   WLF = "WLF",
   WSM = "WSM",
-  XKX = "XKX",
+  XKX = "RKS",
   YEM = "YEM",
   ZAF = "ZAF",
   ZMB = "ZMB",

@@ -12,6 +12,7 @@ import React
 private enum CallbackType {
     case media
     case encryptedBiometricToken
+    case analytics
 }
 
 @objc(OnfidoSdk)
@@ -74,6 +75,16 @@ final class OnfidoSdk: RCTEventEmitter {
                 customEncryptedBiometricTokenHandler: encryptedBiometricTokenHandler
             )
 
+            if (callbackTypes.contains(.analytics)) {
+              onfidoFlow.with(eventHandler: { (event: Event) -> () in
+                let dictionary = [
+                    "name": event.name,
+                    "properties": event.properties
+                ]
+                self.sendEvent(withName: "onfidoAnalyticsCallback", body: dictionary)
+              })
+            }
+
             onfidoFlow
                 .with(responseHandler: { response in
                     switch response {
@@ -119,12 +130,19 @@ final class OnfidoSdk: RCTEventEmitter {
 
     @objc
     public override func supportedEvents() -> [String] {
-        return ["onfidoMediaCallback", "onTokenRequested", "onTokenGenerated"]
+        return ["onfidoMediaCallback", "onTokenRequested", "onTokenGenerated", "onfidoAnalyticsCallback"]
     }
 
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return false
+    }
+
+    // MARK: Analytics
+
+    @objc
+    func withAnalyticsCallback() {
+        callbackTypes.append(.analytics)
     }
 
     // MARK: Media

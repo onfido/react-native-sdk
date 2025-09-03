@@ -11,10 +11,21 @@ import {
 } from "./config_constants";
 import { Base64 } from 'js-base64';
 
-const {OnfidoSdk} = NativeModules;
+const OnfidoSdk: {
+  start(config: OnfidoConfig): Promise<OnfidoResult>
+  withMediaCallbacksEnabled(): void
+  withBiometricTokenCallback(): void
+  withAnalyticsCallback(): void
+  provideBiometricToken(token: string): void
+} = NativeModules.OnfidoSdk
 
-const OndifoSdkModule = NativeModules.OnfidoSdk
-const eventEmitter = new NativeEventEmitter(OndifoSdkModule)
+export type OnfidoEvent = {
+    type: string,
+    properties: Record<string, unknown>
+}
+
+const OnfidoSdkModule = NativeModules.OnfidoSdk
+const eventEmitter = new NativeEventEmitter(OnfidoSdkModule)
 
 type BiometricTokenCallback = {
     onTokenGenerated: (customerUserHash: string, biometricToken: string) => void;
@@ -92,7 +103,7 @@ const Onfido = {
             if (config.flowSteps.captureFace && !(config.flowSteps.captureFace.type in OnfidoCaptureType)) {
                 return configError("Capture Face type is invalid");
             }
-            
+
         }
 
     return OnfidoSdk.start(config).catch((error: any) => {
@@ -101,12 +112,20 @@ const Onfido = {
     });
   },
 
+  addAnalyticsCallback(callback: (event: OnfidoEvent) => void) {
+    const eventType = 'onfidoAnalyticsCallback';
+    OnfidoSdk.withAnalyticsCallback()
+
+    eventEmitter.removeAllListeners(eventType);
+    return eventEmitter.addListener(eventType, callback);
+  },
+
   addCustomMediaCallback(callback: (result: OnfidoMediaResult) => OnfidoMediaResult) {
     OnfidoSdk.withMediaCallbacksEnabled()
 
     // Removing any previously-added listener to avoid multiple invocations
     eventEmitter.removeAllListeners('onfidoMediaCallback');
-    
+
     return eventEmitter.addListener('onfidoMediaCallback', callback);
   },
 
