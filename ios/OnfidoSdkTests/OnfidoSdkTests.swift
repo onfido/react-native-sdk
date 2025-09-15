@@ -41,7 +41,14 @@ class OnfidoSdkTests : XCTestCase {
                 sdkToken: "demo",
                 workflowRunId: nil,
                 flowSteps: .init(captureDocument: .init(
-                    .init(countryCode: nil, alpha2CountryCode: nil, docType: nil, allowedDocumentTypes: nil))
+                    .init(
+                        countryCode: nil,
+                        alpha2CountryCode: nil,
+                        docType: nil,
+                        allowedDocumentTypes: nil,
+                        pages: nil,
+                        title: nil
+                    ))
                 ),
                 localisation: nil,
                 theme: nil,
@@ -81,7 +88,9 @@ class OnfidoSdkTests : XCTestCase {
                             countryCode: "USA",
                             alpha2CountryCode: "US",
                             docType: .drivingLicence,
-                            allowedDocumentTypes: nil
+                            allowedDocumentTypes: nil,
+                            pages: nil,
+                            title: nil
                         )
                     ),
                     captureFace: .init(
@@ -134,7 +143,9 @@ class OnfidoSdkTests : XCTestCase {
                             countryCode: "USA",
                             alpha2CountryCode: "US",
                             docType: .drivingLicence,
-                            allowedDocumentTypes: nil
+                            allowedDocumentTypes: nil,
+                            pages: nil,
+                            title: nil
                         )
                     ),
                     captureFace: .init(
@@ -190,7 +201,9 @@ class OnfidoSdkTests : XCTestCase {
                             .passport,
                             .nationalIdentityCard,
                             .residencePermit
-                        ]
+                        ],
+                        pages: nil,
+                        title: nil
                     )
                 )),
                 localisation: nil,
@@ -235,7 +248,9 @@ class OnfidoSdkTests : XCTestCase {
                             .nationalIdentityCard,
                             .residencePermit,
                             .drivingLicence
-                        ]
+                        ],
+                        pages: nil,
+                        title: nil
                     )
                 )),
                 localisation: nil,

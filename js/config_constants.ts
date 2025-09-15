@@ -5,6 +5,8 @@ export type OnfidoFlowSteps = {
     alpha2CountryCode?: OnfidoAlpha2CountryCode;
     docType?: OnfidoDocumentType;
     allowedDocumentTypes?: OnfidoDocumentType[];
+    pages?: OnfidoDocumentPages;
+    title?: string;
   };
   captureFace?: OnfidoFaceCapture;
   proofOfAddress?: boolean;
@@ -98,6 +100,11 @@ export enum OnfidoDocumentType {
   VISA = "VISA",
   WORK_PERMIT = "WORK_PERMIT",
   GENERIC = "GENERIC"
+}
+
+export enum OnfidoDocumentPages {
+  SINGLE = "SINGLE",
+  FRONT_AND_BACK = "FRONT_AND_BACK"
 }
 
 export enum OnfidoCaptureType {

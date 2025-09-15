@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Future version
 
+## [15.2.0] - 2025-09-12
+
+### Added:
+
+- Support for Generic Document
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - Android 23.2.x (up from 23.1.x)
+
+## [15.1.0] - 2025-09-03
+
 ### Fixed:
 
 - Fixed Kosovo XKX country code support

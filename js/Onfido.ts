@@ -4,6 +4,7 @@ import {
     OnfidoCaptureType,
     OnfidoConfig,
     OnfidoCountryCode,
+    OnfidoDocumentPages,
     OnfidoDocumentType,
     OnfidoError,
     OnfidoMediaResult,
@@ -64,6 +65,16 @@ const Onfido = {
 
                 if (config.flowSteps.captureDocument.docType && !(config.flowSteps.captureDocument.docType in OnfidoDocumentType)) {
                     return configError("docType is invalid");
+                }
+
+                if (config.flowSteps.captureDocument.docType === OnfidoDocumentType.GENERIC) {
+                    if (!config.flowSteps.captureDocument.title) {
+                        return configError("title is required for GENERIC docType");
+                    }
+
+                    if (!config.flowSteps.captureDocument.pages || !(config.flowSteps.captureDocument.pages in OnfidoDocumentPages)) {
+                        return configError("pages is required and must one of OnfidoDocumentPages for GENERIC docType");
+                    }
                 }
 
 

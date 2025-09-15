@@ -31,6 +31,8 @@ struct OnfidoCaptureDocument: Codable {
     let alpha2CountryCode: String?
     let docType: OnfidoDocumentType?
     let allowedDocumentTypes: [OnfidoDocumentType]?
+    let pages: OnfidoDocumentPages?
+    let title: String?
 }
 
 struct OnfidoCaptureFace: Codable {
@@ -62,6 +64,11 @@ enum OnfidoDocumentType: String, Codable {
     case visa = "VISA"
     case workPermit = "WORK_PERMIT"
     case generic = "GENERIC"
+}
+
+enum OnfidoDocumentPages: String, Codable {
+    case single = "SINGLE"
+    case frontAndBack = "FRONT_AND_BACK"
 }
 
 enum OnfidoCaptureType: String, Codable {

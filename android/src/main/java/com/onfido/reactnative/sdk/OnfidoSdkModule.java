@@ -23,6 +23,7 @@ import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEvent;
 import com.onfido.android.sdk.capture.analytics.OnfidoAnalyticsEventListener;
 import com.onfido.android.sdk.capture.config.BiometricTokenCallback;
 import com.onfido.android.sdk.capture.config.MediaCallback;
+import com.onfido.android.sdk.capture.document.DocumentPages;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeatureNotEnabledException;
 import com.onfido.android.sdk.capture.errors.EnterpriseFeaturesInvalidLogoCobrandingException;
 import com.onfido.android.sdk.capture.model.NFCOptions;
@@ -437,11 +438,32 @@ public class OnfidoSdkModule extends ReactContextBaseJavaModule {
         String countryCodeString = captureDocument.getString("alpha2CountryCode");
         CountryCode countryCodeEnum = findCountryCodeByAlpha2(countryCodeString);
 
-    if (countryCodeEnum == null) {
-      System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
-      throw new Exception("Unexpected countryCode value.");
-    }
-    flowStepList.add(getFlowStep(docTypeEnum, countryCodeEnum));
+        if (countryCodeEnum == null) {
+          System.err.println("Unexpected countryCode value: [" + countryCodeString + "]");
+          throw new Exception("Unexpected countryCode value.");
+        }
+
+        if (docTypeString.equals("GENERIC")) {
+            final boolean pagesExists = captureDocument.hasKey("pages");
+
+            if (pagesExists) {
+                String pagesString = captureDocument.getString("pages");
+                try {
+                    DocumentPages documentPagesEnum = DocumentPages.valueOf(pagesString);
+                    flowStepList.add(
+                        DocumentCaptureStepBuilder
+                            .forGenericDocument()
+                            .withCountry(countryCodeEnum)
+                            .withDocumentPages(documentPagesEnum)
+                            .build()
+                    );
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Unsupported pages value: " + pagesString);
+                }
+            }
+        } else {
+            flowStepList.add(getFlowStep(docTypeEnum, countryCodeEnum));
+        }
   }
 
   private static FlowStep getFlowStep(

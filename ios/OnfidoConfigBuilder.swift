@@ -149,9 +149,19 @@ struct OnfidoConfigBuilder {
                     type: .workPermit(config: WorkPermitConfiguration(country: countryCode))
                 )
             case .generic:
-                builder.withDocumentStep(
-                    type: .generic(config: GenericDocumentConfiguration(country: countryCode))
-                )
+                if let title = steps.captureDocument?.title,
+                let pages = steps.captureDocument?.pages {
+                    switch pages {
+                    case .single:
+                        builder.withDocumentStep(
+                            type: .generic(config: try GenericDocumentConfiguration(title: title, country: countryCode, pages: .single))
+                        )
+                    case .frontAndBack:
+                        builder.withDocumentStep(
+                            type: .generic(config: try GenericDocumentConfiguration(title: title, country: countryCode, pages: .frontAndBack))
+                        )
+                    }
+                }
             }
 
         } else if let allowedDocumentTypes = steps.captureDocument?.allowedDocumentTypes {

@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { OnfidoCountryCode, OnfidoCaptureType, OnfidoDocumentType, OnfidoConfig, OnfidoFlowSteps } from "../config_constants";
+import { OnfidoCountryCode, OnfidoCaptureType, OnfidoDocumentType, OnfidoConfig, OnfidoFlowSteps, OnfidoDocumentPages } from "../config_constants";
 import Onfido from "../Onfido";
 
 // add mock
@@ -92,6 +92,10 @@ testCases.forEach((platform) => {
         }).then(result => expect(result).toBe(RESOLVED))
     });
 
+    test('resolve with GENERIC docType, title, and supported number of pages', () => {
+      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.GENERIC, countryCode: OnfidoCountryCode.GBR, pages: OnfidoDocumentPages.SINGLE, title: "Test Title Doc" }}} as unknown as OnfidoConfig).then(result => expect(result).toBe(RESOLVED))
+    });
+
     // Invalid Configuration Tests
     test('reject when using allowedDocumentTypes together with docType/docCountry', () => {
       return start(
@@ -141,6 +145,18 @@ testCases.forEach((platform) => {
 
     test('reject with an empty captureDocument and captureFace', () => {
       return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: {}, captureFace: {} } } as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
+    });
+
+    test('reject with GENERIC docType and missing number of pages', () => {
+      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.GENERIC, countryCode: OnfidoCountryCode.GBR, title: "Test Title Doc" }}} as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
+    });
+
+    test('reject with GENERIC docType and missing title', () => {
+      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.GENERIC, countryCode: OnfidoCountryCode.GBR, pages: OnfidoDocumentPages.FRONT_AND_BACK }}} as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
+    });
+
+    test('reject with GENERIC docType and unsupported number of pages', () => {
+      return start({ ...baseConfig, flowSteps: { ...flowSteps, captureDocument: { docType: OnfidoDocumentType.GENERIC, countryCode: OnfidoCountryCode.GBR, pages: "MULTIPLE_PAGES", title: "Test Title Doc" }}} as unknown as OnfidoConfig).then(result => expect(result).toBe(REJECTED))
     });
 
     test('base 64 helper function converts data array correctly to base64', () => {

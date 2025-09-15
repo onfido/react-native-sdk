@@ -580,9 +580,13 @@ export default class App extends Component {
   * **`proofOfAddress`**: **Optional**. This toggles the proof of address screen on or off. If omitted, this screen does not appear in the flow. Valid values are `true` or `false`
   * **`captureDocument`**: **Optional**. This object contains configurations for the document capture screen. If `docType` and `countryCode` are not specified, a screen will appear allowing the user to choose the document type and issuing country. If all parameters are not specified or the step is omitted, this screen will not appear in the flow.
     * **`docType`**: **Required** if `countryCode` is specified.
-      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`. <br>
+      * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`, `GENERIC`. <br>
     * **`countryCode`**: **Required** if `docType` is specified.
       * Valid values in `OnfidoCountryCode`: Any ISO 3166-1 alpha-3 code. For example: `OnfidoCountryCode.USA`.
+    * **`pages`**: **Required** if `docType` is `GENERIC`, will have no effect otherwise.
+      * Valid values in `OnfidoDocumentPages`: `SINGLE`, `FRONT_AND_BACK`.
+    * **`title`**: **Required** if `docType` is `GENERIC`, will have no effect otherwise.
+      * This is used to specify the type of document, any string is permitted here. (`Tax Id`, `Voter Id`, etc.)
     * **`allowedDocumentTypes`**: **Optional**. If specified, `docType` and `countryCode` must not be specified. This parameter allows you to specify a list of document types that can be selected for all available issuing countries.
       * Valid values in `OnfidoDocumentType`: `PASSPORT`, `DRIVING_LICENCE`, `NATIONAL_IDENTITY_CARD`, `RESIDENCE_PERMIT`, `RESIDENCE_PERMIT`, `VISA`, `WORK_PERMIT`.
   * **`captureFace`**: **Optional**. This object contains configuration options for the face capture screen. If omitted, this screen does not appear in the flow.
