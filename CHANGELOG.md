@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Future version
 
+## [15.3.0] - 2025-11-19
+
+### Changed:
+
+- Updated underlying Onfido native SDK version:
+  - Android 23.3.x (up from 23.2.x)
+
 ## [15.2.0] - 2025-09-12
 
 ### Added:
