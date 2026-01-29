@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Future version
 
+## [15.4.1] - 2026-01-29
+
+### Fixed:
+
+- Fixed `onTokenGenerated` callback not providing the biometric token on iOS when using custom encrypted biometric token storage, which prevented the token from being stored and caused subsequent Authentication to fail
+
 ## [15.4.0] - 2026-01-06
 
 ### Changed:

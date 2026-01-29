@@ -38,7 +38,7 @@ extension EncryptedBiometricTokenHandlerReceiver: EncryptedBiometricTokenHandler
     func onTokenGenerated(customerUserHash: String, encryptedBiometricToken: String) {
         let dictionary = [
             "customerUserHash" : customerUserHash,
-            "encryptedBiometricToken" : encryptedBiometricToken
+            "biometricToken" : encryptedBiometricToken
         ]
         onTokenGeneratedCallback?(dictionary)
     }
