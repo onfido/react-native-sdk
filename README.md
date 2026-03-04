@@ -208,6 +208,8 @@ You have to include the entries below in your app target's `Info.plist` file to 
   <string>A0000002472001</string>
   <string>00000000000000</string>
   <string>D2760000850101</string>
+  <string>A000000077030C60000000FE00000500</string>
+  <string>E828BD080FA0000001674544415441</string>
 </array>
 ```
 
