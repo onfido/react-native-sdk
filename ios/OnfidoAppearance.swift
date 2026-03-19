@@ -18,7 +18,7 @@ public class AppearancePublic: NSObject {
     public let fontFamilyTitle: String
     public let fontFamilyBody: String
     public let captureSuccessColors: CaptureSuccessColors
-    public let backgroundColor: BackgroundColor
+    public let appearanceColor: AppearanceColor
 
     /// public apperance object with shared with RN integrator
     public init(
@@ -32,7 +32,7 @@ public class AppearancePublic: NSObject {
         fontFamilyTitle: String,
         captureSuccessColors: CaptureSuccessColors,
         interfaceStyle: OnfidoInterfaceStyle = .unspecified,
-        backgroundColor: BackgroundColor = .init()
+        appearanceColor: AppearanceColor? = nil
     ) {
         self.primaryColor = primaryColor
         self.primaryTitleColor = primaryTitleColor
@@ -44,7 +44,7 @@ public class AppearancePublic: NSObject {
         self.fontFamilyBody = fontFamilyBody
         self.captureSuccessColors = captureSuccessColors
         self.interfaceStyle = interfaceStyle
-        self.backgroundColor = backgroundColor
+        self.appearanceColor = appearanceColor ?? .init(lightColor: .from(hex: "#FCFCFD"), darkColor: .black)
     }
 }
 
@@ -100,18 +100,18 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                 interfaceStyle = .unspecified
             }
 
-            let backgroundColor: BackgroundColor
+            let appearanceColor: AppearanceColor
             if
                 let color = jsonResult["backgroundColor"] as? [String: String],
                 let lightColor = color["light"],
                 let darkColor = color["dark"]
             {
-                backgroundColor = .init(
+                appearanceColor = .init(
                     lightColor: .from(hex: lightColor),
                     darkColor: .from(hex: darkColor)
                 )
             } else {
-                backgroundColor = .init()
+                appearanceColor = .init(lightColor: .from(hex: "#FCFCFD"), darkColor: .black)
             }
 
             return AppearancePublic(primaryColor: primaryColor,
@@ -124,7 +124,7 @@ public func loadAppearancePublicFromFile(filePath: String?) throws -> Appearance
                                     fontFamilyTitle: fontFamilyTitle,
                                     captureSuccessColors: captureSuccessColors,
                                     interfaceStyle: interfaceStyle,
-                                    backgroundColor: backgroundColor)
+                                    appearanceColor: appearanceColor)
         } else {
             return nil
         }
@@ -151,7 +151,7 @@ public func loadAppearanceFromFile(filePath: String?) throws -> Appearance {
         appearance.fontBold = appearancePublic.fontFamilyTitle
         appearance.captureSuccessColors = appearancePublic.captureSuccessColors
         appearance.setUserInterfaceStyle(.init(appearancePublic.interfaceStyle))
-        appearance.backgroundColor = appearancePublic.backgroundColor
+        appearance.backgroundColor = appearancePublic.appearanceColor
         return appearance
     } else {
         return Appearance.default
